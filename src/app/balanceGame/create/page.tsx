@@ -38,21 +38,15 @@ export default function CreateBalanceGamePage() {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: createBalanceGame,
-    onSuccess: () => {
-      // 성공 시 게임 상세 페이지로 이동
-      alert("생성이 완료되었습니다.");
-      //   router.push(`/balanceGame/${data.id}`);
-    },
-    onError: (error) => {
-      console.error("Error creating game:", error);
-      alert("게임 생성에 실패했습니다. 다시 시도해주세요.");
-    },
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 유효성 검사
-
+    if (list.length % 2 !== 0) {
+      alert("선택지는 짝수 개수로만 생성할 수 있습니다.");
+      return;
+    }
     // 유효성 검사
     if (!title.trim()) {
       alert("게임 제목을 입력해주세요.");
@@ -166,7 +160,7 @@ export default function CreateBalanceGamePage() {
         className="flex justify-center px-4 pb-8 mt-[150px]"
         onSubmit={handleSubmit}
       >
-        <div className="max-w-md w-full space-y-8">
+        <div className="max-w-screen-xl w-full space-y-8">
           {/* 게임 제목 입력 */}
           <div className="space-y-2">
             <label className="text-lg font-medium text-white">게임 제목</label>
@@ -180,7 +174,7 @@ export default function CreateBalanceGamePage() {
           </div>
 
           {/* 항목 리스트 */}
-          <div className="space-y-6">
+          <div className=" w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {list.map((item, index) => (
               <div
                 key={index}
