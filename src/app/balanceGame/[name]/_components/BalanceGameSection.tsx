@@ -131,7 +131,7 @@ export default function BalanceGameSection() {
   return (
     <section
       ref={sectionRef}
-      className="flex items-center justify-center w-full min-h-dvh bg-gradient-to-b from-zinc-900 to-zinc-800"
+      className="flex items-center justify-center w-full min-h-dvh "
     >
       {isStart ? (
         <div ref={ref} className="relative w-full h-full overflow-hidden">
