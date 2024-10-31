@@ -127,7 +127,7 @@ export default function BalanceGameSection() {
       resultTimeline.kill();
     };
   }, []);
-  console.log(data);
+
   return (
     <section
       ref={sectionRef}
