@@ -8,7 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function GameLayout({ children }: { children: ReactNode }) {
-  console.log(process.env.NEXT_PUBLIC_API_URL);
   return (
     <>
       <Header />
