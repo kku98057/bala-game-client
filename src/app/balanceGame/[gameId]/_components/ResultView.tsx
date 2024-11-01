@@ -4,9 +4,14 @@ import gsap from "gsap";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import Script from "next/script";
 import { useEffect, useState } from "react";
 import { FiShare2, FiBarChart2 } from "react-icons/fi"; // 아이콘 사용
-
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 export const ResultView = ({
   result,
   resultRef,
@@ -96,6 +101,13 @@ export const ResultView = ({
     `"${result.name}" 찍은 사람 여기 있네요!`,
     `밸런스 끝판왕의 선택 "${result.name}"`,
   ];
+
+  useEffect(() => {
+    // Kakao SDK 초기화
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
+    }
+  }, []);
   const handleShare = async () => {
     try {
       // URL에 선택한 결과 ID를 포함
@@ -124,7 +136,38 @@ export const ResultView = ({
 
   const shareMessage =
     shareMessages[Math.floor(Math.random() * shareMessages.length)];
+  const handleKakaoShare = () => {
+    const shareUrl = `${window.location.origin}${window.location.pathname}?result=${result.id}`;
 
+    window.Kakao.Share.sendDefault({
+      objectType: "feed",
+      content: {
+        title: "밸런스 게임 결과",
+        description: `내가 선택한 답은 "${result.name}"입니다! 당신의 선택은?`,
+        imageUrl: result.imageUrl,
+        link: {
+          mobileWebUrl: shareUrl,
+          webUrl: shareUrl,
+        },
+      },
+      buttons: [
+        {
+          title: "게임 참여하기",
+          link: {
+            mobileWebUrl: shareUrl,
+            webUrl: shareUrl,
+          },
+        },
+        {
+          title: "결과 보기",
+          link: {
+            mobileWebUrl: shareUrl,
+            webUrl: shareUrl,
+          },
+        },
+      ],
+    });
+  };
   return (
     <div
       ref={resultRef}
@@ -150,7 +193,7 @@ export const ResultView = ({
         {/* 버튼 그룹 */}
         <div className="result-buttons flex flex-col gap-4">
           <button
-            onClick={handleShare}
+            onClick={handleKakaoShare}
             className="group relative w-full flex items-center justify-center py-4 px-6 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <FiShare2 className="mr-2" />
