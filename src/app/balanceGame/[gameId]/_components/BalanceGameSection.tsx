@@ -10,7 +10,7 @@ import { useBalanceGame } from "@/hooks/useBalanceGame";
 import { FiPlay } from "react-icons/fi"; // 시작 아이콘
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { getBalanceGameData } from "../_lib/getBalanceGameData";
 import Link from "next/link";
 import { postBalaceGameParticipageCountData } from "../_lib/postBalaceGameParticipageCountData";
@@ -22,10 +22,18 @@ export default function BalanceGameSection() {
   });
   const [isStart, setIsStart] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 상태 추가
+  const searchParams = useSearchParams();
+  const resultId = searchParams.get("result");
 
   const [userCount, setUserCount] = useState(0); // 사용자 수 상태 추가
-  const { curGame, result, selectHandler, isSelecting, currentRound } =
-    useBalanceGame(data?.items || [], gameId || "0");
+  const {
+    curGame,
+    result,
+    selectHandler,
+    isSelecting,
+    currentRound,
+    setResult,
+  } = useBalanceGame(data?.items || [], gameId || "0");
   const sectionRef = useRef<HTMLDivElement>(null); // 섹션 참조 추가
 
   const ref = useRef<HTMLDivElement>(null);
@@ -152,10 +160,10 @@ export default function BalanceGameSection() {
     );
   };
   useEffect(() => {
-    if (currentRound && isStart) {
+    if (currentRound && isStart && !result) {
       showRoundAnimation();
     }
-  }, [currentRound, isStart]);
+  }, [currentRound, isStart, result]);
 
   useEffect(() => {
     if (sectionRef.current) {
@@ -172,6 +180,20 @@ export default function BalanceGameSection() {
       resultTimeline.kill();
     };
   }, []);
+  useEffect(() => {
+    // 공유된 결과가 있는 경우
+    if (resultId && data?.items) {
+      const sharedResult = data.items.find(
+        (item) => item.id === Number(resultId)
+      );
+      if (sharedResult) {
+        // 결과 화면 바로 표시
+        setIsStart(true);
+        // 공유된 결과를 보여줌
+        setResult(sharedResult);
+      }
+    }
+  }, [resultId, data]);
   return (
     <section
       ref={sectionRef}
@@ -205,7 +227,10 @@ export default function BalanceGameSection() {
                 ))}
               </ul>
               <button
-                onClick={() => window.location.reload()}
+                onClick={() => {
+                  const baseUrl = window.location.href.split("?")[0];
+                  window.location.href = baseUrl;
+                }}
                 className="absolute top-[100px] bg-indigo-600 p-[15px] rounded-full left-[50%] translate-x-[-50%] z-[10] text-white hover:bg-indigo-700 transition-colors duration-200 shadow-lg"
               >
                 다시 시작하기

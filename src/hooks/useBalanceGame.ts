@@ -88,5 +88,6 @@ export const useBalanceGame = (
     selectHandler,
     isSelecting,
     currentRound,
+    setResult,
   };
 };

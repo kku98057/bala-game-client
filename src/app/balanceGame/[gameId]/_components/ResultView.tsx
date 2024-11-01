@@ -4,7 +4,7 @@ import gsap from "gsap";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FiShare2, FiBarChart2 } from "react-icons/fi"; // 아이콘 사용
 
 export const ResultView = ({
@@ -98,23 +98,30 @@ export const ResultView = ({
   ];
   const handleShare = async () => {
     try {
+      // URL에 선택한 결과 ID를 포함
+      const shareUrl = `${window.location.href}?result=${result.id}`;
+
       if (navigator.share) {
         await navigator.share({
           title: "밸런스 게임 결과",
           text: `내가 선택한 답은 "${result.name}"입니다!`,
-          url: window.location.href,
+          url: shareUrl,
         });
       } else {
-        // 클립보드에 복사
-        await navigator.clipboard.writeText(window.location.href);
+        await navigator.clipboard.writeText(shareUrl);
         alert("링크가 복사되었습니다!");
       }
     } catch (error) {
       console.error("공유 실패:", error);
     }
   };
-  const randomMessage =
-    resultMessages[Math.floor(Math.random() * resultMessages.length)];
+  const [randomMessage, setRandomMessage] = useState("");
+  useEffect(() => {
+    setRandomMessage(
+      resultMessages[Math.floor(Math.random() * resultMessages.length)]
+    );
+  }, []);
+
   const shareMessage =
     shareMessages[Math.floor(Math.random() * shareMessages.length)];
 
@@ -163,7 +170,10 @@ export const ResultView = ({
 
         {/* 재시작 버튼 */}
         <button
-          onClick={() => window.location.reload()}
+          onClick={() => {
+            const baseUrl = window.location.href.split("?")[0];
+            window.location.href = baseUrl;
+          }}
           className="w-full mt-8 py-3 text-zinc-400 hover:text-white transition-colors duration-200"
         >
           다시 시작하기
