@@ -6,7 +6,7 @@ interface DataProps {
 export const postFinalChoiceData = async (finalChoiceData: DataProps) => {
   try {
     const response = await fetch(
-      `http://localhost:3001/api/balanceGame/final-choice`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/final-choice`,
       {
         cache: "no-cache",
         headers: {

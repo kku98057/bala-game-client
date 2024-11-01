@@ -21,13 +21,16 @@ export const createBalanceGame = async (formData: FormData) => {
     }
   }
 
-  const response = await fetch("http://localhost:3001/api/balanceGame/create", {
-    method: "POST",
-    body: compressedFormData,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/create`,
+    {
+      method: "POST",
+      body: compressedFormData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   if (!response.ok) {
     const errorData = await response.json();
     throw {

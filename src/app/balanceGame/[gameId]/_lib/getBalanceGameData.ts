@@ -1,7 +1,7 @@
 export const getBalanceGameData = async (id: number) => {
   try {
     const response = await fetch(
-      `http://localhost:3001/api/balanceGame/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/${id}`,
       {
         cache: "no-cache",
       }

@@ -14,13 +14,16 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("로그아웃 실패");

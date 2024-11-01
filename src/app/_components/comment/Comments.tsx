@@ -47,7 +47,7 @@ export default function Comments({ gameId }: CommentProps) {
     queryKey: QUERYKEYS.balanceGame.comments.list(gameId, currentPage),
     queryFn: async () => {
       const response = await fetch(
-        `http://localhost:3001/api/comments/${gameId}?page=${currentPage}&limit=10`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${gameId}?page=${currentPage}&limit=10`
       );
       if (!response.ok) throw new Error("Failed to fetch comments");
       const data = await response.json();
@@ -60,7 +60,7 @@ export default function Comments({ gameId }: CommentProps) {
     mutationFn: async (content: string) => {
       const token = Cookies.get("token");
       const response = await fetch(
-        "http://localhost:3001/api/comments/create",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/comments/create`,
         {
           method: "POST",
           headers: {
