@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { FiX, FiHome, FiList, FiAward, FiInfo } from "react-icons/fi";
+import { FiX, FiHome, FiList } from "react-icons/fi";
 import gsap from "gsap";
 import Link from "next/link";
 
@@ -12,9 +12,7 @@ interface MenuModalProps {
 
 const menuItems = [
   { icon: <FiHome />, label: "홈", href: "/" },
-  { icon: <FiList />, label: "게임 목록", href: "/games" },
-  { icon: <FiAward />, label: "랭킹", href: "/ranking" },
-  { icon: <FiInfo />, label: "게임 소개", href: "/about" },
+  { icon: <FiList />, label: "게임 목록", href: "/balanceGame" },
 ];
 
 export const MenuModal = ({ isOpen, onClose }: MenuModalProps) => {
