@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import Image from "next/image";
 import { BalanceGameListResponse } from "@/app/types/gameType";
+import LinkButton from "@/app/_components/buttons/LinkButton";
 
 export default function BalaceGameListSection() {
   const observerRef = useRef<HTMLDivElement>(null);
@@ -50,10 +51,7 @@ export default function BalaceGameListSection() {
         <h1 className="text-4xl font-semibold text-white mb-6 sm:mb-0">
           밸런스 게임 리스트
         </h1>
-        <Link
-          href="/balanceGame/create"
-          className="group flex items-center gap-2 px-6 py-3 bg-[#2563EB] text-white rounded-xl hover:bg-[#1D4ED8] transition-all duration-300"
-        >
+        <LinkButton href="/balanceGame/create">
           <svg
             className="w-5 h-5"
             fill="none"
@@ -68,7 +66,7 @@ export default function BalaceGameListSection() {
             />
           </svg>
           <span className="font-medium">게임 만들기</span>
-        </Link>
+        </LinkButton>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {data?.pages.map((page) =>

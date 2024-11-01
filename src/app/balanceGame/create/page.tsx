@@ -4,6 +4,8 @@ import { useCallback, useState } from "react";
 import { createBalanceGame } from "./_lib/createBalanceGameData";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import LinkButton from "@/app/_components/buttons/LinkButton";
 
 export default function CreateBalanceGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
@@ -169,10 +171,28 @@ export default function CreateBalanceGamePage() {
   return (
     <div className="w-full min-h-dvh bg-gradient-to-b from-zinc-900 to-zinc-800">
       {/* 고정된 헤더 */}
-      <div className="sticky top-[70px] w-full bg-gradient-to-b from-zinc-900 to-zinc-900/95 pt-8 pb-4 px-4 z-10">
+      <div className="sticky max-w-screen-xl mx-auto flex justify-between items-center top-[70px] w-full bg-gradient-to-b from-zinc-900 to-zinc-900/95 pt-8 pb-4  z-10">
         <h1 className="text-4xl font-bold text-center text-white">
           밸런스 게임 생성하기
         </h1>
+        <LinkButton href="/balanceGame">
+          <span className="flex items-center gap-2">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            게임 목록으로
+          </span>
+        </LinkButton>
       </div>
 
       <form
@@ -211,9 +231,9 @@ export default function CreateBalanceGamePage() {
           </div>
 
           {/* 항목 리스트 */}
-          <div className=" w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ul className=" w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {list.map((item, index) => (
-              <div
+              <li
                 key={index}
                 className="relative p-6 bg-zinc-800/50 rounded-xl border border-zinc-700 hover:border-zinc-600 transition-all duration-200"
               >
@@ -332,9 +352,9 @@ export default function CreateBalanceGamePage() {
                     className="w-full py-3 px-4 bg-zinc-900 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
 
           {/* 하단 버튼 */}
           <div className="sticky bottom-8 pt-4 space-y-4 bg-gradient-to-t from-zinc-800 to-zinc-800/95">
