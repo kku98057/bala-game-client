@@ -1,8 +1,19 @@
-export interface CommentProps {
+export interface CommentType {
   id: number;
-  gameId: number;
-  nickname: string;
   content: string;
   createdAt: string;
-  likes?: number;
+  user: {
+    nickname: string;
+  };
+}
+
+export interface CommentCreateResponse {
+  success: boolean;
+  message: string;
+  data: CommentType;
+}
+
+export interface CommentListResponse {
+  success: boolean;
+  data: CommentType[];
 }

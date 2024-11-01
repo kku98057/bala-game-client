@@ -78,6 +78,7 @@ export default function BalanceGameSection() {
       }
     );
   }, [data?.participantCount]);
+
   useEffect(() => {
     if (ref.current && isStart) {
       const tl = gsap.timeline({
@@ -162,7 +163,7 @@ export default function BalanceGameSection() {
         opacity: 1,
         scale: 1,
         duration: 1,
-        ease: "bounce.out", // 화려한 애니메이션 효과
+        ease: "bounce.out",
       });
     }
     return () => {
@@ -188,8 +189,8 @@ export default function BalanceGameSection() {
               <ul className="w-full flex items-center h-dvh">
                 {curGame.slice(0, 2).map((list: GameProps, index) => (
                   <li
-                    key={`${list.name}_${name}`}
-                    className={`game-choice overflow-hidden ${
+                    key={`${list.id}_선택지`}
+                    className={`game-choice ${
                       index === 0 ? "game-choice-left" : "game-choice-right"
                     } flex-1 h-full`}
                   >

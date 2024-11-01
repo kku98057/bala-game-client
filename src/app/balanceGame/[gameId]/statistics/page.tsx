@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { QUERYKEYS } from "@/queryKeys";
 import Image from "next/image";
 import { getBalaceGameStatisticsData } from "./_lib/getBalaceGameStatisticsData";
@@ -11,12 +11,17 @@ import { useEffect, useState } from "react";
 import { FaCrown } from "react-icons/fa"; // 왕관 아이콘
 import CustomLink from "@/app/_components/buttons/CustomLink";
 import TitleText from "@/app/_components/TitleText";
-import Comments from "@/app/_components/comment/Comment";
+import Comments from "@/app/_components/comment/Comments";
+import Loading from "@/app/_components/Loading";
 
 export default function StatisticsPage() {
   const { gameId } = useParams();
 
-  const { data: statistics, isLoading } = useQuery<GameStatistics>({
+  const {
+    data: statistics,
+    isLoading,
+    isError,
+  } = useQuery<GameStatistics>({
     queryKey: QUERYKEYS.balanceGame.statistics(Number(gameId)),
     queryFn: () => getBalaceGameStatisticsData(Number(gameId)),
   });
@@ -29,15 +34,17 @@ export default function StatisticsPage() {
     }, 100);
     return () => clearTimeout(timer);
   }, []);
-  if (isLoading) {
-    return <div>로딩 중...</div>;
-  }
+
   // 순위별 왕관 색상
   const crownColors = {
     0: "text-yellow-400", // 금관
     1: "text-gray-300", // 은관
     2: "text-amber-600", // 동관
   };
+
+  if (isError) {
+    return notFound();
+  }
 
   return (
     <>
@@ -65,7 +72,7 @@ export default function StatisticsPage() {
               {statistics?.totalCount.toLocaleString()}명
             </span>
           </div>
-
+          {isLoading && <Loading />}
           <div className="space-y-6">
             {statistics?.items.map((item, index) => (
               <div key={item.id} className="bg-zinc-700 rounded-lg p-4">
@@ -118,7 +125,7 @@ export default function StatisticsPage() {
           </div>
         </div>
       </Section>
-      <Section>
+      <Section className="pb-14">
         <Comments gameId={Number(gameId)} />
       </Section>
     </>

@@ -74,7 +74,7 @@ export const GameChoiceList = ({
       )}
 
       {/* 기존 컨텐츠 */}
-      <div className="relative w-full h-full group">
+      <div className="relative w-full h-full group overflow-hidden">
         <Image
           src={list.imageUrl}
           alt={list.name}

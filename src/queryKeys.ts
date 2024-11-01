@@ -7,8 +7,14 @@ const balanceGame = {
     [...balanceGame.all(), "participantCount", { id }] as const,
   statistics: (id: number) =>
     [...balanceGame.all(), "statistics", { id }] as const,
-  comments: (id: number) => [...balanceGame.all(), "comments", { id }] as const,
+
   create: () => [...balanceGame.all(), "create"] as const,
+  comments: {
+    all: () => ["comments", "all"] as const,
+    list: (gameId: number, currentPage: number) =>
+      [...balanceGame.comments.all(), "list", { gameId, currentPage }] as const,
+    create: () => [...balanceGame.comments.all(), "create"] as const,
+  },
 };
 
 export const QUERYKEYS = {
