@@ -11,6 +11,7 @@ export interface BalanceGameList {
   totalUsers: number;
   username: string;
   createdAt: string;
+  participantCount: number;
   itemsCount?: number;
 }
 export interface BalanceGameProps {
