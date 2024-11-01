@@ -44,9 +44,9 @@ export default function BalaceGameListSection({ limit }: { limit: number }) {
       </div>
     );
   }
-
+  console.log(data);
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-48">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
       <div className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end">
         <h1 className="text-4xl font-semibold text-white mb-6 sm:mb-0">
           밸런스 게임 리스트
@@ -77,6 +77,9 @@ export default function BalaceGameListSection({ limit }: { limit: number }) {
               <div className="p-6">
                 {/* 제목 */}
                 <h3 className="text-xl font-medium mb-3 truncate">
+                  <span className="text-blue-500 font-bold">
+                    [{(game.itemsCount as number) / 2}강전]
+                  </span>
                   {game.title}
                 </h3>
 
