@@ -8,11 +8,12 @@ import { GameChoiceList } from "./GameChoiceList";
 import { ResultView } from "./ResultView";
 import { useBalanceGame } from "@/hooks/useBalanceGame";
 import { FiPlay } from "react-icons/fi"; // 시작 아이콘
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
 import { useParams } from "next/navigation";
 import { getBalanceGameData } from "../_lib/getBalanceGameData";
 import Link from "next/link";
+import { postBalaceGameParticipageCountData } from "../_lib/postBalaceGameParticipageCountData";
 
 export default function BalanceGameSection() {
   const { name: id } = useParams();
@@ -35,7 +36,7 @@ export default function BalanceGameSection() {
   const firstTimeline = gsap.timeline();
 
   useEffect(() => {
-    const end = data?.totalUsers;
+    const end = data?.participantCount;
     const duration = 2; // 애니메이션 지속 시간 (초)
 
     // GSAP 애니메이션 설정
@@ -51,7 +52,7 @@ export default function BalanceGameSection() {
         },
       }
     );
-  }, [data?.totalUsers]);
+  }, [data?.participantCount]);
   useEffect(() => {
     if (ref.current && isStart) {
       const tl = gsap.timeline({
@@ -95,22 +96,33 @@ export default function BalanceGameSection() {
       );
     }
   }, [isStart]);
+  const { mutate: participantCountHandler, isPending } = useMutation({
+    mutationFn: ({ id }: { id: number }) =>
+      postBalaceGameParticipageCountData(id),
+    mutationKey: QUERYKEYS.balanceGame.participantCount(Number(id)),
+  });
 
   const handleStart = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    setDisabled(true);
-    const timeline = gsap.timeline({ repeat: 3 });
-    timeline
-      .to(e.currentTarget, {
-        scale: 0.95,
-        duration: 0.15,
-      })
-      .to(e.currentTarget, {
-        scale: 1,
-        duration: 0.15,
-      });
-
-    await delay(1000);
-    setIsStart(true);
+    participantCountHandler(
+      {
+        id: Number(id),
+      },
+      {
+        onSuccess: () => {
+          setIsStart(true);
+          const timeline = gsap.timeline({ repeat: 3 });
+          timeline
+            .to(e.currentTarget, {
+              scale: 0.95,
+              duration: 0.15,
+            })
+            .to(e.currentTarget, {
+              scale: 1,
+              duration: 0.15,
+            });
+        },
+      }
+    );
   };
 
   useEffect(() => {
@@ -176,7 +188,7 @@ export default function BalanceGameSection() {
 
           <button
             type="button"
-            disabled={disabled}
+            disabled={isPending}
             onClick={handleStart}
             className="start-button  group relative w-full flex items-center justify-center py-6 px-8 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >

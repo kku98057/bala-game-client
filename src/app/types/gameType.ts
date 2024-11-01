@@ -4,21 +4,20 @@ export type GameProps = {
   id: number;
   balanceGameId: number;
 };
-export interface BalanceGameList {
-  title: string;
-  id: number;
-  items: GameProps[];
-  totalUsers: number;
-  username: string;
-  createdAt: string;
-  participantCount: number;
-  itemsCount?: number;
-}
+
 export interface BalanceGameProps {
   title: string;
   items: GameProps[];
-  totalUsers: number;
+  participantCount: number;
 }
+
+export interface BalanceGameList extends BalanceGameProps {
+  id: number;
+  username: string;
+  createdAt: string;
+  itemsCount?: number;
+}
+
 export interface BalanceGameListResponse {
   games: BalanceGameList[];
   currentPage: number;
