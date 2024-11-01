@@ -1,7 +1,12 @@
+import { postFinalChoiceData } from "@/app/balanceGame/[gameId]/_lib/postFinalChoiceData";
 import { GameProps } from "@/app/types/gameType";
+import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 
-export const useBalanceGame = (initialData: GameProps[]) => {
+export const useBalanceGame = (
+  initialData: GameProps[],
+  gameId: string | string[]
+) => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [currentRound, setCurrentRound] = useState<string>("");
   const [curGame, setCurGame] = useState<GameProps[]>([]);
@@ -24,11 +29,21 @@ export const useBalanceGame = (initialData: GameProps[]) => {
     return "";
   }, []);
 
+  const { mutate: finalChoiceHandler } = useMutation({
+    mutationFn: (data: { balanceGameId: number; selectedItemId: number }) =>
+      postFinalChoiceData(data),
+    onSuccess: () => {
+      setResult(curGame[0]);
+      setCurGame([]);
+      setNextGame([]);
+    },
+  });
+
   const selectHandler = useCallback(
     async (list1: GameProps, list2: GameProps, selectedGame: GameProps) => {
       if (isSelecting) return;
-
       setIsSelecting(true);
+
       if (curGame.length <= 1) return;
 
       setNextGame((prev) => [...prev, selectedGame]);
@@ -59,9 +74,11 @@ export const useBalanceGame = (initialData: GameProps[]) => {
       setCurrentRound(calculateRound(nextRoundGames));
     } else if (curGame.length === 1 && nextGame.length === 0) {
       // 최종 우승자 결정
-      setResult(curGame[0]);
-      setCurGame([]);
-      setNextGame([]);
+
+      finalChoiceHandler({
+        balanceGameId: Number(gameId),
+        selectedItemId: curGame[0].id,
+      });
     }
   }, [curGame, nextGame, shuffleArray, calculateRound]);
 

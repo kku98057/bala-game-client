@@ -14,7 +14,6 @@ import { useParams } from "next/navigation";
 import { getBalanceGameData } from "../_lib/getBalanceGameData";
 import Link from "next/link";
 import { postBalaceGameParticipageCountData } from "../_lib/postBalaceGameParticipageCountData";
-
 export default function BalanceGameSection() {
   const { gameId } = useParams();
   const { data } = useQuery<BalanceGameProps>({
@@ -26,7 +25,7 @@ export default function BalanceGameSection() {
 
   const [userCount, setUserCount] = useState(0); // 사용자 수 상태 추가
   const { curGame, result, selectHandler, isSelecting, currentRound } =
-    useBalanceGame(data?.items || []);
+    useBalanceGame(data?.items || [], gameId || "0");
   const sectionRef = useRef<HTMLDivElement>(null); // 섹션 참조 추가
 
   const ref = useRef<HTMLDivElement>(null);
