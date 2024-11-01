@@ -154,7 +154,7 @@ export default function BalanceGameSection() {
                 {curGame.slice(0, 2).map((list: GameProps, index) => (
                   <li
                     key={`${list.name}_${name}`}
-                    className={`game-choice ${
+                    className={`game-choice overflow-hidden ${
                       index === 0 ? "game-choice-left" : "game-choice-right"
                     } flex-1 h-full`}
                   >
@@ -193,7 +193,9 @@ export default function BalanceGameSection() {
             className="start-button  group relative w-full flex items-center justify-center py-6 px-8 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <FiPlay className="mr-3 text-2xl" />
-            <span className="text-2xl">시작하기</span>
+            <span className="text-2xl">
+              {isPending ? "시작중.." : "시작하기"}
+            </span>
             <div className="absolute inset-0 rounded-xl border-2 border-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
           </button>
 
