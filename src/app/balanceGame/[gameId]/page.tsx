@@ -7,6 +7,9 @@ import {
   HydrationBoundary,
 } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
+import { Metadata, ResolvingMetadata } from "next";
+// 동적 메타데이터 생성
+
 export default async function page({
   params,
 }: {

@@ -1,7 +1,7 @@
 export const postBalaceGameParticipageCountData = async (id: number) => {
   try {
     const response = await fetch(
-      `http://localhost:3001/api/balanceGame/participants`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/participants`,
       {
         cache: "no-cache",
         headers: {

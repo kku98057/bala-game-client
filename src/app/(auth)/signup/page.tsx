@@ -71,20 +71,23 @@ export default function RegisterPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message || "회원가입에 실패했습니다.");
       }
 
-      router.push("/auth/login");
+      router.push("/login");
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "회원가입에 실패했습니다.";

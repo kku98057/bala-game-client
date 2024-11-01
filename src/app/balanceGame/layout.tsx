@@ -1,7 +1,14 @@
 import { ReactNode } from "react";
+import { Metadata } from "next";
 import Header from "../_components/Header";
+export const metadata: Metadata = {
+  title: "밸런썸 (Balancesome) - 게임목록",
+  description:
+    "밸런썸 (Balancesome) 밸런스 게임을 만들고 즐기고 공유하고 랭킹을 확인하세요!",
+};
 
 export default function GameLayout({ children }: { children: ReactNode }) {
+  console.log(process.env.NEXT_PUBLIC_API_URL);
   return (
     <>
       <Header />
