@@ -10,13 +10,13 @@ import { notFound } from "next/navigation";
 export default async function page({
   params,
 }: {
-  params: Promise<{ name: string }>;
+  params: Promise<{ gameId: string }>;
 }) {
   const queryClient = new QueryClient();
 
   try {
-    const gameId = Number((await params).name);
-    const gameData = await getBalanceGameData(gameId);
+    const NumberId = Number((await params).gameId);
+    const gameData = await getBalanceGameData(NumberId);
 
     // 데이터가 없는 경우 404
     if (!gameData) {
@@ -24,7 +24,7 @@ export default async function page({
     }
 
     await queryClient.prefetchQuery({
-      queryKey: QUERYKEYS.balanceGame.list(gameId),
+      queryKey: QUERYKEYS.balanceGame.list(NumberId),
       queryFn: () => Promise.resolve(gameData),
     });
 

@@ -16,10 +16,10 @@ import Link from "next/link";
 import { postBalaceGameParticipageCountData } from "../_lib/postBalaceGameParticipageCountData";
 
 export default function BalanceGameSection() {
-  const { name: id } = useParams();
+  const { gameId } = useParams();
   const { data } = useQuery<BalanceGameProps>({
-    queryKey: QUERYKEYS.balanceGame.list(Number(id)),
-    queryFn: async () => getBalanceGameData(Number(id)),
+    queryKey: QUERYKEYS.balanceGame.list(Number(gameId)),
+    queryFn: async () => getBalanceGameData(Number(gameId)),
   });
   const [isStart, setIsStart] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 상태 추가
@@ -126,13 +126,13 @@ export default function BalanceGameSection() {
   const { mutate: participantCountHandler, isPending } = useMutation({
     mutationFn: ({ id }: { id: number }) =>
       postBalaceGameParticipageCountData(id),
-    mutationKey: QUERYKEYS.balanceGame.participantCount(Number(id)),
+    mutationKey: QUERYKEYS.balanceGame.participantCount(Number(gameId)),
   });
 
   const handleStart = async (e: React.MouseEvent<HTMLButtonElement>) => {
     participantCountHandler(
       {
-        id: Number(id),
+        id: Number(gameId),
       },
       {
         onSuccess: () => {

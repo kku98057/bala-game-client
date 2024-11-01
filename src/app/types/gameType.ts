@@ -25,3 +25,13 @@ export interface BalanceGameListResponse {
   totalItems: number;
   list: number;
 }
+export interface GameStatistics {
+  totalCount: number;
+  items: {
+    id: number;
+    name: string;
+    imageUrl: string;
+    count: number;
+    percentage: number;
+  }[];
+}

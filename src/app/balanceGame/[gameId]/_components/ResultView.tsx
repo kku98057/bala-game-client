@@ -3,6 +3,7 @@ import confetti from "canvas-confetti";
 import gsap from "gsap";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { FiShare2, FiBarChart2 } from "react-icons/fi"; // 아이콘 사용
 
@@ -13,9 +14,10 @@ export const ResultView = ({
   result: GameProps;
   resultRef: React.RefObject<HTMLDivElement>;
 }) => {
+  const { gameId } = useParams();
   useEffect(() => {
     // 초기 상태 설정
-    gsap.set([".result-image", ".result-title", ".result-buttons button"], {
+    gsap.set([".result-image", ".result-title", ".result-buttons a"], {
       opacity: 0,
     });
 
@@ -52,7 +54,7 @@ export const ResultView = ({
         }
       )
       .fromTo(
-        ".result-buttons button",
+        ".result-buttons a",
         {
           y: 20,
           opacity: 0,
@@ -129,7 +131,8 @@ export const ResultView = ({
             <div className="absolute inset-0 rounded-xl border-2 border-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
           </button>
 
-          <button
+          <Link
+            href={`/balanceGame/${gameId}/statistics`}
             onClick={() => {
               /* 통계 보기 로직 */
             }}
@@ -138,7 +141,7 @@ export const ResultView = ({
             <FiBarChart2 className="mr-2" />
             <span>통계 보기</span>
             <div className="absolute inset-0 rounded-xl border-2 border-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-          </button>
+          </Link>
         </div>
 
         {/* 재시작 버튼 */}

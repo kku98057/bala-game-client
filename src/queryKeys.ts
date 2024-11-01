@@ -5,6 +5,8 @@ const balanceGame = {
   list: (id: number) => [...balanceGame.all(), { id }] as const,
   participantCount: (id: number) =>
     [...balanceGame.all(), "participantCount", { id }] as const,
+  statistics: (id: number) =>
+    [...balanceGame.all(), "statistics", { id }] as const,
 };
 
 export const QUERYKEYS = {
