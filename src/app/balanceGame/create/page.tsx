@@ -314,7 +314,6 @@ export default function CreateBalanceGamePage() {
                       const isValidChange = list.some(
                         (item) => item.name.trim() || item.image
                       );
-                      console.log(isValidChange);
                       if (isValidChange) {
                         const result = window.confirm(
                           "형식 변경 시 선택지는 초기화 됩니다. 진행하시겠습니까?"

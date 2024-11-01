@@ -10,8 +10,6 @@ export default async function balanceGameListData({
       `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame?page=${page}&limit=${limit}`
     );
     const data = await res.json();
-    console.log("API Response:", data);
-    console.log("Payload structure:", data.payload);
 
     return data.payload;
   } catch (error) {
