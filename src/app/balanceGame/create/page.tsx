@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import CustomButton from "@/app/_components/buttons/CustomButton";
 import CustomLink from "@/app/_components/buttons/CustomLink";
+import Section from "@/app/_components/Section";
 
 export default function CreateBalanceGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
@@ -185,7 +186,6 @@ export default function CreateBalanceGamePage() {
     },
     [list]
   );
-  console.log(list);
   // 드래그 이벤트 핸들러 수정
   const handleDragEnter = useCallback((e: React.DragEvent, index: number) => {
     e.preventDefault();
@@ -210,11 +210,10 @@ export default function CreateBalanceGamePage() {
       return newStates;
     });
   }, []);
-  console.log(list);
   return (
-    <div className="w-full min-h-dvh bg-gradient-to-b from-zinc-900 to-zinc-800 px-4 max-w-screen-2xl mx-auto">
+    <Section>
       {/* 고정된 헤더 */}
-      <div className="sticky flex justify-between items-center top-[70px] w-full bg-gradient-to-b from-zinc-900 to-zinc-900/95 pt-8 pb-4  z-10">
+      <div className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end">
         <h1 className="text-4xl font-bold text-center text-white">
           밸런스 게임 생성하기
         </h1>
@@ -470,6 +469,6 @@ export default function CreateBalanceGamePage() {
           </div>
         </div>
       </form>
-    </div>
+    </Section>
   );
 }
