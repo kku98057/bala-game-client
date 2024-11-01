@@ -12,10 +12,35 @@ export default function Header() {
   const router = useRouter();
   const [user, setUser] = useState<UserProps | null>(null); // user 상태 추가
 
-  const handleLogout = () => {
-    Cookies.remove("token");
-    Cookies.remove("user");
-    router.push("/login");
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("로그아웃 실패");
+      }
+
+      // 쿠키 제거
+      Cookies.remove("token");
+      Cookies.remove("user");
+      setUser(null);
+
+      // 홈으로 리다이렉트
+      router.push("/login");
+    } catch (error) {
+      console.error("로그아웃 에러:", error);
+      // 에러가 발생해도 일단 로컬의 토큰은 제거
+      Cookies.remove("token");
+      Cookies.remove("user");
+      setUser(null);
+      router.push("/login");
+    }
   };
   // 컴포넌트가 마운트된 후에만 쿠키를 읽도록 수정
   useEffect(() => {

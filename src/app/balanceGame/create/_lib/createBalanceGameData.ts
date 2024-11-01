@@ -1,9 +1,9 @@
 import { optimizeImage } from "@/app/_lib/optimizeImage";
-
+import Cookies from "js-cookie";
 export const createBalanceGame = async (formData: FormData) => {
   const imageFiles = formData.getAll("image") as File[];
   const compressedFormData = new FormData();
-
+  const token = Cookies.get("token");
   // 이미지가 아닌 데이터 복사
   for (const [key, value] of formData.entries()) {
     if (key !== "image") {
@@ -24,9 +24,18 @@ export const createBalanceGame = async (formData: FormData) => {
   const response = await fetch("http://localhost:3001/api/balanceGame/create", {
     method: "POST",
     body: compressedFormData,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
   if (!response.ok) {
-    throw new Error("게임 생성에 실패했습니다");
+    const errorData = await response.json();
+    throw {
+      response: {
+        status: response.status,
+        data: errorData,
+      },
+    };
   }
 
   return response.json();

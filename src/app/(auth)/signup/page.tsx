@@ -167,7 +167,7 @@ export default function RegisterPage() {
         <div className="text-center text-zinc-400">
           이미 계정이 있으신가요?{" "}
           <Link
-            href="/auth/login"
+            href="/login"
             className="text-indigo-400 hover:text-indigo-300 transition-colors"
           >
             로그인하기

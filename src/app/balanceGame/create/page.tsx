@@ -1,6 +1,6 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createBalanceGame } from "./_lib/createBalanceGameData";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -8,12 +8,14 @@ import CustomButton from "@/app/_components/buttons/CustomButton";
 import CustomLink from "@/app/_components/buttons/CustomLink";
 import Section from "@/app/_components/Section";
 import TitleText from "@/app/_components/TitleText";
-
+import { QUERYKEYS } from "@/queryKeys";
+import { UserProps } from "@/app/types/UserType";
+import Cookies from "js-cookie";
 export default function CreateBalanceGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
-  const [username, setUsername] = useState(""); // 유저이름 추가
-  const [tournamentType, setTournamentType] = useState<4 | 8 | 16 | null>(null);
 
+  const [tournamentType, setTournamentType] = useState<4 | 8 | 16 | null>(null);
+  const [user, setUser] = useState<UserProps | null>(null);
   const [list, setList] = useState<
     { name: string; image: File | null; id: number }[]
   >([]);
@@ -21,6 +23,7 @@ export default function CreateBalanceGamePage() {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: createBalanceGame,
+    mutationKey: QUERYKEYS.balanceGame.create(),
   });
   const initializeTournament = (type: 4 | 8 | 16) => {
     const itemCount = type * 2;
@@ -86,6 +89,11 @@ export default function CreateBalanceGamePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 유효성 검사
+    if (!user) {
+      alert("로그인이 필요한 서비스입니다.");
+      router.push("/login");
+      return;
+    }
     if (list.length % 2 !== 0) {
       alert("선택지는 짝수 개수로만 생성할 수 있습니다.");
       return;
@@ -97,14 +105,6 @@ export default function CreateBalanceGamePage() {
     }
     if (title.length > 20) {
       alert("게임 제목은 20자 이하로 입력해주세요.");
-      return;
-    }
-    if (!username.trim()) {
-      alert("작성자명을 입력해주세요.");
-      return;
-    }
-    if (username.length > 8) {
-      alert("작성자명은 8자 이하로 입력해주세요.");
       return;
     }
     if (![8, 16, 32].includes(list.length)) {
@@ -130,7 +130,7 @@ export default function CreateBalanceGamePage() {
 
     // 기본 데이터 추가
     formData.append("title", title);
-    formData.append("username", username);
+    formData.append("username", user.nickname);
 
     // 각 아이템의 이름을 별도로 추가
     list.forEach((item, index) => {
@@ -146,9 +146,18 @@ export default function CreateBalanceGamePage() {
         alert("생성이 완료되었습니다.");
         router.push(`/balanceGame/${response.data.id}`);
       },
-      onError: (error) => {
-        console.error("Error creating game:", error);
-        alert("게임 생성에 실패했습니다. 다시 시도해주세요.");
+      onError: (error: any) => {
+        if (error.response?.status === 401) {
+          alert("로그인이 필요한 서비스입니다.");
+          router.push("/login");
+          return;
+        }
+
+        // 그 외 에러 메시지 표시
+        const errorMessage =
+          error.response?.data?.message ||
+          "게임 생성에 실패했습니다. 다시 시도해주세요.";
+        alert(errorMessage);
       },
     });
   };
@@ -211,6 +220,15 @@ export default function CreateBalanceGamePage() {
       return newStates;
     });
   }, []);
+  useEffect(() => {
+    const userCookie = Cookies.get("user");
+    if (userCookie) {
+      setUser(JSON.parse(userCookie));
+    } else {
+      // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+      router.push("/login");
+    }
+  }, [router]);
   return (
     <Section>
       {/* 고정된 헤더 */}
@@ -241,7 +259,7 @@ export default function CreateBalanceGamePage() {
               className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
             />
           </div>
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <label className="text-lg font-medium text-white">작성자</label>
             <input
               type="text"
@@ -254,7 +272,7 @@ export default function CreateBalanceGamePage() {
               placeholder="작성자명을 입력하세요."
               className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
             />
-          </div>
+          </div> */}
           {!tournamentType && (
             <div className="space-y-4">
               <h2 className="text-lg font-medium text-white">
