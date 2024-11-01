@@ -64,6 +64,14 @@ export default function CreateBalanceGamePage() {
       alert("작성자명은 8자 이하로 입력해주세요.");
       return;
     }
+
+    // 선택지 이름 길이 검증 추가
+    const invalidItem = list.find((item) => item.name.trim().length > 20);
+    if (invalidItem) {
+      alert("선택지 설명은 20자 이하로 입력해주세요.");
+      return;
+    }
+
     // 모든 항목이 이름과 이미지를 가지고 있는지 확인
     const isValid = list.every((item) => item.name.trim() && item.image);
     if (!isValid) {
@@ -314,6 +322,8 @@ export default function CreateBalanceGamePage() {
                     type="text"
                     value={item.name}
                     onChange={(e) => {
+                      if (e.target.value.length > 20)
+                        return alert("설명은 최대 20자까지 입니다.");
                       const newList = [...list];
                       newList[index].name = e.target.value;
                       setList(newList);
