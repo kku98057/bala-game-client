@@ -52,11 +52,18 @@ export default function CreateBalanceGamePage() {
       alert("게임 제목을 입력해주세요.");
       return;
     }
+    if (title.length > 20) {
+      alert("게임 제목은 20자 이하로 입력해주세요.");
+      return;
+    }
     if (!username.trim()) {
       alert("작성자명을 입력해주세요.");
       return;
     }
-
+    if (username.length > 8) {
+      alert("작성자명은 8자 이하로 입력해주세요.");
+      return;
+    }
     // 모든 항목이 이름과 이미지를 가지고 있는지 확인
     const isValid = list.every((item) => item.name.trim() && item.image);
     if (!isValid) {
@@ -171,7 +178,11 @@ export default function CreateBalanceGamePage() {
             <input
               type="text"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length > 20)
+                  return alert("게임 제목은 최대 20자까지 입니다.");
+                setTitle(e.target.value);
+              }}
               placeholder="예) 당신의 선택은?"
               className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
             />
@@ -181,7 +192,11 @@ export default function CreateBalanceGamePage() {
             <input
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length > 8)
+                  return alert("작성자명은 최대 8자까지 입니다.");
+                setUsername(e.target.value);
+              }}
               placeholder="작성자명을 입력하세요."
               className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
             />
