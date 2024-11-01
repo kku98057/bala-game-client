@@ -8,6 +8,7 @@ interface GameChoiceListProps {
   onSelect: (list1: GameProps, list2: GameProps, selected: GameProps) => void;
   curGame: GameProps[];
   isSelecting: boolean;
+  disabled?: boolean;
 }
 
 export const GameChoiceList = ({
@@ -15,8 +16,9 @@ export const GameChoiceList = ({
   onSelect,
   curGame,
   isSelecting,
+  disabled,
 }: GameChoiceListProps) => {
-  const itemRef = useRef<HTMLDivElement>(null);
+  const itemRef = useRef<HTMLButtonElement>(null);
 
   const handleSelect = async () => {
     if (isSelecting) return;
@@ -55,7 +57,8 @@ export const GameChoiceList = ({
   };
 
   return (
-    <div
+    <button
+      disabled={isSelecting || disabled}
       ref={itemRef}
       onClick={handleSelect}
       data-id={list.id}
@@ -84,6 +87,6 @@ export const GameChoiceList = ({
           {list.name}
         </p>
       </div>
-    </div>
+    </button>
   );
 };

@@ -1,9 +1,9 @@
 "use client";
 
 import { BalanceGameProps, GameProps } from "@/app/types/gameType";
-import delay from "@/utils/delay";
+
 import gsap from "gsap";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GameChoiceList } from "./GameChoiceList";
 import { ResultView } from "./ResultView";
 import { useBalanceGame } from "@/hooks/useBalanceGame";
@@ -22,11 +22,11 @@ export default function BalanceGameSection() {
     queryFn: async () => getBalanceGameData(Number(id)),
   });
   const [isStart, setIsStart] = useState(false);
-  const [disabled, setDisabled] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 상태 추가
+
   const [userCount, setUserCount] = useState(0); // 사용자 수 상태 추가
-  const { curGame, result, selectHandler, isSelecting } = useBalanceGame(
-    data?.items || []
-  );
+  const { curGame, result, selectHandler, isSelecting, currentRound } =
+    useBalanceGame(data?.items || []);
   const sectionRef = useRef<HTMLDivElement>(null); // 섹션 참조 추가
 
   const ref = useRef<HTMLDivElement>(null);
@@ -34,7 +34,33 @@ export default function BalanceGameSection() {
   const startTimeline = gsap.timeline();
   const resultTimeline = gsap.timeline();
   const firstTimeline = gsap.timeline();
+  // 라운드 시작 애니메이션
+  const showRoundAnimation = useCallback(() => {
+    setIsAnimating(true); // 애니메이션 시작
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setIsAnimating(false); // 애니메이션 완료
+      },
+    });
 
+    tl.fromTo(
+      ".round-announcement",
+      {
+        scale: 2,
+        opacity: 0,
+      },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.5,
+        ease: "back.out",
+      }
+    ).to(".round-announcement", {
+      opacity: 0,
+      delay: 1,
+      duration: 0.3,
+    });
+  }, []);
   useEffect(() => {
     const end = data?.participantCount;
     const duration = 2; // 애니메이션 지속 시간 (초)
@@ -96,6 +122,7 @@ export default function BalanceGameSection() {
       );
     }
   }, [isStart]);
+
   const { mutate: participantCountHandler, isPending } = useMutation({
     mutationFn: ({ id }: { id: number }) =>
       postBalaceGameParticipageCountData(id),
@@ -124,6 +151,11 @@ export default function BalanceGameSection() {
       }
     );
   };
+  useEffect(() => {
+    if (currentRound && isStart) {
+      showRoundAnimation();
+    }
+  }, [currentRound, isStart]);
 
   useEffect(() => {
     if (sectionRef.current) {
@@ -140,7 +172,6 @@ export default function BalanceGameSection() {
       resultTimeline.kill();
     };
   }, []);
-
   return (
     <section
       ref={sectionRef}
@@ -148,6 +179,11 @@ export default function BalanceGameSection() {
     >
       {isStart ? (
         <div ref={ref} className="relative w-full h-full overflow-hidden">
+          <div className="round-announcement fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 opacity-0">
+            <h2 className="text-6xl font-bold text-white bg-indigo-600 px-8 py-4 rounded-lg shadow-lg">
+              {currentRound} 시작!
+            </h2>
+          </div>
           {curGame.length > 0 && !result && (
             <>
               <ul className="w-full flex items-center h-dvh">
@@ -163,6 +199,7 @@ export default function BalanceGameSection() {
                       onSelect={selectHandler}
                       curGame={curGame}
                       isSelecting={isSelecting}
+                      disabled={isAnimating}
                     />
                   </li>
                 ))}
