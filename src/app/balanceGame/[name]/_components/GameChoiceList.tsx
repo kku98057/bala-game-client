@@ -77,7 +77,7 @@ export const GameChoiceList = ({
           alt={list.name}
           className=" object-cover hover:brightness-75 hover:scale-105 transition-all duration-300"
           fill
-          sizes="100%"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
         />
         <p className="absolute bottom-[15%] left-[50%] translate-x-[-50%] text-white text-[5cqi] font-bold">

@@ -2,6 +2,7 @@ export type GameProps = {
   name: string;
   imageUrl: string;
   id: number;
+  balanceGameId: number;
 };
 export interface BalanceGameList {
   title: string;

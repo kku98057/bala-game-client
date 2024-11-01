@@ -7,12 +7,10 @@ import Link from "next/link";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import Image from "next/image";
 import { BalanceGameListResponse } from "@/app/types/gameType";
-import LinkButton from "@/app/_components/buttons/LinkButton";
 import CustomLink from "@/app/_components/buttons/CustomLink";
 
-export default function BalaceGameListSection() {
+export default function BalaceGameListSection({ limit }: { limit: number }) {
   const observerRef = useRef<HTMLDivElement>(null);
-  const limit = 10;
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfiniteQuery<BalanceGameListResponse>({
@@ -21,8 +19,11 @@ export default function BalaceGameListSection() {
         balanceGameListData({ page: pageParam, limit }),
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
-        const { currentPage, totalPages } = lastPage;
-        return currentPage < totalPages ? currentPage + 1 : undefined;
+        if (!lastPage?.games) return undefined;
+        if (!lastPage.currentPage || !lastPage.totalPages) return undefined;
+        return lastPage.currentPage < lastPage.totalPages
+          ? lastPage.currentPage + 1
+          : undefined;
       },
     });
 
@@ -36,7 +37,6 @@ export default function BalaceGameListSection() {
     ref: observerRef,
     callback: onIntersect,
   });
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
@@ -96,6 +96,7 @@ export default function BalaceGameListSection() {
                       alt={game.items[0].name}
                       fill
                       className="object-cover"
+                      sizes="100%"
                     />
                   </div>
                   <span className="font-bold text-gray-400">VS</span>
@@ -105,6 +106,7 @@ export default function BalaceGameListSection() {
                       alt={game.items[1].name}
                       fill
                       className="object-cover"
+                      sizes="100%"
                     />
                   </div>
                 </div>

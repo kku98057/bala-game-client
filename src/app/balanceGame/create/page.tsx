@@ -4,44 +4,83 @@ import { useCallback, useState } from "react";
 import { createBalanceGame } from "./_lib/createBalanceGameData";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
-import LinkButton from "@/app/_components/buttons/LinkButton";
+import CustomButton from "@/app/_components/buttons/CustomButton";
+import CustomLink from "@/app/_components/buttons/CustomLink";
 
 export default function CreateBalanceGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
   const [username, setUsername] = useState(""); // 유저이름 추가
+  const [tournamentType, setTournamentType] = useState<4 | 8 | 16 | null>(null);
 
   const [list, setList] = useState<
     { name: string; image: File | null; id: number }[]
-  >(
-    Array(8)
-      .fill(null)
-      .map((_, i) => ({
-        name: "",
-        image: null, // 초기값을 null로 설정
-        id: i + 1,
-      }))
-  );
-  const addItems = () => {
-    if (list.length < 20) {
-      setList((prev) => [
-        ...prev,
-        { name: "", image: null, id: prev.length + 1 },
-        { name: "", image: null, id: prev.length + 2 },
-      ]);
-    }
-  };
-  const removeItem = (indexToRemove: number) => {
-    if (list.length > 8) {
-      // 최소 8개 항목 유지
-      setList((prev) => prev.filter((_, index) => index !== indexToRemove));
-    }
-  };
+  >([]);
+
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: createBalanceGame,
   });
+  const initializeTournament = (type: 4 | 8 | 16) => {
+    const itemCount = type * 2;
+    setTournamentType(type);
+    setList(
+      Array(itemCount)
+        .fill(null)
+        .map((_, i) => ({
+          name: "",
+          image: null,
+          id: i + 1,
+        }))
+    );
+  };
+  const handleBulkImageUpload = useCallback(
+    (files: FileList) => {
+      if (files.length > list.length) {
+        alert(`선택 가능한 이미지는 최대 ${list.length}개입니다.`);
+        return;
+      }
 
+      const newList = [...list];
+      let availableSlotIndex = 0;
+
+      // 비어있는 첫 번째 슬롯 찾기
+      while (
+        availableSlotIndex < list.length &&
+        newList[availableSlotIndex].image !== null
+      ) {
+        availableSlotIndex++;
+      }
+
+      Array.from(files).forEach((file, index) => {
+        if (!file.type.startsWith("image/")) {
+          alert(`${file.name}은(는) 이미지 파일이 아닙니다.`);
+          return;
+        }
+
+        // 현재 사용 가능한 슬롯이 있고, 전체 길이를 초과하지 않는 경우에만 추가
+        if (availableSlotIndex + index < list.length) {
+          newList[availableSlotIndex + index].image = file;
+        }
+      });
+
+      setList(newList);
+
+      const totalUploaded = newList.filter((item) => item.image).length;
+      const remainingSlots = list.length - totalUploaded;
+
+      // 업로드 완료 메시지
+      if (remainingSlots > 0) {
+        alert(
+          `${files.length}개의 이미지가 업로드되었습니다. 남은 선택지: ${remainingSlots}개`
+        );
+      } else {
+        alert(
+          `모든 이미지가 업로드되었습니다. (${list.length}/${list.length})`
+        );
+      }
+    },
+    [list]
+  );
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 유효성 검사
@@ -66,7 +105,10 @@ export default function CreateBalanceGamePage() {
       alert("작성자명은 8자 이하로 입력해주세요.");
       return;
     }
-
+    if (![8, 16, 32].includes(list.length)) {
+      alert("8강, 16강, 32강 중 하나의 형식으로만 생성할 수 있습니다.");
+      return;
+    }
     // 선택지 이름 길이 검증 추가
     const invalidItem = list.find((item) => item.name.trim().length > 20);
     if (invalidItem) {
@@ -143,6 +185,7 @@ export default function CreateBalanceGamePage() {
     },
     [list]
   );
+  console.log(list);
   // 드래그 이벤트 핸들러 수정
   const handleDragEnter = useCallback((e: React.DragEvent, index: number) => {
     e.preventDefault();
@@ -167,39 +210,24 @@ export default function CreateBalanceGamePage() {
       return newStates;
     });
   }, []);
-
+  console.log(list);
   return (
-    <div className="w-full min-h-dvh bg-gradient-to-b from-zinc-900 to-zinc-800">
+    <div className="w-full min-h-dvh bg-gradient-to-b from-zinc-900 to-zinc-800 px-4 max-w-screen-2xl mx-auto">
       {/* 고정된 헤더 */}
-      <div className="sticky max-w-screen-xl mx-auto flex justify-between items-center top-[70px] w-full bg-gradient-to-b from-zinc-900 to-zinc-900/95 pt-8 pb-4  z-10">
+      <div className="sticky flex justify-between items-center top-[70px] w-full bg-gradient-to-b from-zinc-900 to-zinc-900/95 pt-8 pb-4  z-10">
         <h1 className="text-4xl font-bold text-center text-white">
           밸런스 게임 생성하기
         </h1>
-        <LinkButton href="/balanceGame">
-          <span className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            게임 목록으로
-          </span>
-        </LinkButton>
+        <CustomLink href="/balanceGame" icon="arrow" iconPosition="right">
+          <span className="flex items-center gap-2">게임 목록으로</span>
+        </CustomLink>
       </div>
 
       <form
-        className="flex justify-center px-4 pb-8 mt-[150px]"
+        className="flex justify-center  pb-8 mt-[150px]"
         onSubmit={handleSubmit}
       >
-        <div className="max-w-screen-xl w-full space-y-8">
+        <div className=" w-full space-y-8">
           {/* 게임 제목 입력 */}
           <div className="space-y-2">
             <label className="text-lg font-medium text-white">게임 제목</label>
@@ -229,9 +257,89 @@ export default function CreateBalanceGamePage() {
               className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
             />
           </div>
+          {!tournamentType && (
+            <div className="space-y-4">
+              <h2 className="text-lg font-medium text-white">
+                토너먼트 형식 선택
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <button
+                  type="button"
+                  onClick={() => initializeTournament(4)}
+                  className="group relative py-4 px-6 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200"
+                >
+                  4강 (8개 선택지)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => initializeTournament(8)}
+                  className="group relative py-4 px-6 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200"
+                >
+                  8강 (16개 선택지)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => initializeTournament(16)}
+                  className="group relative py-4 px-6 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200"
+                >
+                  16강 (32개 선택지)
+                </button>
+              </div>
+            </div>
+          )}
+          {tournamentType && (
+            <>
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-medium text-white">
+                  {tournamentType}강 토너먼트 ({list.length}개 선택지)
+                </h2>
+                <div className="flex items-center gap-4 justify-center">
+                  <CustomButton icon="plus">
+                    <label className="cursor-pointer text-white ">
+                      <span>이미지 일괄 업로드</span>
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            handleBulkImageUpload(e.target.files);
+                          }
+                        }}
+                      />
+                    </label>
+                  </CustomButton>
+                  <CustomButton
+                    onClick={() => {
+                      const isValidChange = list.some(
+                        (item) => item.name.trim() || item.image
+                      );
+                      console.log(isValidChange);
+                      if (isValidChange) {
+                        const result = window.confirm(
+                          "형식 변경 시 선택지는 초기화 됩니다. 진행하시겠습니까?"
+                        );
+                        if (result) {
+                          setTournamentType(null);
+                          setList([]);
+                        }
+                      } else {
+                        setTournamentType(null);
+                        setList([]);
+                      }
+                    }}
+                    className="text-indigo-400 hover:text-indigo-300 transition-colors duration-200"
+                  >
+                    형식 변경
+                  </CustomButton>
+                </div>
+              </div>
+            </>
+          )}
 
           {/* 항목 리스트 */}
-          <ul className=" w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ul className=" w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {list.map((item, index) => (
               <li
                 key={index}
@@ -241,15 +349,6 @@ export default function CreateBalanceGamePage() {
                   <div className="text-lg font-medium text-white">
                     선택지 {index + 1}
                   </div>
-                  {list.length > 8 && (
-                    <button
-                      type="button"
-                      onClick={() => removeItem(index)}
-                      className="text-red-400 hover:text-red-300 text-sm transition-colors duration-200"
-                    >
-                      제거
-                    </button>
-                  )}
                 </div>
 
                 {/* 이미지 업로드 영역 */}
@@ -358,28 +457,16 @@ export default function CreateBalanceGamePage() {
 
           {/* 하단 버튼 */}
           <div className="sticky bottom-8 pt-4 space-y-4 bg-gradient-to-t from-zinc-800 to-zinc-800/95">
-            <button
-              type="button"
-              onClick={addItems}
-              disabled={list.length >= 20}
-              className={`group relative w-full flex items-center justify-center py-4 px-6 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl ${
-                list.length >= 20
-                  ? "bg-zinc-700 cursor-not-allowed"
-                  : "bg-indigo-600 hover:bg-indigo-700"
-              }`}
-            >
-              <span>선택지 추가하기 ({list.length}/20)</span>
-              <div className="absolute inset-0 rounded-xl border-2 border-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-            </button>
-
-            <button
-              type="submit"
-              disabled={mutation.isPending}
-              className="group relative w-full flex items-center justify-center py-4 px-6 bg-green-600 hover:bg-green-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              {mutation.isPending ? "생성 중..." : "게임 생성하기"}
-              <div className="absolute inset-0 rounded-xl border-2 border-green-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-            </button>
+            {tournamentType && (
+              <button
+                type="submit"
+                disabled={mutation.isPending}
+                className="group relative w-full flex items-center justify-center py-4 px-6 bg-green-600 hover:bg-green-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+              >
+                {mutation.isPending ? "생성 중..." : "게임 생성하기"}
+                <div className="absolute inset-0 rounded-xl border-2 border-green-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+              </button>
+            )}
           </div>
         </div>
       </form>
