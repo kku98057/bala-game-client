@@ -9,6 +9,7 @@ import Image from "next/image";
 import { BalanceGameListResponse } from "@/app/types/gameType";
 import CustomLink from "@/app/_components/buttons/CustomLink";
 import Section from "@/app/_components/Section";
+import TitleText from "@/app/_components/TitleText";
 
 export default function BalaceGameListSection({ limit }: { limit: number }) {
   const observerRef = useRef<HTMLDivElement>(null);
@@ -48,9 +49,7 @@ export default function BalaceGameListSection({ limit }: { limit: number }) {
   return (
     <Section>
       <div className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end">
-        <h1 className="text-4xl font-semibold text-white mb-6 sm:mb-0">
-          밸런스 게임 리스트
-        </h1>
+        <TitleText>밸런스 게임 리스트</TitleText>
         <CustomLink href="/balanceGame/create" icon="plus">
           <span className="font-medium">게임 만들기</span>
         </CustomLink>

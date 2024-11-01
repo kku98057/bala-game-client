@@ -216,7 +216,7 @@ export default function BalanceGameSection() {
         </div>
       ) : (
         <div className="game_title opacity-0 scale-[0.5] max-w-md w-full mx-auto px-4 text-center space-y-8">
-          <h1 className="  start-title text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
+          <h1 className="start-title text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
             당신의 선택은?
             <br />
             <span className=" text-indigo-400">{data?.title}</span>

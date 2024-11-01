@@ -9,6 +9,8 @@ import { GameStatistics } from "@/app/types/gameType";
 import Section from "@/app/_components/Section";
 import { useEffect, useState } from "react";
 import { FaCrown } from "react-icons/fa"; // 왕관 아이콘
+import CustomLink from "@/app/_components/buttons/CustomLink";
+import TitleText from "@/app/_components/TitleText";
 
 export default function StatisticsPage() {
   const { gameId } = useParams();
@@ -38,7 +40,21 @@ export default function StatisticsPage() {
 
   return (
     <Section>
-      <h1 className="text-3xl font-bold text-white mb-8">게임 통계</h1>
+      <div className="w-full flex items-center justify-between mb-8">
+        <TitleText>게임 통계</TitleText>
+        <div className="flex items-center justify-center gap-4">
+          <CustomLink
+            icon="arrow"
+            href={`/balanceGame/${gameId}`}
+            iconPosition="right"
+          >
+            다시하기
+          </CustomLink>
+          <CustomLink icon="arrow" href="/balanceGame" iconPosition="right">
+            게임목록
+          </CustomLink>
+        </div>
+      </div>
 
       <div className="bg-zinc-800 rounded-lg p-6">
         <div className="text-lg text-white mb-4">

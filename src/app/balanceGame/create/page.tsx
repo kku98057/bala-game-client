@@ -7,6 +7,7 @@ import Image from "next/image";
 import CustomButton from "@/app/_components/buttons/CustomButton";
 import CustomLink from "@/app/_components/buttons/CustomLink";
 import Section from "@/app/_components/Section";
+import TitleText from "@/app/_components/TitleText";
 
 export default function CreateBalanceGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
@@ -214,9 +215,7 @@ export default function CreateBalanceGamePage() {
     <Section>
       {/* 고정된 헤더 */}
       <div className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end">
-        <h1 className="text-4xl font-bold text-center text-white">
-          밸런스 게임 생성하기
-        </h1>
+        <TitleText>밸런스 게임 생성하기</TitleText>
         <CustomLink href="/balanceGame" icon="arrow" iconPosition="right">
           <span className="flex items-center gap-2">게임 목록으로</span>
         </CustomLink>
