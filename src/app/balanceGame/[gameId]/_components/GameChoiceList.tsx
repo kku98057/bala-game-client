@@ -8,6 +8,7 @@ interface GameChoiceListProps {
   onSelect: (list1: GameProps, list2: GameProps, selected: GameProps) => void;
   curGame: GameProps[];
   isSelecting: boolean;
+  disabled?: boolean;
 }
 
 export const GameChoiceList = ({
@@ -15,8 +16,9 @@ export const GameChoiceList = ({
   onSelect,
   curGame,
   isSelecting,
+  disabled,
 }: GameChoiceListProps) => {
-  const itemRef = useRef<HTMLDivElement>(null);
+  const itemRef = useRef<HTMLButtonElement>(null);
 
   const handleSelect = async () => {
     if (isSelecting) return;
@@ -55,7 +57,8 @@ export const GameChoiceList = ({
   };
 
   return (
-    <div
+    <button
+      disabled={isSelecting || disabled}
       ref={itemRef}
       onClick={handleSelect}
       data-id={list.id}
@@ -71,19 +74,19 @@ export const GameChoiceList = ({
       )}
 
       {/* 기존 컨텐츠 */}
-      <div className="relative w-full h-full group">
+      <div className="relative w-full h-full group overflow-hidden">
         <Image
           src={list.imageUrl}
           alt={list.name}
           className=" object-cover hover:brightness-75 hover:scale-105 transition-all duration-300"
           fill
-          sizes="100%"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
         />
         <p className="absolute bottom-[15%] left-[50%] translate-x-[-50%] text-white text-[5cqi] font-bold">
           {list.name}
         </p>
       </div>
-    </div>
+    </button>
   );
 };

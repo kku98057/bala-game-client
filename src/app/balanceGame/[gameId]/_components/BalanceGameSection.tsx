@@ -1,31 +1,39 @@
 "use client";
 
 import { BalanceGameProps, GameProps } from "@/app/types/gameType";
-import delay from "@/utils/delay";
+
 import gsap from "gsap";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GameChoiceList } from "./GameChoiceList";
 import { ResultView } from "./ResultView";
 import { useBalanceGame } from "@/hooks/useBalanceGame";
 import { FiPlay } from "react-icons/fi"; // 시작 아이콘
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { getBalanceGameData } from "../_lib/getBalanceGameData";
 import Link from "next/link";
-
+import { postBalaceGameParticipageCountData } from "../_lib/postBalaceGameParticipageCountData";
 export default function BalanceGameSection() {
-  const { name: id } = useParams();
+  const { gameId } = useParams();
   const { data } = useQuery<BalanceGameProps>({
-    queryKey: QUERYKEYS.balanceGame.list(Number(id)),
-    queryFn: async () => getBalanceGameData(Number(id)),
+    queryKey: QUERYKEYS.balanceGame.list(Number(gameId)),
+    queryFn: async () => getBalanceGameData(Number(gameId)),
   });
   const [isStart, setIsStart] = useState(false);
-  const [disabled, setDisabled] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 상태 추가
+  const searchParams = useSearchParams();
+  const resultId = searchParams.get("result");
+
   const [userCount, setUserCount] = useState(0); // 사용자 수 상태 추가
-  const { curGame, result, selectHandler, isSelecting } = useBalanceGame(
-    data?.items || []
-  );
+  const {
+    curGame,
+    result,
+    selectHandler,
+    isSelecting,
+    currentRound,
+    setResult,
+  } = useBalanceGame(data?.items || [], gameId || "0");
   const sectionRef = useRef<HTMLDivElement>(null); // 섹션 참조 추가
 
   const ref = useRef<HTMLDivElement>(null);
@@ -33,9 +41,35 @@ export default function BalanceGameSection() {
   const startTimeline = gsap.timeline();
   const resultTimeline = gsap.timeline();
   const firstTimeline = gsap.timeline();
+  // 라운드 시작 애니메이션
+  const showRoundAnimation = useCallback(() => {
+    setIsAnimating(true); // 애니메이션 시작
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setIsAnimating(false); // 애니메이션 완료
+      },
+    });
 
+    tl.fromTo(
+      ".round-announcement",
+      {
+        scale: 2,
+        opacity: 0,
+      },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.5,
+        ease: "back.out",
+      }
+    ).to(".round-announcement", {
+      opacity: 0,
+      delay: 1,
+      duration: 0.3,
+    });
+  }, []);
   useEffect(() => {
-    const end = data?.totalUsers;
+    const end = data?.participantCount;
     const duration = 2; // 애니메이션 지속 시간 (초)
 
     // GSAP 애니메이션 설정
@@ -51,7 +85,8 @@ export default function BalanceGameSection() {
         },
       }
     );
-  }, [data?.totalUsers]);
+  }, [data?.participantCount]);
+
   useEffect(() => {
     if (ref.current && isStart) {
       const tl = gsap.timeline({
@@ -96,22 +131,39 @@ export default function BalanceGameSection() {
     }
   }, [isStart]);
 
-  const handleStart = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    setDisabled(true);
-    const timeline = gsap.timeline({ repeat: 3 });
-    timeline
-      .to(e.currentTarget, {
-        scale: 0.95,
-        duration: 0.15,
-      })
-      .to(e.currentTarget, {
-        scale: 1,
-        duration: 0.15,
-      });
+  const { mutate: participantCountHandler, isPending } = useMutation({
+    mutationFn: ({ id }: { id: number }) =>
+      postBalaceGameParticipageCountData(id),
+    mutationKey: QUERYKEYS.balanceGame.participantCount(Number(gameId)),
+  });
 
-    await delay(1000);
-    setIsStart(true);
+  const handleStart = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    participantCountHandler(
+      {
+        id: Number(gameId),
+      },
+      {
+        onSuccess: () => {
+          setIsStart(true);
+          const timeline = gsap.timeline({ repeat: 3 });
+          timeline
+            .to(e.currentTarget, {
+              scale: 0.95,
+              duration: 0.15,
+            })
+            .to(e.currentTarget, {
+              scale: 1,
+              duration: 0.15,
+            });
+        },
+      }
+    );
   };
+  useEffect(() => {
+    if (currentRound && isStart && !result) {
+      showRoundAnimation();
+    }
+  }, [currentRound, isStart, result]);
 
   useEffect(() => {
     if (sectionRef.current) {
@@ -119,7 +171,7 @@ export default function BalanceGameSection() {
         opacity: 1,
         scale: 1,
         duration: 1,
-        ease: "bounce.out", // 화려한 애니메이션 효과
+        ease: "bounce.out",
       });
     }
     return () => {
@@ -128,7 +180,20 @@ export default function BalanceGameSection() {
       resultTimeline.kill();
     };
   }, []);
-
+  useEffect(() => {
+    // 공유된 결과가 있는 경우
+    if (resultId && data?.items) {
+      const sharedResult = data.items.find(
+        (item) => item.id === Number(resultId)
+      );
+      if (sharedResult) {
+        // 결과 화면 바로 표시
+        setIsStart(true);
+        // 공유된 결과를 보여줌
+        setResult(sharedResult);
+      }
+    }
+  }, [resultId, data]);
   return (
     <section
       ref={sectionRef}
@@ -136,12 +201,17 @@ export default function BalanceGameSection() {
     >
       {isStart ? (
         <div ref={ref} className="relative w-full h-full overflow-hidden">
+          <div className="round-announcement fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 opacity-0">
+            <h2 className="text-6xl font-bold text-white bg-indigo-600 px-8 py-4 rounded-lg shadow-lg">
+              {currentRound} 시작!
+            </h2>
+          </div>
           {curGame.length > 0 && !result && (
             <>
               <ul className="w-full flex items-center h-dvh">
                 {curGame.slice(0, 2).map((list: GameProps, index) => (
                   <li
-                    key={`${list.name}_${name}`}
+                    key={`${list.id}_선택지`}
                     className={`game-choice ${
                       index === 0 ? "game-choice-left" : "game-choice-right"
                     } flex-1 h-full`}
@@ -151,12 +221,16 @@ export default function BalanceGameSection() {
                       onSelect={selectHandler}
                       curGame={curGame}
                       isSelecting={isSelecting}
+                      disabled={isAnimating}
                     />
                   </li>
                 ))}
               </ul>
               <button
-                onClick={() => window.location.reload()}
+                onClick={() => {
+                  const baseUrl = window.location.href.split("?")[0];
+                  window.location.href = baseUrl;
+                }}
                 className="absolute top-[100px] bg-indigo-600 p-[15px] rounded-full left-[50%] translate-x-[-50%] z-[10] text-white hover:bg-indigo-700 transition-colors duration-200 shadow-lg"
               >
                 다시 시작하기
@@ -168,7 +242,7 @@ export default function BalanceGameSection() {
         </div>
       ) : (
         <div className="game_title opacity-0 scale-[0.5] max-w-md w-full mx-auto px-4 text-center space-y-8">
-          <h1 className="  start-title text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
+          <h1 className="start-title text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
             당신의 선택은?
             <br />
             <span className=" text-indigo-400">{data?.title}</span>
@@ -176,12 +250,14 @@ export default function BalanceGameSection() {
 
           <button
             type="button"
-            disabled={disabled}
+            disabled={isPending}
             onClick={handleStart}
             className="start-button  group relative w-full flex items-center justify-center py-6 px-8 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <FiPlay className="mr-3 text-2xl" />
-            <span className="text-2xl">시작하기</span>
+            <span className="text-2xl">
+              {isPending ? "시작중.." : "시작하기"}
+            </span>
             <div className="absolute inset-0 rounded-xl border-2 border-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
           </button>
 

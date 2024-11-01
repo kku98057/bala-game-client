@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 밸런스 게임 (Balance Game - Client)
 
-## Getting Started
+재미있는 밸런스 게임을 만들고 공유할 수 있는 웹 애플리케이션입니다.
 
-First, run the development server:
+## 🎮 주요 기능
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 커스텀 밸런스 게임 생성
+- 이미지 업로드 기능
+- 실시간 참여자 통계
+- 반응형 디자인
+- 게임 결과 공유
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠 기술 스택
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Frontend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js 15 (App Router)
+- TypeScript
+- TailwindCSS
+- React Query
+- Framer Motion
+- GSAP
 
-## Learn More
+### Backend
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js
+- Express
+- mySql
+- Prisma
+- AWS S3
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌟 주요 특징
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **반응형 디자인**: 모바일부터 데스크탑까지 모든 디바이스 지원
+- **인터랙티브 애니메이션**: Framer Motion과 GSAP를 활용한 부드러운 애니메이션
+- **실시간 통계**: 참여자 수와 선택 비율을 실시간으로 확인
+- **이미지 최적화**: Next.js Image 컴포넌트를 활용한 이미지 최적화
+- **SEO 최적화**: Next.js의 App Router를 활용한 SEO 최적화
 
-## Deploy on Vercel
+## 👥 팀 멤버
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- 개발자 - kku98057
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+이 프로젝트는 [Next.js](https://nextjs.org/)를 기반으로 제작되었습니다.

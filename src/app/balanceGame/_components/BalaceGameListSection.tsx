@@ -7,11 +7,12 @@ import Link from "next/link";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import Image from "next/image";
 import { BalanceGameListResponse } from "@/app/types/gameType";
-import LinkButton from "@/app/_components/buttons/LinkButton";
+import CustomLink from "@/app/_components/buttons/CustomLink";
+import Section from "@/app/_components/Section";
+import TitleText from "@/app/_components/TitleText";
 
-export default function BalaceGameListSection() {
+export default function BalaceGameListSection({ limit }: { limit: number }) {
   const observerRef = useRef<HTMLDivElement>(null);
-  const limit = 10;
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfiniteQuery<BalanceGameListResponse>({
@@ -20,8 +21,11 @@ export default function BalaceGameListSection() {
         balanceGameListData({ page: pageParam, limit }),
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
-        const { currentPage, totalPages } = lastPage;
-        return currentPage < totalPages ? currentPage + 1 : undefined;
+        if (!lastPage?.games) return undefined;
+        if (!lastPage.currentPage || !lastPage.totalPages) return undefined;
+        return lastPage.currentPage < lastPage.totalPages
+          ? lastPage.currentPage + 1
+          : undefined;
       },
     });
 
@@ -35,7 +39,6 @@ export default function BalaceGameListSection() {
     ref: observerRef,
     callback: onIntersect,
   });
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
@@ -43,29 +46,13 @@ export default function BalaceGameListSection() {
       </div>
     );
   }
-
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-48">
+    <Section>
       <div className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end">
-        <h1 className="text-4xl font-semibold text-white mb-6 sm:mb-0">
-          밸런스 게임 리스트
-        </h1>
-        <LinkButton href="/balanceGame/create">
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
+        <TitleText>밸런스 게임 리스트</TitleText>
+        <CustomLink href="/balanceGame/create" icon="plus">
           <span className="font-medium">게임 만들기</span>
-        </LinkButton>
+        </CustomLink>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {data?.pages.map((page) =>
@@ -89,6 +76,9 @@ export default function BalaceGameListSection() {
               <div className="p-6">
                 {/* 제목 */}
                 <h3 className="text-xl font-medium mb-3 truncate">
+                  <span className="text-blue-500 font-bold">
+                    [{(game.itemsCount as number) / 2}강전]
+                  </span>
                   {game.title}
                 </h3>
 
@@ -99,7 +89,23 @@ export default function BalaceGameListSection() {
                     {new Date(game.createdAt).toLocaleDateString()}
                   </time>
                 </div>
-
+                {/* 참여자 수 */}
+                <div className="flex items-center gap-1 text-sm text-gray-500 mb-4">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                  </svg>
+                  <span>{game.participantCount.toLocaleString()}명 참여</span>
+                </div>
                 {/* VS 이미지 프리뷰 */}
                 <div className="flex items-center justify-center gap-4">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden">
@@ -108,6 +114,7 @@ export default function BalaceGameListSection() {
                       alt={game.items[0].name}
                       fill
                       className="object-cover"
+                      sizes="100%"
                     />
                   </div>
                   <span className="font-bold text-gray-400">VS</span>
@@ -117,6 +124,7 @@ export default function BalaceGameListSection() {
                       alt={game.items[1].name}
                       fill
                       className="object-cover"
+                      sizes="100%"
                     />
                   </div>
                 </div>
@@ -127,6 +135,6 @@ export default function BalaceGameListSection() {
       </div>
 
       <div ref={observerRef} className="w-full h-20" />
-    </section>
+    </Section>
   );
 }
