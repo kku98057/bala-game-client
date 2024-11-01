@@ -4,7 +4,6 @@ import GameUseCaseSection from "./_components/mainpage/GameUseCaseSection";
 
 import HeroSection from "./_components/mainpage/HeroSection";
 export default function Home() {
-  console.log(process.env.NEXT_PUBLIC_API_URL);
   return (
     <>
       <Header />
