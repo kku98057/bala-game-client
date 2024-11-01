@@ -3,7 +3,6 @@ export const createBalanceGame = async (formData: FormData) => {
     method: "POST",
     body: formData,
   });
-  console.log(response);
   if (!response.ok) {
     throw new Error("게임 생성에 실패했습니다");
   }
