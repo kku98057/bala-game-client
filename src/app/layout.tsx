@@ -4,9 +4,8 @@ import "./globals.css";
 import ReactQueryProviders from "@/hooks/useReactQuery";
 
 export const metadata: Metadata = {
-  title: "바라바라 밸런스게임",
-  description:
-    "바라바라 밸런스 게임을 만들고 즐기고 공유하고 랭킹을 확인하세요!",
+  title: "밸런썸 (Balancesome)",
+  description: "밸런스 게임을 만들고 즐기고 공유하고 랭킹을 확인하세요!",
 };
 
 export default function RootLayout({

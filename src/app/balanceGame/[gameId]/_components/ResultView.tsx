@@ -79,7 +79,23 @@ export const ResultView = ({
       tl.kill();
     };
   }, []);
+  // 랜덤 결과 메시지 선택
+  const resultMessages = [
+    `당신의 선택은 "${result.name}"! 센스가 아주 좋으시네요 👍`,
+    `"${result.name}" 특급 안목이십니다! 👀`,
+    `역시! "${result.name}"만한 게 없죠! ⭐`,
+    `"${result.name}" 찍으신 분? 당신이군요! 🎯`,
+    `오늘의 승자는 "${result.name}"입니다! 🏆`,
+  ];
 
+  // 랜덤 공유 메시지
+  const shareMessages = [
+    `내가 골라도 "${result.name}"을(를) 고르겠어!`,
+    `이거 실화? 내가 고른 "${result.name}" 어때요?`,
+    `고민 끝에 선택한 "${result.name}", 당신의 선택은?`,
+    `"${result.name}" 찍은 사람 여기 있네요!`,
+    `밸런스 끝판왕의 선택 "${result.name}"`,
+  ];
   const handleShare = async () => {
     try {
       if (navigator.share) {
@@ -97,6 +113,11 @@ export const ResultView = ({
       console.error("공유 실패:", error);
     }
   };
+  const randomMessage =
+    resultMessages[Math.floor(Math.random() * resultMessages.length)];
+  const shareMessage =
+    shareMessages[Math.floor(Math.random() * shareMessages.length)];
+
   return (
     <div
       ref={resultRef}
@@ -114,11 +135,10 @@ export const ResultView = ({
             priority
           />
         </div>
-
-        {/* 결과 제목 */}
-        <h2 className="result-title text-center text-4xl font-bold text-white mb-8">
-          {result.name}
-        </h2>
+        <div className="result-title text-center space-y-2">
+          <h2 className="text-4xl font-bold text-white">{result.name}</h2>
+          <p className="text-indigo-400 text-lg">{randomMessage}</p>
+        </div>
 
         {/* 버튼 그룹 */}
         <div className="result-buttons flex flex-col gap-4">
@@ -127,19 +147,16 @@ export const ResultView = ({
             className="group relative w-full flex items-center justify-center py-4 px-6 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <FiShare2 className="mr-2" />
-            <span>공유하기</span>
+            <span>친구들한테 자랑하기</span>
             <div className="absolute inset-0 rounded-xl border-2 border-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
           </button>
 
           <Link
             href={`/balanceGame/${gameId}/statistics`}
-            onClick={() => {
-              /* 통계 보기 로직 */
-            }}
             className="group relative w-full flex items-center justify-center py-4 px-6 bg-zinc-700 hover:bg-zinc-600 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <FiBarChart2 className="mr-2" />
-            <span>통계 보기</span>
+            <span>다른 사람들은 뭘 골랐을까?</span>
             <div className="absolute inset-0 rounded-xl border-2 border-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
           </Link>
         </div>
