@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
 import { useParams } from "next/navigation";
 import { getBalanceGameData } from "../_lib/getBalanceGameData";
+import Link from "next/link";
 
 export default function BalanceGameSection() {
   const { name: id } = useParams();
@@ -127,11 +128,11 @@ export default function BalanceGameSection() {
       resultTimeline.kill();
     };
   }, []);
-  console.log(data);
+
   return (
     <section
       ref={sectionRef}
-      className="flex items-center justify-center w-full min-h-dvh bg-gradient-to-b from-zinc-900 to-zinc-800"
+      className="flex items-center justify-center w-full min-h-dvh "
     >
       {isStart ? (
         <div ref={ref} className="relative w-full h-full overflow-hidden">
@@ -191,6 +192,12 @@ export default function BalanceGameSection() {
             참가 유저 수:{" "}
             <span className="font-bold">{userCount.toLocaleString()}</span>
           </p>
+          <Link
+            href="/balanceGame"
+            className="inline-block mt-8 px-6 py-3 bg-zinc-700 hover:bg-zinc-600 rounded-lg text-white transition-colors duration-200"
+          >
+            목록으로 돌아가기
+          </Link>
         </div>
       )}
     </section>

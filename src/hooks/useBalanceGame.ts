@@ -51,9 +51,7 @@ export const useBalanceGame = (initialData: GameProps[]) => {
       setNextGame([]);
     }
   }, [curGame, nextGame]);
-  console.clear();
-  console.log(curGame);
-  console.log(nextGame);
+
   return {
     curGame,
     result,

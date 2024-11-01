@@ -5,7 +5,9 @@ export default function GameLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Header />
-      {children}
+      <main className="bg-gradient-to-b from-zinc-900 to-zinc-800 min-h-dvh">
+        {children}
+      </main>
     </>
   );
 }

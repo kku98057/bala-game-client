@@ -4,9 +4,12 @@ import { useCallback, useState } from "react";
 import { createBalanceGame } from "./_lib/createBalanceGameData";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import LinkButton from "@/app/_components/buttons/LinkButton";
 
 export default function CreateBalanceGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
+  const [username, setUsername] = useState(""); // 유저이름 추가
 
   const [list, setList] = useState<
     { name: string; image: File | null; id: number }[]
@@ -29,7 +32,6 @@ export default function CreateBalanceGamePage() {
     }
   };
   const removeItem = (indexToRemove: number) => {
-    console.log(indexToRemove);
     if (list.length > 8) {
       // 최소 8개 항목 유지
       setList((prev) => prev.filter((_, index) => index !== indexToRemove));
@@ -38,24 +40,37 @@ export default function CreateBalanceGamePage() {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: createBalanceGame,
-    onSuccess: () => {
-      // 성공 시 게임 상세 페이지로 이동
-      alert("생성이 완료되었습니다.");
-      //   router.push(`/balanceGame/${data.id}`);
-    },
-    onError: (error) => {
-      console.error("Error creating game:", error);
-      alert("게임 생성에 실패했습니다. 다시 시도해주세요.");
-    },
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 유효성 검사
-
+    if (list.length % 2 !== 0) {
+      alert("선택지는 짝수 개수로만 생성할 수 있습니다.");
+      return;
+    }
     // 유효성 검사
     if (!title.trim()) {
       alert("게임 제목을 입력해주세요.");
+      return;
+    }
+    if (title.length > 20) {
+      alert("게임 제목은 20자 이하로 입력해주세요.");
+      return;
+    }
+    if (!username.trim()) {
+      alert("작성자명을 입력해주세요.");
+      return;
+    }
+    if (username.length > 8) {
+      alert("작성자명은 8자 이하로 입력해주세요.");
+      return;
+    }
+
+    // 선택지 이름 길이 검증 추가
+    const invalidItem = list.find((item) => item.name.trim().length > 20);
+    if (invalidItem) {
+      alert("선택지 설명은 20자 이하로 입력해주세요.");
       return;
     }
 
@@ -71,7 +86,7 @@ export default function CreateBalanceGamePage() {
 
     // 기본 데이터 추가
     formData.append("title", title);
-    formData.append("username", "test");
+    formData.append("username", username);
 
     // 각 아이템의 이름을 별도로 추가
     list.forEach((item, index) => {
@@ -156,33 +171,69 @@ export default function CreateBalanceGamePage() {
   return (
     <div className="w-full min-h-dvh bg-gradient-to-b from-zinc-900 to-zinc-800">
       {/* 고정된 헤더 */}
-      <div className="sticky top-[70px] w-full bg-gradient-to-b from-zinc-900 to-zinc-900/95 pt-8 pb-4 px-4 z-10">
+      <div className="sticky max-w-screen-xl mx-auto flex justify-between items-center top-[70px] w-full bg-gradient-to-b from-zinc-900 to-zinc-900/95 pt-8 pb-4  z-10">
         <h1 className="text-4xl font-bold text-center text-white">
           밸런스 게임 생성하기
         </h1>
+        <LinkButton href="/balanceGame">
+          <span className="flex items-center gap-2">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            게임 목록으로
+          </span>
+        </LinkButton>
       </div>
 
       <form
         className="flex justify-center px-4 pb-8 mt-[150px]"
         onSubmit={handleSubmit}
       >
-        <div className="max-w-md w-full space-y-8">
+        <div className="max-w-screen-xl w-full space-y-8">
           {/* 게임 제목 입력 */}
           <div className="space-y-2">
             <label className="text-lg font-medium text-white">게임 제목</label>
             <input
               type="text"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length > 20)
+                  return alert("게임 제목은 최대 20자까지 입니다.");
+                setTitle(e.target.value);
+              }}
               placeholder="예) 당신의 선택은?"
+              className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-lg font-medium text-white">작성자</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => {
+                if (e.target.value.length > 8)
+                  return alert("작성자명은 최대 8자까지 입니다.");
+                setUsername(e.target.value);
+              }}
+              placeholder="작성자명을 입력하세요."
               className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
             />
           </div>
 
           {/* 항목 리스트 */}
-          <div className="space-y-6">
+          <ul className=" w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {list.map((item, index) => (
-              <div
+              <li
                 key={index}
                 className="relative p-6 bg-zinc-800/50 rounded-xl border border-zinc-700 hover:border-zinc-600 transition-all duration-200"
               >
@@ -291,6 +342,8 @@ export default function CreateBalanceGamePage() {
                     type="text"
                     value={item.name}
                     onChange={(e) => {
+                      if (e.target.value.length > 20)
+                        return alert("설명은 최대 20자까지 입니다.");
                       const newList = [...list];
                       newList[index].name = e.target.value;
                       setList(newList);
@@ -299,9 +352,9 @@ export default function CreateBalanceGamePage() {
                     className="w-full py-3 px-4 bg-zinc-900 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
 
           {/* 하단 버튼 */}
           <div className="sticky bottom-8 pt-4 space-y-4 bg-gradient-to-t from-zinc-800 to-zinc-800/95">
