@@ -16,6 +16,7 @@ import Loading from "@/app/_components/Loading";
 
 export default function StatisticsPage() {
   const { gameId } = useParams();
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const {
     data: statistics,
@@ -66,67 +67,93 @@ export default function StatisticsPage() {
         </div>
 
         <div className="bg-zinc-800 rounded-lg p-6">
-          <div className="text-lg text-white mb-4">
-            총 참여자 수:{" "}
-            <span className="font-bold">
-              {statistics?.totalCount.toLocaleString()}명
-            </span>
+          <div className="flex justify-between items-center mb-4">
+            <div className="text-lg text-white">
+              총 참여자 수:{" "}
+              <span className="font-bold">
+                {statistics?.totalCount.toLocaleString()}명
+              </span>
+            </div>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setSelectedTab(0)}
+                className={`px-4 py-2 rounded-lg transition-colors ${
+                  selectedTab === 0
+                    ? "bg-indigo-500 text-white"
+                    : "text-zinc-400 hover:text-white"
+                }`}
+              >
+                통계
+              </button>
+              <button
+                onClick={() => setSelectedTab(1)}
+                className={`px-4 py-2 rounded-lg transition-colors ${
+                  selectedTab === 1
+                    ? "bg-indigo-500 text-white"
+                    : "text-zinc-400 hover:text-white"
+                }`}
+              >
+                댓글
+              </button>
+            </div>
           </div>
-          {isLoading && <Loading />}
-          <div className="space-y-6">
-            {statistics?.items.map((item, index) => (
-              <div key={item.id} className="bg-zinc-700 rounded-lg p-4">
-                <div className="flex items-center gap-4 mb-3">
-                  {/* 순위 왕관 (1-3위만 표시) */}
-                  {index < 3 && (
-                    <div
-                      className={`text-2xl ${
-                        crownColors[index as keyof typeof crownColors]
-                      }`}
-                    >
-                      <FaCrown />
+
+          {selectedTab === 0 ? (
+            <>
+              {isLoading && <Loading />}
+              <div className="space-y-6">
+                {statistics?.items.map((item, index) => (
+                  <div key={item.id} className="bg-zinc-700 rounded-lg p-4">
+                    <div className="flex items-center gap-4 mb-3">
+                      {index < 3 && (
+                        <div
+                          className={`text-2xl ${
+                            crownColors[index as keyof typeof crownColors]
+                          }`}
+                        >
+                          <FaCrown />
+                        </div>
+                      )}
+
+                      <div className="relative w-16 h-16 rounded-full overflow-hidden">
+                        <Image
+                          src={item.imageUrl}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-white">
+                          {item.name}
+                        </h3>
+                        <p className="text-zinc-400">
+                          {item.count.toLocaleString()}명 선택
+                        </p>
+                      </div>
+
+                      <div className="text-2xl font-bold text-indigo-400">
+                        {item.percentage}%
+                      </div>
                     </div>
-                  )}
 
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden">
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.name}
-                      fill
-                      className="object-cover"
-                    />
+                    <div className="w-full h-2 bg-zinc-600 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-indigo-500 transition-all duration-1000 ease-out"
+                        style={{
+                          width: showProgress ? `${item.percentage}%` : "0%",
+                        }}
+                      />
+                    </div>
                   </div>
-
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-white">
-                      {item.name}
-                    </h3>
-                    <p className="text-zinc-400">
-                      {item.count.toLocaleString()}명 선택
-                    </p>
-                  </div>
-
-                  <div className="text-2xl font-bold text-indigo-400">
-                    {item.percentage}%
-                  </div>
-                </div>
-
-                {/* 프로그레스 바 */}
-                <div className="w-full h-2 bg-zinc-600 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-indigo-500 transition-all duration-1000 ease-out"
-                    style={{
-                      width: showProgress ? `${item.percentage}%` : "0%",
-                    }}
-                  />
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          ) : (
+            <Comments gameId={Number(gameId)} />
+          )}
         </div>
-      </Section>
-      <Section className="pb-14">
-        <Comments gameId={Number(gameId)} />
       </Section>
     </>
   );

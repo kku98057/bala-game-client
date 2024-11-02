@@ -1,3 +1,5 @@
+"use client";
+
 export default function Footer() {
   return (
     <footer className=" bg-gradient-to-b from-zinc-900 to-zinc-800">
