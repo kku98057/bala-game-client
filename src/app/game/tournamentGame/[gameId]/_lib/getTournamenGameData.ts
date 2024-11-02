@@ -1,7 +1,7 @@
-export const getBalanceGameData = async (id: number) => {
+export const getTournamenGameData = async (id: number) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/tournamentGame/${id}`,
       {
         cache: "no-cache",
       }

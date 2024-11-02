@@ -13,7 +13,7 @@ export default function GameUseCaseSection() {
             {
               step: 1,
               title: "게임 생성",
-              desc: "나만의 밸런스 게임을 만들어보세요",
+              desc: "나만의 다양한 게임을 만들어보세요",
               icon: "✏️",
             },
             {

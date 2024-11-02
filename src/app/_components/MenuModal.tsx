@@ -25,7 +25,7 @@ export const MenuModal = ({
   // 로그인 상태에 따라 다른 메뉴 아이템 표시
   const menuItems = [
     { icon: <FiHome />, label: "홈", href: "/" },
-    { icon: <FiList />, label: "게임 목록", href: "/balanceGame" },
+    { icon: <FiList />, label: "게임 목록", href: "/game" },
   ];
 
   // 인증 관련 메뉴 아이템
@@ -163,9 +163,7 @@ export const MenuModal = ({
 
         <div className="absolute bottom-8 left-6 right-6">
           <div className="p-4 bg-zinc-800 rounded-xl">
-            <p className="text-zinc-400 text-sm text-center">
-              밸런스 게임 v1.0.0
-            </p>
+            <p className="text-zinc-400 text-sm text-center">밸런썸 v1.0.0</p>
           </div>
         </div>
       </div>

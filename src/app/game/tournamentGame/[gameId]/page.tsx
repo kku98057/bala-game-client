@@ -1,6 +1,6 @@
 import { QUERYKEYS } from "@/queryKeys";
-import BalanceGameSection from "./_components/BalanceGameSection";
-import { getBalanceGameData } from "./_lib/getBalanceGameData";
+import TournamenGameSection from "./_components/TournamenGameSection";
+import { getTournamenGameData } from "./_lib/getTournamenGameData";
 import {
   QueryClient,
   dehydrate,
@@ -19,7 +19,7 @@ export default async function page({
 
   try {
     const NumberId = Number((await params).gameId);
-    const gameData = await getBalanceGameData(NumberId);
+    const gameData = await getTournamenGameData(NumberId);
 
     // 데이터가 없는 경우 404
     if (!gameData) {
@@ -27,7 +27,7 @@ export default async function page({
     }
 
     await queryClient.prefetchQuery({
-      queryKey: QUERYKEYS.balanceGame.list(NumberId),
+      queryKey: QUERYKEYS.tournamentGame.list(NumberId),
       queryFn: () => Promise.resolve(gameData),
     });
 
@@ -35,7 +35,7 @@ export default async function page({
 
     return (
       <HydrationBoundary state={dehydrateState}>
-        <BalanceGameSection />
+        <TournamenGameSection />
       </HydrationBoundary>
     );
   } catch (error) {

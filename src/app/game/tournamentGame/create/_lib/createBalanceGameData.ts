@@ -22,7 +22,7 @@ export const createBalanceGame = async (formData: FormData) => {
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/create`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/tournamentGame/create`,
     {
       method: "POST",
       body: compressedFormData,

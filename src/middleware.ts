@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("token");
 
   // 인증이 필요한 페이지 목록 (로그인한 사용자만 접근 가능)
-  const protectedRoutes = ["/balanceGame/create"];
+  const protectedRoutes = ["/balanceGame/create", "/tournamentGame/create"];
   const isProtectedRoute = protectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
   );
@@ -33,6 +33,7 @@ export const config = {
   matcher: [
     "/login",
     "/signup",
-    "/balanceGame/create", // 추가
+    "/game/tournamentGame/create", // 추가
+    "/game/balanceGame/create", // 추가
   ],
 };

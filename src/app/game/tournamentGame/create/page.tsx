@@ -11,7 +11,7 @@ import TitleText from "@/app/_components/TitleText";
 import { QUERYKEYS } from "@/queryKeys";
 import { UserProps } from "@/app/types/UserType";
 import Cookies from "js-cookie";
-export default function CreateBalanceGamePage() {
+export default function CreateTournamentGameGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
 
   const [tournamentType, setTournamentType] = useState<4 | 8 | 16 | null>(null);
@@ -23,7 +23,7 @@ export default function CreateBalanceGamePage() {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: createBalanceGame,
-    mutationKey: QUERYKEYS.balanceGame.create(),
+    mutationKey: QUERYKEYS.tournamentGame.create(),
   });
   const initializeTournament = (type: 4 | 8 | 16) => {
     const itemCount = type * 2;
@@ -144,7 +144,7 @@ export default function CreateBalanceGamePage() {
     mutation.mutate(formData, {
       onSuccess: (response) => {
         alert("생성이 완료되었습니다.");
-        router.push(`/balanceGame/${response.data.id}`);
+        router.push(`/tournamentGame/${response.data.id}`);
       },
       onError: (error: any) => {
         if (error.response?.status === 401) {
@@ -233,8 +233,12 @@ export default function CreateBalanceGamePage() {
     <Section>
       {/* 고정된 헤더 */}
       <div className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end">
-        <TitleText>밸런스 게임 생성하기</TitleText>
-        <CustomLink href="/balanceGame" icon="arrow" iconPosition="right">
+        <TitleText>토너먼트 게임 생성하기</TitleText>
+        <CustomLink
+          href="/game/tournamentGame/create"
+          icon="arrow"
+          iconPosition="right"
+        >
           <span className="flex items-center gap-2">게임 목록으로</span>
         </CustomLink>
       </div>

@@ -1,9 +1,9 @@
-import { postFinalChoiceData } from "@/app/balanceGame/[gameId]/_lib/postFinalChoiceData";
+import { postFinalChoiceData } from "@/app/game/tournamentGame/[gameId]/_lib/postFinalChoiceData";
 import { GameProps } from "@/app/types/gameType";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 
-export const useBalanceGame = (
+export const useTournamentGame = (
   initialData: GameProps[],
   gameId: string | string[]
 ) => {
@@ -30,7 +30,7 @@ export const useBalanceGame = (
   }, []);
 
   const { mutate: finalChoiceHandler } = useMutation({
-    mutationFn: (data: { balanceGameId: number; selectedItemId: number }) =>
+    mutationFn: (data: { tournamentId: number; selectedItemId: number }) =>
       postFinalChoiceData(data),
     onSuccess: () => {
       setResult(curGame[0]);
@@ -76,7 +76,7 @@ export const useBalanceGame = (
       // 최종 우승자 결정
 
       finalChoiceHandler({
-        balanceGameId: Number(gameId),
+        tournamentId: Number(gameId),
         selectedItemId: curGame[0].id,
       });
     }

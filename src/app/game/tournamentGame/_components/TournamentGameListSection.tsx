@@ -2,23 +2,23 @@
 import { QUERYKEYS } from "@/queryKeys";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRef } from "react";
-import balanceGameListData from "../_lib/balanceGameListData";
+import getTournamenGameListData from "../_lib/getTournamenGameListData";
 import Link from "next/link";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import Image from "next/image";
-import { BalanceGameListResponse } from "@/app/types/gameType";
+import { TournamentListResponse } from "@/app/types/gameType";
 import CustomLink from "@/app/_components/buttons/CustomLink";
 import Section from "@/app/_components/Section";
 import TitleText from "@/app/_components/TitleText";
 
-export default function BalaceGameListSection({ limit }: { limit: number }) {
+export default function TournamentListSection({ limit }: { limit: number }) {
   const observerRef = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
-    useInfiniteQuery<BalanceGameListResponse>({
-      queryKey: QUERYKEYS.balanceGame.lists({ limit }),
+    useInfiniteQuery<TournamentListResponse>({
+      queryKey: QUERYKEYS.tournamentGame.lists({ limit }),
       queryFn: ({ pageParam = 1 }) =>
-        balanceGameListData({ page: pageParam, limit }),
+        getTournamenGameListData({ page: pageParam, limit }),
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
         if (!lastPage?.games) return undefined;
@@ -49,8 +49,8 @@ export default function BalaceGameListSection({ limit }: { limit: number }) {
   return (
     <Section>
       <div className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end">
-        <TitleText>밸런스 게임 리스트</TitleText>
-        <CustomLink href="/balanceGame/create" icon="plus">
+        <TitleText>토너먼트 게임 리스트</TitleText>
+        <CustomLink href="/game/tournamentGame/create" icon="plus">
           <span className="font-medium">게임 만들기</span>
         </CustomLink>
       </div>
@@ -59,7 +59,7 @@ export default function BalaceGameListSection({ limit }: { limit: number }) {
           page.games.map((game) => (
             <Link
               key={game.id}
-              href={`/balanceGame/${game.id}`}
+              href={`/game/tournamentGame/${game.id}`}
               className="group bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:bg-gray-50"
             >
               {/* 썸네일 이미지 */}

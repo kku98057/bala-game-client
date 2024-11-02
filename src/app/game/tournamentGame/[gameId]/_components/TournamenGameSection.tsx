@@ -1,24 +1,26 @@
 "use client";
 
-import { BalanceGameProps, GameProps } from "@/app/types/gameType";
+import { TournamentGameProps, GameProps } from "@/app/types/gameType";
 
 import gsap from "gsap";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GameChoiceList } from "./GameChoiceList";
 import { ResultView } from "./ResultView";
-import { useBalanceGame } from "@/hooks/useBalanceGame";
+
 import { FiPlay } from "react-icons/fi"; // 시작 아이콘
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
 import { useParams, useSearchParams } from "next/navigation";
-import { getBalanceGameData } from "../_lib/getBalanceGameData";
+import { getTournamenGameData } from "../_lib/getTournamenGameData";
 import Link from "next/link";
-import { postBalaceGameParticipageCountData } from "../_lib/postBalaceGameParticipageCountData";
-export default function BalanceGameSection() {
+import { postTournamentGameParticipageCountData } from "../_lib/postTournamentGameParticipageCountData";
+import { useTournamentGame } from "@/hooks/useTournamentGame";
+
+export default function TournamenGameSection() {
   const { gameId } = useParams();
-  const { data } = useQuery<BalanceGameProps>({
-    queryKey: QUERYKEYS.balanceGame.list(Number(gameId)),
-    queryFn: async () => getBalanceGameData(Number(gameId)),
+  const { data } = useQuery<TournamentGameProps>({
+    queryKey: QUERYKEYS.tournamentGame.list(Number(gameId)),
+    queryFn: async () => getTournamenGameData(Number(gameId)),
   });
   const [isStart, setIsStart] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 상태 추가
@@ -33,7 +35,7 @@ export default function BalanceGameSection() {
     isSelecting,
     currentRound,
     setResult,
-  } = useBalanceGame(data?.items || [], gameId || "0");
+  } = useTournamentGame(data?.items || [], gameId || "0");
   const sectionRef = useRef<HTMLDivElement>(null); // 섹션 참조 추가
 
   const ref = useRef<HTMLDivElement>(null);
@@ -133,8 +135,8 @@ export default function BalanceGameSection() {
 
   const { mutate: participantCountHandler, isPending } = useMutation({
     mutationFn: ({ id }: { id: number }) =>
-      postBalaceGameParticipageCountData(id),
-    mutationKey: QUERYKEYS.balanceGame.participantCount(Number(gameId)),
+      postTournamentGameParticipageCountData(id),
+    mutationKey: QUERYKEYS.tournamentGame.participantCount(Number(gameId)),
   });
 
   const handleStart = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -269,7 +271,7 @@ export default function BalanceGameSection() {
             <span className="font-bold">{userCount.toLocaleString()}</span>
           </p>
           <Link
-            href="/balanceGame"
+            href="/game/tournamentGame"
             className="inline-block mt-8 px-6 py-3 bg-zinc-700 hover:bg-zinc-600 rounded-lg text-white transition-colors duration-200"
           >
             목록으로 돌아가기

@@ -1,12 +1,12 @@
 interface DataProps {
-  balanceGameId: number;
+  tournamentId: number;
   selectedItemId: number;
 }
 
 export const postFinalChoiceData = async (finalChoiceData: DataProps) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/final-choice`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/tournamentGame/final-choice`,
       {
         cache: "no-cache",
         headers: {

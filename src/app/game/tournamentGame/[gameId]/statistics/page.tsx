@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { notFound, useParams } from "next/navigation";
 import { QUERYKEYS } from "@/queryKeys";
 import Image from "next/image";
-import { getBalaceGameStatisticsData } from "./_lib/getBalaceGameStatisticsData";
+import { getTournamentGameStatisticsData } from "./_lib/getTournamentGameStatisticsData";
 import { GameStatistics } from "@/app/types/gameType";
 import Section from "@/app/_components/Section";
 import { useEffect, useState } from "react";
@@ -23,8 +23,8 @@ export default function StatisticsPage() {
     isLoading,
     isError,
   } = useQuery<GameStatistics>({
-    queryKey: QUERYKEYS.balanceGame.statistics(Number(gameId)),
-    queryFn: () => getBalaceGameStatisticsData(Number(gameId)),
+    queryKey: QUERYKEYS.tournamentGame.statistics(Number(gameId)),
+    queryFn: () => getTournamentGameStatisticsData(Number(gameId)),
   });
   const [showProgress, setShowProgress] = useState(false);
 
@@ -55,12 +55,16 @@ export default function StatisticsPage() {
           <div className="flex items-center justify-center gap-4">
             <CustomLink
               icon="arrow"
-              href={`/balanceGame/${gameId}`}
+              href={`/game/tournamentGame/${gameId}`}
               iconPosition="right"
             >
               다시하기
             </CustomLink>
-            <CustomLink icon="arrow" href="/balanceGame" iconPosition="right">
+            <CustomLink
+              icon="arrow"
+              href="/game/tournamentGame"
+              iconPosition="right"
+            >
               게임목록
             </CustomLink>
           </div>

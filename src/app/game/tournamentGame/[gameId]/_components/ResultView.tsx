@@ -99,7 +99,7 @@ export const ResultView = ({
     `이거 실화? 내가 고른 "${result.name}" 어때요?`,
     `고민 끝에 선택한 "${result.name}", 당신의 선택은?`,
     `"${result.name}" 찍은 사람 여기 있네요!`,
-    `밸런스 끝판왕의 선택 "${result.name}"`,
+    `토너먼트계 끝판왕의 선택 "${result.name}"`,
   ];
 
   useEffect(() => {
@@ -108,25 +108,7 @@ export const ResultView = ({
       window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
     }
   }, []);
-  const handleShare = async () => {
-    try {
-      // URL에 선택한 결과 ID를 포함
-      const shareUrl = `${window.location.href}?result=${result.id}`;
 
-      if (navigator.share) {
-        await navigator.share({
-          title: "밸런스 게임 결과",
-          text: `내가 선택한 답은 "${result.name}"입니다!`,
-          url: shareUrl,
-        });
-      } else {
-        await navigator.clipboard.writeText(shareUrl);
-        alert("링크가 복사되었습니다!");
-      }
-    } catch (error) {
-      console.error("공유 실패:", error);
-    }
-  };
   const [randomMessage, setRandomMessage] = useState("");
   useEffect(() => {
     setRandomMessage(
@@ -142,7 +124,7 @@ export const ResultView = ({
     window.Kakao.Share.sendDefault({
       objectType: "feed",
       content: {
-        title: "밸런스 게임 결과",
+        title: "토너먼트 결과",
         description: `내가 선택한 답은 "${result.name}"입니다! 당신의 선택은?`,
         imageUrl: result.imageUrl,
         link: {
@@ -202,7 +184,7 @@ export const ResultView = ({
           </button>
 
           <Link
-            href={`/balanceGame/${gameId}/statistics`}
+            href={`/game/tournamentGame/${gameId}/statistics`}
             className="group relative w-full flex items-center justify-center py-4 px-6 bg-zinc-700 hover:bg-zinc-600 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <FiBarChart2 className="mr-2" />
@@ -222,7 +204,7 @@ export const ResultView = ({
           다시 시작하기
         </button>
         <Link
-          href={"/balanceGame/create"}
+          href={"/game/tournamentGame/create"}
           role="button"
           aria-label="게임 만들기"
           className="flex items-center justify-center w-full mt-8 py-3 text-zinc-400 hover:text-white transition-colors duration-200"

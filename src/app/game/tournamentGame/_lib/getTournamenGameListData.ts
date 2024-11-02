@@ -1,4 +1,4 @@
-export default async function balanceGameListData({
+export default async function getTournamenGameListData({
   page,
   limit,
 }: {
@@ -7,7 +7,7 @@ export default async function balanceGameListData({
 }) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame?page=${page}&limit=${limit}`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/tournamentGame?page=${page}&limit=${limit}`
     );
     const data = await res.json();
 
