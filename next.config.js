@@ -8,6 +8,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "prod-balansome.s3.ap-northeast-2.amazonaws.com",
+        port: "",
+        pathname: "/balance-game/**",
+      },
+      {
+        protocol: "https",
         hostname: "bala-game-images.s3.ap-northeast-2.amazonaws.com",
         port: "",
         pathname: "/balance-game/**",
