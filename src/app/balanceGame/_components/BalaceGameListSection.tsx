@@ -77,7 +77,7 @@ export default function BalaceGameListSection({ limit }: { limit: number }) {
                 {/* 제목 */}
                 <h3 className="text-xl font-medium mb-3 truncate">
                   <span className="text-blue-500 font-bold">
-                    [{(game.itemsCount as number) / 2}강전]
+                    [{game.itemsCount as number}강전]
                   </span>
                   {game.title}
                 </h3>
