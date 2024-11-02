@@ -5,13 +5,18 @@ import { useRef } from "react";
 import getTournamenGameListData from "../_lib/getTournamenGameListData";
 import Link from "next/link";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
-import Image from "next/image";
+import { motion } from "framer-motion";
 import { TournamentListResponse } from "@/app/types/gameType";
 import CustomLink from "@/app/_components/buttons/CustomLink";
 import Section from "@/app/_components/Section";
 import TitleText from "@/app/_components/TitleText";
+import TournamentGameCard from "./TournamentGameCard";
 
-export default function TournamentListSection({ limit }: { limit: number }) {
+export default function TournamentGameListSection({
+  limit,
+}: {
+  limit: number;
+}) {
   const observerRef = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
@@ -48,88 +53,26 @@ export default function TournamentListSection({ limit }: { limit: number }) {
   }
   return (
     <Section>
-      <div className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end"
+      >
         <TitleText>토너먼트 게임 리스트</TitleText>
         <CustomLink href="/game/tournamentGame/create" icon="plus">
           <span className="font-medium">게임 만들기</span>
         </CustomLink>
-      </div>
+      </motion.div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {data?.pages.map((page) =>
-          page.games.map((game) => (
-            <Link
+        {data?.pages.map((page, pageIndex) =>
+          page.games.map((game, index) => (
+            <TournamentGameCard
               key={game.id}
-              href={`/game/tournamentGame/${game.id}`}
-              className="group bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:bg-gray-50"
-            >
-              {/* 썸네일 이미지 */}
-              <div className="relative w-full h-64">
-                <Image
-                  src={game.items[0].imageUrl}
-                  alt={game.items[0].name}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-              </div>
-
-              <div className="p-6">
-                {/* 제목 */}
-                <h3 className="text-xl font-medium mb-3 truncate">
-                  <span className="text-blue-500 font-bold">
-                    [{game.itemsCount as number}강전]
-                  </span>
-                  {game.title}
-                </h3>
-
-                {/* 작성자 정보와 날짜 */}
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                  <span className="font-medium">{game.username}</span>
-                  <time className="text-gray-400">
-                    {new Date(game.createdAt).toLocaleDateString()}
-                  </time>
-                </div>
-                {/* 참여자 수 */}
-                <div className="flex items-center gap-1 text-sm text-gray-500 mb-4">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                  </svg>
-                  <span>{game.participantCount.toLocaleString()}명 참여</span>
-                </div>
-                {/* VS 이미지 프리뷰 */}
-                <div className="flex items-center justify-center gap-4">
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden">
-                    <Image
-                      src={game.items[0].imageUrl}
-                      alt={game.items[0].name}
-                      fill
-                      className="object-cover"
-                      sizes="100%"
-                    />
-                  </div>
-                  <span className="font-bold text-gray-400">VS</span>
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden">
-                    <Image
-                      src={game.items[1].imageUrl}
-                      alt={game.items[1].name}
-                      fill
-                      className="object-cover"
-                      sizes="100%"
-                    />
-                  </div>
-                </div>
-              </div>
-            </Link>
+              game={game}
+              delay={0.1 * (pageIndex * page.games.length + index)} // 순차적으로 딜레이 증가
+            />
           ))
         )}
       </div>

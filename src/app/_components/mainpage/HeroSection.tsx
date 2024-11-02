@@ -84,14 +84,14 @@ export default function HeroSection() {
             >
               토너먼트 게임 만들기
             </CustomLink>
-            <CustomLink
+            {/* <CustomLink
               href="/game/balanceGame/create"
               variant="primary"
               icon="plus"
               iconPosition="left"
             >
               밸런스 게임 만들기
-            </CustomLink>
+            </CustomLink> */}
 
             <CustomLink
               href="/game"

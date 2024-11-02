@@ -1,3 +1,5 @@
+import GameListSection from "./_components/GameListSection";
+
 export default function GameMainPage() {
-  return <div></div>;
+  return <GameListSection limit={10} />;
 }
