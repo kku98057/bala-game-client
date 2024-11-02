@@ -44,7 +44,7 @@ export default function Comments({ gameId }: CommentProps) {
 
   // 댓글 목록 조회
   const { data: comments } = useQuery<CommentListType>({
-    queryKey: QUERYKEYS.balanceGame.comments.list(gameId, currentPage),
+    queryKey: QUERYKEYS.tournamentGame.comments.list(gameId, currentPage),
     queryFn: async () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${gameId}?page=${currentPage}&limit=10`
@@ -83,7 +83,7 @@ export default function Comments({ gameId }: CommentProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: QUERYKEYS.balanceGame.comments.all(),
+        queryKey: QUERYKEYS.tournamentGame.comments.all(),
       });
       setContent("");
     },

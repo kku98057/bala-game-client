@@ -2,24 +2,24 @@ export type GameProps = {
   name: string;
   imageUrl: string;
   id: number;
-  balanceGameId: number;
+  tournamentId: number;
 };
 
-export interface BalanceGameProps {
+export interface TournamentGameProps {
   title: string;
   items: GameProps[];
   participantCount: number;
 }
 
-export interface BalanceGameList extends BalanceGameProps {
+export interface TournamentList extends TournamentGameProps {
   id: number;
   username: string;
   createdAt: string;
   itemsCount?: number;
 }
 
-export interface BalanceGameListResponse {
-  games: BalanceGameList[];
+export interface TournamentListResponse {
+  games: TournamentList[];
   currentPage: number;
   totalPages: number;
   totalItems: number;

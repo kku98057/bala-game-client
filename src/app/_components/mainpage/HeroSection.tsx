@@ -64,7 +64,7 @@ export default function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            재미있는 밸런스 게임을 만들고 공유해보세요.
+            재미있는 게임을 만들고 공유해보세요.
             <br />
             친구들과 함께 즐기는 선택의 순간!
           </motion.p>
@@ -77,16 +77,24 @@ export default function HeroSection() {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <CustomLink
-              href="/balanceGame/create"
+              href="/game/tournamentGame/create"
               variant="primary"
               icon="plus"
               iconPosition="left"
             >
-              게임 만들기
+              토너먼트 게임 만들기
             </CustomLink>
+            {/* <CustomLink
+              href="/game/balanceGame/create"
+              variant="primary"
+              icon="plus"
+              iconPosition="left"
+            >
+              밸런스 게임 만들기
+            </CustomLink> */}
 
             <CustomLink
-              href="/balanceGame"
+              href="/game"
               variant="secondary"
               icon="arrow"
               iconPosition="right"
@@ -106,12 +114,12 @@ export default function HeroSection() {
             {
               icon: "🎮",
               title: "쉽고 재미있게",
-              description: "간단한 클릭만으로 밸런스 게임을 즐겨보세요",
+              description: "간단한 클릭만으로 게임을 즐겨보세요",
             },
             {
               icon: "🎨",
               title: "직접 만들기",
-              description: "나만의 독특한 밸런스 게임을 만들어보세요",
+              description: "나만의 독특한 게임을 만들어보세요",
             },
             {
               icon: "🤝",

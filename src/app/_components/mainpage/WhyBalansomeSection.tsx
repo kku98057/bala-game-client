@@ -14,7 +14,7 @@ export default function WhyBalansomeSection() {
               icon: "🎯",
               title: "맞춤형 게임 생성",
               description:
-                "다양한 주제와 형식으로 자유롭게 밸런스 게임을 만들 수 있습니다. 당신만의 독특한 아이디어를 실현해보세요.",
+                "다양한 주제와 형식으로 자유롭게 게임을 만들 수 있습니다. 당신만의 독특한 아이디어를 실현해보세요.",
               color: "from-purple-500 to-indigo-500",
             },
             {
@@ -69,7 +69,7 @@ export default function WhyBalansomeSection() {
           viewport={{ once: true }}
         >
           <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-            Balansome은 단순한 밸런스 게임을 넘어,
+            Balansome은 단순한 게임을 넘어,
             <span className="text-indigo-400"> 새로운 소통의 방식</span>을
             제안합니다.
             <br />
