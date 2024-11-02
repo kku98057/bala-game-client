@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { UserProps } from "../types/UserType";
+import Link from "next/link";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +57,7 @@ export default function Header() {
     <>
       <header className="flex py-4 px-6 items-center justify-between fixed top-0 left-0 z-20 w-full bg-zinc-900/80 backdrop-blur-md border-b border-zinc-800">
         <div className="flex items-center gap-4">
-          <div className="w-8 h-8 relative flex">
+          <Link href="/" className="w-8 h-8 relative flex">
             <Image
               src="/imgs/hamberger.jpg"
               alt="로고"
@@ -65,7 +66,7 @@ export default function Header() {
               sizes="100%"
               className="rounded-lg"
             />
-          </div>
+          </Link>
           {user && (
             <span className="text-zinc-300 text-sm">{user.nickname}님</span>
           )}
