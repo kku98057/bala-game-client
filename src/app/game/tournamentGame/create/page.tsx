@@ -1,7 +1,7 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
-import { createBalanceGame } from "./_lib/createBalanceGameData";
+import { createTournamentGameData } from "./_lib/createTournamentGameData";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import CustomButton from "@/app/_components/buttons/CustomButton";
@@ -22,7 +22,7 @@ export default function CreateTournamentGameGamePage() {
 
   const router = useRouter();
   const mutation = useMutation({
-    mutationFn: createBalanceGame,
+    mutationFn: createTournamentGameData,
     mutationKey: QUERYKEYS.tournamentGame.create(),
   });
   const initializeTournament = (type: 4 | 8 | 16) => {
