@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GameChoiceList } from "./GameChoiceList";
 import { ResultView } from "./ResultView";
-
+import { motion } from "framer-motion";
 import { FiPlay } from "react-icons/fi"; // 시작 아이콘
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
@@ -15,6 +15,7 @@ import { getTournamenGameData } from "../_lib/getTournamenGameData";
 import Link from "next/link";
 import { postTournamentGameParticipageCountData } from "../_lib/postTournamentGameParticipageCountData";
 import { useTournamentGame } from "@/hooks/useTournamentGame";
+import useCounterUp from "@/hooks/useCounterUp";
 
 export default function TournamenGameSection() {
   const { gameId } = useParams();
@@ -27,7 +28,6 @@ export default function TournamenGameSection() {
   const searchParams = useSearchParams();
   const resultId = searchParams.get("result");
 
-  const [userCount, setUserCount] = useState(0); // 사용자 수 상태 추가
   const {
     curGame,
     result,
@@ -70,24 +70,6 @@ export default function TournamenGameSection() {
       duration: 0.3,
     });
   }, []);
-  useEffect(() => {
-    const end = data?.participantCount;
-    const duration = 2; // 애니메이션 지속 시간 (초)
-
-    // GSAP 애니메이션 설정
-    gsap.to(
-      { count: 0 },
-      {
-        count: end,
-        delay: 1,
-        duration: duration,
-        ease: "power4.out", // 가속도 설정
-        onUpdate: function () {
-          setUserCount(Math.ceil(this.targets()[0].count)); // 현재 카운트 업데이트
-        },
-      }
-    );
-  }, [data?.participantCount]);
 
   useEffect(() => {
     if (ref.current && isStart) {
@@ -196,27 +178,79 @@ export default function TournamenGameSection() {
       }
     }
   }, [resultId, data]);
+  const { rounded } = useCounterUp(data?.participantCount as number);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.3 },
+    },
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const roundAnnouncementVariants = {
+    hidden: { opacity: 0, scale: 2 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: "backOut",
+      },
+    },
+    exit: {
+      opacity: 0,
+      transition: { duration: 0.3 },
+    },
+  };
   return (
-    <section
-      ref={sectionRef}
-      className="flex items-center justify-center w-full min-h-dvh "
+    <motion.section
+      className="flex items-center justify-center w-full min-h-dvh"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
     >
       {isStart ? (
-        <div ref={ref} className="relative w-full h-full overflow-hidden">
-          <div className="round-announcement fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 opacity-0">
-            <h2 className="text-6xl font-bold text-white bg-indigo-600 px-8 py-4 rounded-lg shadow-lg">
-              {currentRound} 시작!
-            </h2>
-          </div>
+        <div className="relative w-full h-full overflow-hidden">
+          {currentRound && !result && (
+            <div className="round-announcement fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50  md:w-auto">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white bg-indigo-600 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg shadow-lg whitespace-nowrap text-center">
+                {currentRound} 시작!
+              </h2>
+            </div>
+          )}
+
           {curGame.length > 0 && !result && (
             <>
-              <ul className="w-full flex items-center h-dvh">
+              <motion.ul className="w-full h-full flex flex-col md:flex-row items-stretch">
                 {curGame.slice(0, 2).map((list: GameProps, index) => (
-                  <li
+                  <motion.li
                     key={`${list.id}_선택지`}
-                    className={`game-choice ${
-                      index === 0 ? "game-choice-left" : "game-choice-right"
-                    } flex-1 h-full`}
+                    initial={{
+                      x: index === 0 ? -100 : 100,
+                      opacity: 0,
+                    }}
+                    animate={{
+                      x: 0,
+                      opacity: 1,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: index * 0.2,
+                      ease: "easeOut",
+                    }}
+                    className={`relative flex-1`}
                   >
                     <GameChoiceList
                       list={list}
@@ -225,59 +259,91 @@ export default function TournamenGameSection() {
                       isSelecting={isSelecting}
                       disabled={isAnimating}
                     />
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
-              <button
-                onClick={() => {
-                  const baseUrl = window.location.href.split("?")[0];
-                  window.location.href = baseUrl;
-                }}
-                className="absolute top-[100px] bg-indigo-600 p-[15px] rounded-full left-[50%] translate-x-[-50%] z-[10] text-white hover:bg-indigo-700 transition-colors duration-200 shadow-lg"
-              >
-                다시 시작하기
-              </button>
+              </motion.ul>
+
+              <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  z-20">
+                <div className="bg-white/10 backdrop-blur-lg rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
+                  <span className="text-xl md:text-2xl font-bold text-white">
+                    VS
+                  </span>
+                </div>
+              </div>
             </>
           )}
 
           {result && <ResultView result={result} resultRef={resultRef} />}
         </div>
       ) : (
-        <div className="game_title opacity-0 scale-[0.5] max-w-md w-full mx-auto px-4 text-center space-y-8">
-          <h1 className="start-title text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
+        <motion.div
+          className="max-w-md w-full mx-auto px-4 text-center space-y-8 py-24"
+          variants={containerVariants}
+        >
+          <motion.h1
+            className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight"
+            variants={titleVariants}
+          >
             당신의 선택은?
             <br />
-            <span className=" text-indigo-400">{data?.title}</span>
-          </h1>
+            <motion.span className="text-indigo-400" variants={titleVariants}>
+              {data?.title}
+            </motion.span>
+          </motion.h1>
 
-          <button
+          <motion.button
             type="button"
             disabled={isPending}
             onClick={handleStart}
-            className="start-button  group relative w-full flex items-center justify-center py-6 px-8 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group relative w-full flex items-center justify-center py-6 px-8 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            variants={titleVariants}
           >
             <FiPlay className="mr-3 text-2xl" />
             <span className="text-2xl">
               {isPending ? "시작중.." : "시작하기"}
             </span>
-            <div className="absolute inset-0 rounded-xl border-2 border-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-          </button>
+          </motion.button>
 
-          <p className="text-zinc-400 text-sm mt-6">
-            두 가지 선택지 중 하나를 골라주세요
-          </p>
-          <p className="text-white text-lg mt-4">
-            참가 유저 수:{" "}
-            <span className="font-bold">{userCount.toLocaleString()}</span>
-          </p>
-          <Link
-            href="/game/tournamentGame"
-            className="inline-block mt-8 px-6 py-3 bg-zinc-700 hover:bg-zinc-600 rounded-lg text-white transition-colors duration-200"
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="text-zinc-400 text-sm mt-6"
           >
-            목록으로 돌아가기
-          </Link>
-        </div>
+            두 가지 선택지 중 하나를 골라주세요
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="text-white text-lg"
+          >
+            참여자 수:{" "}
+            <motion.span
+              className="font-bold"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+            >
+              {rounded}
+            </motion.span>
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
+          >
+            <Link
+              href="/game/tournamentGame"
+              className="inline-block px-6 py-3 bg-zinc-700 hover:bg-zinc-600 rounded-lg text-white transition-all duration-200 hover:scale-105"
+            >
+              목록으로 돌아가기
+            </Link>
+          </motion.div>
+        </motion.div>
       )}
-    </section>
+    </motion.section>
   );
 }

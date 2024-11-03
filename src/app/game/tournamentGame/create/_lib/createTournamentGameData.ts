@@ -1,6 +1,6 @@
 import { optimizeImage } from "@/app/_lib/optimizeImage";
 import Cookies from "js-cookie";
-export const createBalanceGame = async (formData: FormData) => {
+export const createTournamentGameData = async (formData: FormData) => {
   const imageFiles = formData.getAll("image") as File[];
   const compressedFormData = new FormData();
   const token = Cookies.get("token");

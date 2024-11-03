@@ -1,3 +1,5 @@
+import BalanceGameListSection from "./_components/BalanceGameListSection";
+
 export default function page() {
-  return <div></div>;
+  return <BalanceGameListSection limit={10} />;
 }

@@ -2,7 +2,7 @@ import { GameProps } from "@/app/types/gameType";
 import gsap from "gsap";
 import Image from "next/image";
 import { useRef } from "react";
-
+import { motion } from "framer-motion";
 interface GameChoiceListProps {
   list: GameProps;
   onSelect: (list1: GameProps, list2: GameProps, selected: GameProps) => void;
@@ -57,36 +57,50 @@ export const GameChoiceList = ({
   };
 
   return (
-    <button
-      disabled={isSelecting || disabled}
-      ref={itemRef}
+    <motion.button
       onClick={handleSelect}
+      disabled={isSelecting || disabled}
+      className="w-full block  h-[50dvh] md:h-[100dvh] relative overflow-hidden"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       data-id={list.id}
-      className={`game-choice w-full h-full cursor-pointer relative transition-all
-        ${isSelecting ? "pointer-events-none" : ""}
-      `}
     >
-      {/* 로딩 인디케이터 */}
-      {isSelecting && (
-        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
-          <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-        </div>
-      )}
-
-      {/* 기존 컨텐츠 */}
-      <div className="relative w-full h-full group overflow-hidden">
+      <motion.div
+        className="relative w-full h-full group overflow-hidden "
+        whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.3 }}
+      >
         <Image
           src={list.imageUrl}
           alt={list.name}
-          className=" object-cover hover:brightness-75 hover:scale-105 transition-all duration-300"
+          className="block object-cover transition-all duration-300"
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
         />
-        <p className="absolute bottom-[15%] left-[50%] translate-x-[-50%] text-white text-[5cqi] font-bold">
+
+        <motion.div
+          className="absolute inset-0 bg-black/30"
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        />
+
+        <p className="absolute bottom-[15%] left-[50%] translate-x-[-50%] text-white text-[10cqi] md:text-[5cqi] font-bold">
           {list.name}
         </p>
-      </div>
-    </button>
+      </motion.div>
+
+      {isSelecting && (
+        <motion.div
+          className="absolute inset-0 bg-black/50 flex items-center justify-center z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+        </motion.div>
+      )}
+    </motion.button>
   );
 };
