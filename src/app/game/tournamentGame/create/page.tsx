@@ -144,7 +144,7 @@ export default function CreateTournamentGameGamePage() {
     mutation.mutate(formData, {
       onSuccess: (response) => {
         alert("생성이 완료되었습니다.");
-        router.push(`/tournamentGame/${response.data.id}`);
+        router.push(`/game/tournamentGame/${response.data.id}`);
       },
       onError: (error: any) => {
         if (error.response?.status === 401) {
