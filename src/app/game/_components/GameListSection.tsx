@@ -11,6 +11,7 @@ import TitleText from "@/app/_components/TitleText";
 import { FaTrophy } from "react-icons/fa";
 import GameCard from "./GameCard";
 import { IconType } from "react-icons";
+import TitleSection from "@/app/_components/TitleSection";
 interface GameList {
   href: string;
   icon: IconType;
@@ -19,6 +20,13 @@ interface GameList {
 }
 export default function GameListSection({ limit }: { limit: number }) {
   const list: GameList[] = [
+    {
+      href: "/game/balanceGame",
+      icon: FaTrophy,
+      title: "밸런스 게임",
+      description:
+        "여러 선택지 중 최고의 선택을 가려내는 밸런스 게임을 즐겨보세요",
+    },
     {
       href: "/game/tournamentGame",
       icon: FaTrophy,
@@ -29,14 +37,7 @@ export default function GameListSection({ limit }: { limit: number }) {
   ];
   return (
     <Section>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end"
-      >
-        <TitleText>토너먼트 게임 리스트</TitleText>
-      </motion.div>
+      <TitleSection title="게임" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
         {list.map((data, index) => (
           <GameCard

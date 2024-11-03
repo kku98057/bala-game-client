@@ -8,7 +8,7 @@ interface TitleProps {
 export default function TitleText({ children }: TitleProps) {
   return (
     <>
-      <h3 className="text-4xl font-bold text-center text-white">{children}</h3>
+      <h3 className="text-4xl font-bold  text-white">{children}</h3>
     </>
   );
 }

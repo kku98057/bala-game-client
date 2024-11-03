@@ -26,6 +26,8 @@ export interface TournamentListResponse {
   list: number;
 }
 export interface GameStatistics {
+  username: string;
+  createdAt: string;
   totalCount: number;
   items: {
     id: number;

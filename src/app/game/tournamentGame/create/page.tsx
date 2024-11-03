@@ -1,5 +1,5 @@
 "use client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { createTournamentGameData } from "./_lib/createTournamentGameData";
 import { useRouter } from "next/navigation";
@@ -11,9 +11,10 @@ import TitleText from "@/app/_components/TitleText";
 import { QUERYKEYS } from "@/queryKeys";
 import { UserProps } from "@/app/types/UserType";
 import Cookies from "js-cookie";
+import TitleSection from "@/app/_components/TitleSection";
 export default function CreateTournamentGameGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
-
+  const queryClient = useQueryClient();
   const [tournamentType, setTournamentType] = useState<4 | 8 | 16 | null>(null);
   const [user, setUser] = useState<UserProps | null>(null);
   const [list, setList] = useState<
@@ -144,6 +145,9 @@ export default function CreateTournamentGameGamePage() {
     mutation.mutate(formData, {
       onSuccess: (response) => {
         alert("생성이 완료되었습니다.");
+        queryClient.invalidateQueries({
+          queryKey: QUERYKEYS.tournamentGame.all(),
+        });
         router.push(`/game/tournamentGame/${response.data.id}`);
       },
       onError: (error: any) => {
@@ -231,18 +235,15 @@ export default function CreateTournamentGameGamePage() {
   }, [router]);
   return (
     <Section>
-      {/* 고정된 헤더 */}
-      <div className="flex flex-col items-center justify-between mb-24 sm:flex-row sm:items-end">
-        <TitleText>토너먼트 게임 생성하기</TitleText>
+      <TitleSection title="토너먼트 게임" subTitle="생성하기">
         <CustomLink
-          href="/game/tournamentGame/create"
+          href="/game/tournamentGame"
           icon="arrow"
           iconPosition="right"
         >
-          <span className="flex items-center gap-2">게임 목록으로</span>
+          게임 목록
         </CustomLink>
-      </div>
-
+      </TitleSection>
       <form
         className="flex justify-center  pb-8 mt-[150px]"
         onSubmit={handleSubmit}

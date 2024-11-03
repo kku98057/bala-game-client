@@ -7,7 +7,6 @@ import Container from "../Container";
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false);
   const featuresRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     setMounted(true);
 

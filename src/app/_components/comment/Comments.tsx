@@ -6,6 +6,7 @@ import { QUERYKEYS } from "@/queryKeys";
 import Cookies from "js-cookie";
 import { UserProps } from "@/app/types/UserType";
 import { useRouter } from "next/navigation";
+import getGameCommentData from "./_lib/getGameCommentData";
 
 interface CommentListType {
   comments: CommentType[];
@@ -17,20 +18,23 @@ interface CommentListType {
 
 interface CommentProps {
   gameId: number;
+  gameType: "BALANCE" | "TOURNAMENT";
 }
 
 interface CommentType {
   id: number;
   content: string;
   createdAt: string;
+  userId: string;
   user: {
     nickname: string;
   };
 }
-
-export default function Comments({ gameId }: CommentProps) {
+export default function Comments({ gameId, gameType }: CommentProps) {
   const [content, setContent] = useState("");
   const [user, setUser] = useState<UserProps | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editContent, setEditContent] = useState("");
   const router = useRouter();
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,14 +49,7 @@ export default function Comments({ gameId }: CommentProps) {
   // 댓글 목록 조회
   const { data: comments } = useQuery<CommentListType>({
     queryKey: QUERYKEYS.tournamentGame.comments.list(gameId, currentPage),
-    queryFn: async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${gameId}?page=${currentPage}&limit=10`
-      );
-      if (!response.ok) throw new Error("Failed to fetch comments");
-      const data = await response.json();
-      return data.data;
-    },
+    queryFn: () => getGameCommentData({ gameId, currentPage, gameType }),
   });
 
   // 댓글 작성
@@ -69,6 +66,7 @@ export default function Comments({ gameId }: CommentProps) {
           },
           body: JSON.stringify({
             gameId,
+            gameType,
             content,
           }),
         }
@@ -104,6 +102,104 @@ export default function Comments({ gameId }: CommentProps) {
       return;
     }
     createMutation.mutate(content);
+  };
+  const deleteMutation = useMutation({
+    mutationFn: async (commentId: number) => {
+      const token = Cookies.get("token");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${commentId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: QUERYKEYS.tournamentGame.comments.all(),
+      });
+    },
+    onError: (error: Error) => {
+      alert(error.message);
+    },
+  });
+
+  // 댓글 수정
+  const updateMutation = useMutation({
+    mutationFn: async ({
+      commentId,
+      content,
+    }: {
+      commentId: number;
+      content: string;
+    }) => {
+      const token = Cookies.get("token");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${commentId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ content }),
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: QUERYKEYS.tournamentGame.comments.all(),
+      });
+      setEditingId(null);
+      setEditContent("");
+    },
+    onError: (error: Error) => {
+      alert(error.message);
+    },
+  });
+
+  // 댓글 삭제 핸들러
+  const handleDelete = (commentId: number) => {
+    if (window.confirm("댓글을 삭제하시겠습니까?")) {
+      deleteMutation.mutate(commentId);
+    }
+  };
+
+  // 댓글 수정 시작
+  const handleEditStart = (comment: CommentType) => {
+    setEditingId(comment.id);
+    setEditContent(comment.content);
+  };
+
+  // 댓글 수정 취소
+  const handleEditCancel = () => {
+    setEditingId(null);
+    setEditContent("");
+  };
+
+  // 댓글 수정 제출
+  const handleEditSubmit = (commentId: number) => {
+    if (!editContent.trim()) {
+      alert("댓글 내용을 입력해주세요.");
+      return;
+    }
+    updateMutation.mutate({ commentId, content: editContent });
   };
   return (
     <div className="space-y-6">
@@ -183,15 +279,57 @@ export default function Comments({ gameId }: CommentProps) {
                     minute: "2-digit",
                   })}
                 </span>
+                {user?.id === comment.userId && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEditStart(comment)}
+                      className="text-sm text-zinc-400 hover:text-indigo-400"
+                    >
+                      수정
+                    </button>
+                    <button
+                      onClick={() => handleDelete(comment.id)}
+                      className="text-sm text-zinc-400 hover:text-red-400"
+                    >
+                      삭제
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* 댓글 내용 */}
               <div className="pl-11">
-                {" "}
-                {/* 프로필 이미지 너비만큼 들여쓰기 */}
-                <p className="text-zinc-300 leading-relaxed break-words">
-                  {comment.content}
-                </p>
+                {editingId === comment.id ? (
+                  <div className="space-y-2">
+                    <textarea
+                      value={editContent}
+                      onChange={(e) => {
+                        if (e.target.value.length <= 300) {
+                          setEditContent(e.target.value);
+                        }
+                      }}
+                      className="w-full h-24 p-4 bg-zinc-700 border border-zinc-600 rounded-lg text-white"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEditSubmit(comment.id)}
+                        className="px-3 py-1 bg-indigo-600 text-white rounded-lg"
+                      >
+                        저장
+                      </button>
+                      <button
+                        onClick={handleEditCancel}
+                        className="px-3 py-1 bg-zinc-600 text-white rounded-lg"
+                      >
+                        취소
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-zinc-300 leading-relaxed break-words">
+                    {comment.content}
+                  </p>
+                )}
               </div>
 
               {/* 댓글 푸터 - 좋아요, 답글 등의 기능을 추가할 수 있습니다 */}

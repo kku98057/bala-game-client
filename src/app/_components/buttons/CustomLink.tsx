@@ -70,7 +70,7 @@ export default function CustomLink({
       href={href}
       className={`${baseStyles} ${selectedVariant.background} ${className}`}
     >
-      <span className="flex items-center justify-center gap-2 relative z-10">
+      <span className="flex items-center justify-center gap-2 relative z-10 whitespace-nowrap">
         {icon && iconPosition === "left" && icons[icon]}
         {children}
         {icon && iconPosition === "right" && icons[icon]}

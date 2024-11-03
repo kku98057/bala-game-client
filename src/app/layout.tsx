@@ -32,6 +32,19 @@ export default function RootLayout({
           integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
           crossOrigin="anonymous"
         ></Script>{" "}
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-G3YHG309EC"
+        ></Script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: ` window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G3YHG309EC');`,
+          }}
+        ></script>
         <ReactQueryProviders>{children}</ReactQueryProviders>
       </body>
     </html>
