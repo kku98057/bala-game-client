@@ -1,10 +1,10 @@
-"use client";
 import Footer from "./_components/Footer";
 import Header from "./_components/Header";
 import GameUseCaseSection from "./_components/mainpage/GameUseCaseSection";
 
 import HeroSection from "./_components/mainpage/HeroSection";
 import WhyBalansomeSection from "./_components/mainpage/WhyBalansomeSection";
+
 export default function Home() {
   return (
     <>

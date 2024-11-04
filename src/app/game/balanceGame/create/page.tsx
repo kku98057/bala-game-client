@@ -120,7 +120,7 @@ export default function CreateBalanceGamePage() {
           queryClient.invalidateQueries({
             queryKey: QUERYKEYS.balanceGame.all(),
           });
-          router.push(`/game/balanceGame/${response.data.id}`);
+          router.push(`/game/balanceGame`);
         },
         onError: (error: any) => {
           if (error.response?.status === 401) {

@@ -38,6 +38,6 @@ export default async function postLogin(
   } catch (err: unknown) {
     const errorMessage =
       err instanceof Error ? err.message : "로그인에 실패했습니다.";
-    setError && setError(errorMessage);
+    if (setError) setError(errorMessage);
   }
 }

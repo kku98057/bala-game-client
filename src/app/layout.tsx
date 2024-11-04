@@ -1,25 +1,23 @@
-import type { Metadata } from "next";
-
 import "./globals.css";
 import ReactQueryProviders from "@/hooks/useReactQuery";
+import { Metadata } from "next";
 import Script from "next/script";
-
+import { DEFAULT_METADATA } from "./enum";
 export const metadata: Metadata = {
-  title: "밸런썸 (Balancesome)",
-  description:
-    "밸런썸 (Balancesome) 다양한 게임을 만들고 즐기고 공유하고 랭킹을 확인하세요!",
+  title: `${DEFAULT_METADATA.siteName} | ${DEFAULT_METADATA.subTitle}`,
+  description: DEFAULT_METADATA.defaultDescription,
   icons: {
     icon: { url: "/imgs/logo.png" },
   },
+
   openGraph: {
     title: "밸런썸 (Balancesome)",
-    description:
-      "밸런썸 (Balancesome) 다양한 게임을 만들고 즐기고 공유하고 랭킹을 확인하세요!",
-    url: "https://balancesome.co.kr",
-    siteName: "토너먼트 게임",
+    description: DEFAULT_METADATA.defaultDescription,
+    url: DEFAULT_METADATA.baseUrl,
+    siteName: DEFAULT_METADATA.siteName,
     images: [
       {
-        url: "/imgs/logo.png",
+        url: DEFAULT_METADATA.defaultThumbnail,
         width: 1200,
         height: 630,
       },

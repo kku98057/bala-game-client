@@ -148,7 +148,7 @@ export default function CreateTournamentGameGamePage() {
         queryClient.invalidateQueries({
           queryKey: QUERYKEYS.tournamentGame.all(),
         });
-        router.push(`/game/tournamentGame/${response.data.id}`);
+        router.push(`/game/tournamentGame`);
       },
       onError: (error: any) => {
         if (error.response?.status === 401) {

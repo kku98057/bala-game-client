@@ -17,11 +17,13 @@ interface GameData {
 interface GenerateGameMetadataProps {
   gameData: GameData | null;
   gameType: GameTypeProps;
+  isStatistics?: boolean;
 }
 
 export function generateGameMetadata({
   gameData,
   gameType,
+  isStatistics,
 }: GenerateGameMetadataProps): Metadata {
   if (!gameData) {
     return {
@@ -30,7 +32,9 @@ export function generateGameMetadata({
     };
   }
 
-  const title = `${gameData.title} - ${DEFAULT_METADATA.siteName}`;
+  const title = `${gameData.title} ${isStatistics ? "통계" : ""} | ${
+    DEFAULT_METADATA.siteName
+  }`;
   const description =
     gameData.description || `${DEFAULT_METADATA.defaultDescription}`;
   const url = `${DEFAULT_METADATA.baseUrl}/game/${
@@ -42,6 +46,9 @@ export function generateGameMetadata({
   return {
     title,
     description,
+    icons: {
+      icon: `/imgs/logo.png`,
+    },
     openGraph: {
       title,
       description,

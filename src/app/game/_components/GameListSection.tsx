@@ -1,7 +1,7 @@
 "use client";
 
 import Section from "@/app/_components/Section";
-import { FaTrophy } from "react-icons/fa";
+import { FaBalanceScale, FaTrophy } from "react-icons/fa";
 import GameCard from "./GameCard";
 import { IconType } from "react-icons";
 import TitleSection from "@/app/_components/TitleSection";
@@ -15,7 +15,7 @@ export default function GameListSection({ limit }: { limit: number }) {
   const list: GameList[] = [
     {
       href: "/game/balanceGame",
-      icon: FaTrophy,
+      icon: FaBalanceScale,
       title: "밸런스 게임",
       description: `여러 선택지 중 최고의 선택을 가려내는\n 밸런스 게임을 즐겨보세요`,
     },
