@@ -58,23 +58,26 @@ export default function StatisticsPage() {
         count={statistics?.items.length as number}
       >
         <div className="w-full">
-          <div className="bg-zinc-800 rounded-lg p-6">
+          <div className="bg-zinc-800 rounded-lg p-4 sm:p-6">
             <div className="mb-4">
               {statistics && (
-                <div className="text-lg text-white">
+                <div className="text-base sm:text-lg text-white">
                   작성자:{" "}
                   <span className="font-bold">{statistics.username}</span>
                 </div>
               )}
             </div>
             {isLoading && <Loading />}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {statistics?.items.map((item, index) => (
-                <div key={item.id} className="bg-zinc-700 rounded-lg p-4">
-                  <div className="flex items-center gap-4 mb-3">
+                <div
+                  key={item.id}
+                  className="bg-zinc-700 rounded-lg p-3 sm:p-4"
+                >
+                  <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mb-3">
                     {index < 3 && (
                       <div
-                        className={`text-2xl ${
+                        className={`text-xl sm:text-2xl ${
                           crownColors[index as keyof typeof crownColors]
                         }`}
                       >
@@ -82,7 +85,7 @@ export default function StatisticsPage() {
                       </div>
                     )}
 
-                    <div className="relative w-16 h-16 rounded-full overflow-hidden">
+                    <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden">
                       <Image
                         src={item.imageUrl}
                         alt={item.name}
@@ -91,16 +94,16 @@ export default function StatisticsPage() {
                       />
                     </div>
 
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-white">
+                    <div className="flex-1 text-center sm:text-left">
+                      <h3 className="text-lg sm:text-xl font-bold text-white">
                         {item.name}
                       </h3>
-                      <p className="text-zinc-400">
+                      <p className="text-sm sm:text-base text-zinc-400">
                         {item.count.toLocaleString()}명 선택
                       </p>
                     </div>
 
-                    <div className="text-2xl font-bold text-indigo-400">
+                    <div className="text-xl sm:text-2xl font-bold text-indigo-400">
                       {item.percentage}%
                     </div>
                   </div>
@@ -115,7 +118,7 @@ export default function StatisticsPage() {
                   </div>
                 </div>
               ))}
-            </div>{" "}
+            </div>
           </div>
         </div>
       </StatisticsSection>
