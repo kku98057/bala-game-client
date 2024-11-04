@@ -43,7 +43,6 @@ export default function BalanceGameListSection({ limit }: { limit: number }) {
     ref: observerRef,
     callback: onIntersect,
   });
-  console.log(data);
 
   if (isLoading) {
     return (

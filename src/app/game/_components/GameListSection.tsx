@@ -27,7 +27,6 @@ export default function GameListSection({ limit }: { limit: number }) {
       description: `여러 선택지 중 최고의 선택을 가려내는\n 토너먼트를 즐겨보세요`,
     },
   ];
-  console.log(list);
   return (
     <Section>
       <TitleSection title="게임" />
