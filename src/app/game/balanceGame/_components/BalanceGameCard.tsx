@@ -44,6 +44,7 @@ export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
       transition={{ duration: 0.5, delay }}
       whileHover={{ y: -5 }}
       whileTap={{ scale: 0.98 }}
+      className="relative"
     >
       {username === game.username && (
         <button
