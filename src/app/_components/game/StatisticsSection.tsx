@@ -53,7 +53,9 @@ export default function StatisticsSection({
         <div className="flex items-center justify-center gap-4">
           <CustomLink
             icon="arrow"
-            href={`/game/${gameType}/${gameId}`}
+            href={`/game/${
+              gameType === "BALANCE" ? "balanceGame" : "tournamentGame"
+            }/${gameId}`}
             iconPosition="right"
           >
             다시하기

@@ -31,12 +31,12 @@ export const MenuModal = ({
   // 인증 관련 메뉴 아이템
   const authItems = user
     ? [
-        {
-          icon: <FiUser />,
-          label: "프로필",
-          href: "/profile",
-          onClick: onClose,
-        },
+        // {
+        //   icon: <FiUser />,
+        //   label: "프로필",
+        //   href: "/profile",
+        //   onClick: onClose,
+        // },
         {
           icon: <FiLogOut />,
           label: "로그아웃",

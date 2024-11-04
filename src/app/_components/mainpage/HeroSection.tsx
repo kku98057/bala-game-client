@@ -75,14 +75,14 @@ export default function HeroSection() {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <CustomLink
+            {/* <CustomLink
               href="/game/tournamentGame/create"
               variant="primary"
               icon="plus"
               iconPosition="left"
             >
               토너먼트 게임 만들기
-            </CustomLink>
+            </CustomLink> */}
             {/* <CustomLink
               href="/game/balanceGame/create"
               variant="primary"
@@ -94,12 +94,12 @@ export default function HeroSection() {
 
             <CustomLink
               href="/game"
-              variant="secondary"
+              variant="primary"
               icon="arrow"
               iconPosition="right"
             >
               {" "}
-              게임 목록 보기
+              게임 하러가기
             </CustomLink>
           </motion.div>
         </div>

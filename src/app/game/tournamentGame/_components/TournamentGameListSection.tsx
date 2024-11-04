@@ -58,6 +58,7 @@ export default function TournamentGameListSection({
         <CustomLink
           href="/game/tournamentGame/create"
           icon="plus"
+          iconPosition="right"
           className="w-full sm:w-auto justify-center text-center px-6 py-3"
         >
           게임 만들기

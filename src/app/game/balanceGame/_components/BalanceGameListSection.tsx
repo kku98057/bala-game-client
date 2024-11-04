@@ -52,6 +52,7 @@ export default function BalanceGameListSection({ limit }: { limit: number }) {
           className="w-full sm:w-auto justify-center text-center px-6 py-3"
           href="/game/balanceGame/create"
           icon="plus"
+          iconPosition="right"
         >
           게임 만들기
         </CustomLink>{" "}

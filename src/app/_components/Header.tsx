@@ -59,7 +59,7 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <Link href="/" className="w-8 h-8 relative flex">
             <Image
-              src="/imgs/hamberger.jpg"
+              src="/imgs/logo.png"
               alt="로고"
               fill
               priority
