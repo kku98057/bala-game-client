@@ -3,18 +3,23 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import postLogin from "../_lib/postLogin";
+import Loading from "@/app/_components/Loading";
 
 export default function RegisterPage() {
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     nickname: "",
+    passwordConfirm: "", // 비밀번호 확인 필드 추가
   });
   const [errors, setErrors] = useState({
     email: "",
     password: "",
     nickname: "",
+    passwordConfirm: "", // 비밀번호 확인 필드 추가
+
     general: "",
   });
 
@@ -33,8 +38,61 @@ export default function RegisterPage() {
     }
     return "";
   };
-  // 완성되지 않은 한글 체크 함수
+  // 비밀번호 확인 검사 함수
+  const validatePasswordConfirm = (
+    password: string,
+    passwordConfirm: string
+  ) => {
+    if (password !== passwordConfirm) {
+      return "비밀번호가 일치하지 않습니다.";
+    }
+    return "";
+  };
 
+  // 비밀번호 입력 핸들러 추가
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setFormData((prev) => ({ ...prev, password: newPassword }));
+
+    // 비밀번호 유효성 검사
+    const passwordError = validatePassword(newPassword);
+
+    // 비밀번호 확인과 일치 여부 검사
+    const confirmError = formData.passwordConfirm
+      ? validatePasswordConfirm(newPassword, formData.passwordConfirm)
+      : "";
+
+    setErrors((prev) => ({
+      ...prev,
+      password: passwordError,
+      passwordConfirm: confirmError,
+    }));
+  };
+  // 비밀번호 확인 입력 핸들러 추가
+  const handlePasswordConfirmChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const confirmPassword = e.target.value;
+    setFormData((prev) => ({ ...prev, passwordConfirm: confirmPassword }));
+
+    // 비밀번호 일치 여부 검사
+    const confirmError = validatePasswordConfirm(
+      formData.password,
+      confirmPassword
+    );
+    setErrors((prev) => ({ ...prev, passwordConfirm: confirmError }));
+  };
+
+  // 비밀번호 유효성 검사 함수 추가
+  const validatePassword = (password: string) => {
+    if (password.length < 8) {
+      return "비밀번호는 8자 이상이어야 합니다.";
+    }
+    // 추가적인 비밀번호 규칙을 여기에 추가할 수 있습니다
+    return "";
+  };
+
+  // 완성되지 않은 한글 체크 함수
   const hasIncompleteHangul = (str: string) => {
     // 자음/모음만 있는 불완전한 한글 체크를 위한 정규식
     const incompleteHangulRegex = /[\u1100-\u11FF\u3130-\u318F]/;
@@ -63,14 +121,29 @@ export default function RegisterPage() {
       }));
       return;
     }
-    // 폼 제출 전 최종 유효성 검사
+
+    e.preventDefault();
+
+    // 비밀번호 유효성 검사
+    const passwordError = validatePassword(formData.password);
+    const passwordConfirmError = validatePasswordConfirm(
+      formData.password,
+      formData.passwordConfirm
+    );
     const nicknameError = validateNickname(formData.nickname);
-    if (nicknameError) {
-      setErrors({ ...errors, nickname: nicknameError });
+
+    if (passwordError || passwordConfirmError || nicknameError) {
+      setErrors({
+        ...errors,
+        password: passwordError,
+        passwordConfirm: passwordConfirmError,
+        nickname: nicknameError,
+      });
       return;
     }
 
     try {
+      setIsLoading(true);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
         {
@@ -87,11 +160,14 @@ export default function RegisterPage() {
         throw new Error(data.message || "회원가입에 실패했습니다.");
       }
 
-      router.push("/login");
+      await postLogin({ email: formData.email, password: formData.password });
+      setIsLoading(false);
+      alert("로그인 되었습니다.");
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "회원가입에 실패했습니다.";
       setErrors((prev) => ({ ...prev, general: errorMessage }));
+      setIsLoading(false);
     }
   };
   return (
@@ -128,15 +204,32 @@ export default function RegisterPage() {
               type="password"
               required
               value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              placeholder="비밀번호"
+              onChange={handlePasswordChange} // 핸들러 변경
+              placeholder="비밀번호 (8자 이상)"
               className="w-full p-3 bg-zinc-700/50 rounded-xl text-white placeholder:text-zinc-400
-                       focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
+            {errors.password && (
+              <p className="mt-1 text-red-400 text-sm">{errors.password}</p>
+            )}
           </div>
 
+          <div>
+            <input
+              type="password"
+              required
+              value={formData.passwordConfirm}
+              onChange={handlePasswordConfirmChange} // 핸들러 변경
+              placeholder="비밀번호 확인"
+              className="w-full p-3 bg-zinc-700/50 rounded-xl text-white placeholder:text-zinc-400
+                 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            {errors.passwordConfirm && (
+              <p className="mt-1 text-red-400 text-sm">
+                {errors.passwordConfirm}
+              </p>
+            )}
+          </div>
           <div>
             <div className="relative">
               <input
@@ -177,6 +270,7 @@ export default function RegisterPage() {
           </Link>
         </div>
       </div>
+      {isLoading && <Loading overlay />}
     </div>
   );
 }

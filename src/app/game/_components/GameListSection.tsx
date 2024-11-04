@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 
 import Section from "@/app/_components/Section";
 import { FaTrophy } from "react-icons/fa";
@@ -28,7 +27,7 @@ export default function GameListSection({ limit }: { limit: number }) {
     },
   ];
   return (
-    <Section>
+    <Section className="pb-10">
       <TitleSection title="게임" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
         {list.map((data, index) => (
