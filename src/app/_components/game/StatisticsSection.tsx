@@ -28,15 +28,14 @@ export default function StatisticsSection({
   const [showComments, setShowComments] = useState(false);
   return (
     <Section>
-      <div className="w-full flex items-center justify-between mb-8">
-        <div className="flex items-center gap-6">
+      <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-2 md:gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-4 md:gap-6 w-full sm:w-auto">
           <TitleText>{title}</TitleText>
-          {/* 댓글 토글 버튼 개선 */}
           <button
             onClick={() => setShowComments(!showComments)}
             className={`
-              flex items-center gap-3 px-6 py-3 rounded-xl
-              text-lg font-semibold
+              flex items-center gap-3 px-4 sm:px-4 md:px-6 py-2 sm:py-2 md:py-3 rounded-xl
+              text-base sm:text-base md:text-lg font-semibold w-full sm:w-auto justify-center
               transition-all duration-300 transform hover:scale-105
               ${
                 showComments
@@ -45,16 +44,19 @@ export default function StatisticsSection({
               }
             `}
           >
-            <FaComments size={24} />
+            <FaComments size={20} />
             <span>댓글</span>
           </button>
         </div>
 
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-start sm:justify-center gap-2 sm:gap-2 md:gap-4 w-full sm:w-auto">
           <CustomLink
             icon="arrow"
-            href={`/game/${gameType}/${gameId}`}
+            href={`/game/${
+              gameType === "BALANCE" ? "balanceGame" : "tournamentGame"
+            }/${gameId}`}
             iconPosition="right"
+            className="flex-1 sm:flex-none text-sm sm:text-sm md:text-base"
           >
             다시하기
           </CustomLink>
@@ -64,6 +66,7 @@ export default function StatisticsSection({
               gameType === "BALANCE" ? "balanceGame" : "tournamentGame"
             }`}
             iconPosition="right"
+            className="flex-1 sm:flex-none text-sm sm:text-sm md:text-base"
           >
             게임목록
           </CustomLink>
@@ -71,45 +74,50 @@ export default function StatisticsSection({
       </div>
 
       <div className="relative min-h-[calc(100vh-200px)]">
-        {/* 메인 콘텐츠 영역 */}
         <div
           className={`w-full transition-all duration-300 ${
             showComments ? "lg:mr-[400px]" : ""
           }`}
         >
-          {/* 게임 정보 헤더 개선 */}
-          <div className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-8 mb-6">
-            <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
-              <div className="flex items-center gap-4">
-                <div className="bg-indigo-500/10 px-4 py-2 rounded-lg">
-                  <span className="text-zinc-400">작성자</span>
-                  <span className="ml-2 text-lg font-bold text-white">
-                    {username}
+          <div className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 mb-6">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 md:gap-6">
+                <div className="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:gap-2 md:gap-4">
+                  <div className="bg-indigo-500/10 px-3 sm:px-3 md:px-4 py-2 rounded-lg">
+                    <span className="text-zinc-400 text-sm md:text-base">
+                      작성자
+                    </span>
+                    <span className="ml-2 text-base sm:text-base md:text-lg font-bold text-white">
+                      {username}
+                    </span>
+                  </div>
+                  <div className="bg-indigo-500/10 px-3 sm:px-3 md:px-4 py-2 rounded-lg">
+                    <span className="text-zinc-400 text-sm md:text-base">
+                      작성일
+                    </span>
+                    <span className="ml-2 text-sm md:text-base text-white">
+                      {new Date(createdAt).toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
+                </div>
+                <div className="bg-indigo-500/10 px-3 sm:px-3 md:px-4 py-2 rounded-lg sm:ml-auto w-full sm:w-auto text-center">
+                  <span className="text-zinc-400 text-sm md:text-base">
+                    총 질문
+                  </span>
+                  <span className="ml-2 text-base sm:text-base md:text-lg font-bold text-indigo-400">
+                    {count}개
                   </span>
                 </div>
-                <div className="bg-indigo-500/10 px-4 py-2 rounded-lg">
-                  <span className="text-zinc-400">작성일</span>
-                  <span className="ml-2 text-white">
-                    {new Date(createdAt).toLocaleDateString("ko-KR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </span>
-                </div>
-              </div>
-              <div className="bg-indigo-500/10 px-4 py-2 rounded-lg ml-auto">
-                <span className="text-zinc-400">총 질문</span>
-                <span className="ml-2 text-lg font-bold text-indigo-400">
-                  {count}개
-                </span>
               </div>
             </div>
           </div>
           {children}
         </div>
 
-        {/* 댓글 패널 */}
         <AnimatePresence>
           {showComments && (
             <>
@@ -134,7 +142,6 @@ export default function StatisticsSection({
                 </div>
               </motion.div>
 
-              {/* 모바일용 배경 오버레이 */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

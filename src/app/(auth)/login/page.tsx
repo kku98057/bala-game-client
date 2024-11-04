@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import postLogin from "../_lib/postLogin";
 export default function LoginPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -14,45 +15,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "로그인에 실패했습니다.");
-      }
-      const data = await response.json();
-      // 토큰과 유저 정보를 쿠키에 저장
-      Cookies.set("token", data.data.token, {
-        secure: true,
-        sameSite: "strict",
-        expires: 7, // 7일
-      });
-
-      Cookies.set("user", JSON.stringify(data.data.user), {
-        secure: true,
-        sameSite: "strict",
-        expires: 7,
-      });
-
-      // 로그인 성공 시 홈페이지로 이동
-      router.push("/");
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : "로그인에 실패했습니다.";
-      setError(errorMessage);
-    }
+    await postLogin(formData, setError);
   };
 
   return (

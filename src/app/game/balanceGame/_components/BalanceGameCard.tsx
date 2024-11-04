@@ -3,13 +3,40 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { TournamentList } from "@/app/types/gameType";
 import { BalanceGameListProps } from "@/app/types/balanceGameType";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteBalaceGameData } from "../_lib/deleteBalaceGameData";
+import { QUERYKEYS } from "@/queryKeys";
+import Cookies from "js-cookie";
 interface BalanceGameCardProps {
   game: BalanceGameListProps;
   delay: number;
 }
 
 export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
+  const gameId = game.id;
+  const userInfo = Cookies.get("user");
+  const username = userInfo ? JSON.parse(userInfo).nickname : null;
+  const queryClient = useQueryClient();
+  const { mutate: deleteGameHandler } = useMutation({
+    mutationFn: (id: number) => deleteBalaceGameData(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: QUERYKEYS.balanceGame.all(),
+      });
+      alert("게임이 삭제되었습니다.");
+    },
+    onError: (error: any) => {
+      return alert(error);
+    },
+  });
+  const handleDelete = () => {
+    if (
+      window.confirm("정말로 이 게임을 삭제하시겠습니까? 복구는 불가능합니다.")
+    ) {
+      deleteGameHandler(Number(gameId));
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -18,6 +45,29 @@ export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
       whileHover={{ y: -5 }}
       whileTap={{ scale: 0.98 }}
     >
+      {username === game.username && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            handleDelete();
+          }}
+          className="absolute top-2 right-2 p-2 text-zinc-400 hover:text-red-500 transition-colors z-10"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            />
+          </svg>
+        </button>
+      )}
       <Link
         href={`/game/balanceGame/${game.id}`}
         className="group block bg-zinc-800/50 rounded-2xl overflow-hidden transition-all duration-300 hover:bg-zinc-700/50 border border-zinc-700"

@@ -2,7 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { TournamentList } from "@/app/types/gameType";
-
+import Cookies from "js-cookie";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { QUERYKEYS } from "@/queryKeys";
+import deleteTournamentGameData from "../_lib/deleteTournamentGameData";
 interface TournamentGameCardProps {
   game: TournamentList;
   delay: number;
@@ -12,6 +15,30 @@ export default function TournamentGameCard({
   game,
   delay,
 }: TournamentGameCardProps) {
+  const gameId = game.id;
+  const userInfo = Cookies.get("user");
+  const username = userInfo ? JSON.parse(userInfo).nickname : null;
+
+  const queryClient = useQueryClient();
+  const { mutate: deleteGameHandler } = useMutation({
+    mutationFn: (id: number) => deleteTournamentGameData(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: QUERYKEYS.tournamentGame.all(),
+      });
+      alert("게임이 삭제되었습니다.");
+    },
+    onError: (error: any) => {
+      return alert(error);
+    },
+  });
+  const handleDelete = () => {
+    if (
+      window.confirm("정말로 이 게임을 삭제하시겠습니까? 복구는 불가능합니다.")
+    ) {
+      deleteGameHandler(Number(gameId));
+    }
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -20,6 +47,29 @@ export default function TournamentGameCard({
       whileHover={{ y: -5 }}
       whileTap={{ scale: 0.98 }}
     >
+      {username === game.username && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            handleDelete();
+          }}
+          className="absolute top-2 right-2 p-2 text-zinc-400 hover:text-red-500 transition-colors z-50"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            />
+          </svg>
+        </button>
+      )}
       <Link
         href={`/game/tournamentGame/${game.id}`}
         className="group block relative overflow-hidden rounded-2xl transition-all duration-300"

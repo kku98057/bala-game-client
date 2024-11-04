@@ -86,7 +86,7 @@ export const GameChoiceList = ({
           transition={{ duration: 0.2 }}
         />
 
-        <p className="absolute bottom-[15%] left-[50%] translate-x-[-50%] text-white text-[10cqi] md:text-[5cqi] font-bold">
+        <p className=" bottom-[15%]  text-white text-[10cqi] md:text-[5cqi] font-bold">
           {list.name}
         </p>
       </motion.div>

@@ -51,7 +51,7 @@ export default function GameCard({
             <h3 className="text-2xl font-bold transition-transform duration-300 group-hover:translate-y-[-2px]">
               {title}
             </h3>
-            <p className="text-sm text-zinc-400 group-hover:text-zinc-300 max-w-xs transition-all duration-300">
+            <p className=" whitespace-pre-line text-sm text-zinc-400 group-hover:text-zinc-300 max-w-xs transition-all duration-300">
               {description}
             </p>
           </div>

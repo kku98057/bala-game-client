@@ -1,34 +1,30 @@
-import type { Metadata } from "next";
-
 import "./globals.css";
 import ReactQueryProviders from "@/hooks/useReactQuery";
+import { Metadata } from "next";
 import Script from "next/script";
-
+import { DEFAULT_METADATA } from "./enum";
 export const metadata: Metadata = {
-  title: "밸런썸 (Balancesome)",
-  description:
-    "밸런썸 (Balancesome) 다양한 게임을 만들고 즐기고 공유하고 랭킹을 확인하세요!",
-  // openGraph: {
-  //   title: '토너먼트 게임',
-  //   description: '토너먼트 게임 플랫폼',
-  //   url: 'https://your-domain.com',
-  //   siteName: '토너먼트 게임',
-  //   images: [
-  //     {
-  //       url: 'https://your-domain.com/og-image.jpg',
-  //       width: 1200,
-  //       height: 630,
-  //     },
-  //   ],
-  //   locale: 'ko_KR',
-  //   type: 'website',
-  // },
-  // twitter: {
-  //   card: 'summary_large_image',
-  //   title: '토너먼트 게임',
-  //   description: '토너먼트 게임 플랫폼',
-  //   images: ['https://your-domain.com/og-image.jpg'],
-  // },
+  title: `${DEFAULT_METADATA.siteName} | ${DEFAULT_METADATA.subTitle}`,
+  description: DEFAULT_METADATA.defaultDescription,
+  icons: {
+    icon: { url: "/imgs/logo.png" },
+  },
+
+  openGraph: {
+    title: "밸런썸 (Balancesome)",
+    description: DEFAULT_METADATA.defaultDescription,
+    url: DEFAULT_METADATA.baseUrl,
+    siteName: DEFAULT_METADATA.siteName,
+    images: [
+      {
+        url: DEFAULT_METADATA.defaultThumbnail,
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "ko_KR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

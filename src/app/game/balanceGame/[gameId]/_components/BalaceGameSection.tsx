@@ -3,19 +3,13 @@
 import { useParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
-import { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useState } from "react";
 import gsap from "gsap";
 import Link from "next/link";
 import QuestionList from "./QuestionList";
 import { getBalanceGameData } from "../_lib/getBalanceGameData";
 import { postBanaceGameParticipageCountData } from "../_lib/postBanaceGameParticipageCountData";
-import {
-  motion,
-  AnimatePresence,
-  animate,
-  useMotionValue,
-  useTransform,
-} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import useCounterUp from "@/hooks/useCounterUp";
 import { FiPlay } from "react-icons/fi";
 
@@ -27,6 +21,7 @@ export default function BalanceGameSection() {
     queryKey: QUERYKEYS.balanceGame.list(Number(gameId)),
     queryFn: () => getBalanceGameData(Number(gameId)),
   });
+
   const { mutate: participantCountHandler, isPending } = useMutation({
     mutationFn: ({ id }: { id: number }) =>
       postBanaceGameParticipageCountData(id),
@@ -57,6 +52,7 @@ export default function BalanceGameSection() {
       }
     );
   };
+
   const { rounded } = useCounterUp(data?.participantCount);
 
   if (!data) return null;
@@ -74,8 +70,6 @@ export default function BalanceGameSection() {
             className="max-w-md w-full mx-auto px-4 text-center space-y-12"
           >
             <motion.h1 className="text-4xl md:text-5xl font-bold text-white mb-12 leading-tight">
-              당신의 선택은?
-              <br />
               <motion.span
                 className="text-indigo-400 mt-3 block"
                 initial={{ opacity: 0 }}
