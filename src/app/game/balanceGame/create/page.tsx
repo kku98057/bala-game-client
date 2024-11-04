@@ -91,11 +91,6 @@ export default function CreateBalanceGamePage() {
 
     // 각 질문과 선택지 검증
     for (const [index, question] of questions.entries()) {
-      if (!question.title.trim()) {
-        alert(`${index + 1}번 질문의 내용을 입력해주세요.`);
-        return;
-      }
-
       if (question.items.length < 2) {
         alert(`${index + 1}번 질문은 최소 2개의 선택지가 필요합니다.`);
         return;
@@ -162,7 +157,9 @@ export default function CreateBalanceGamePage() {
         <div className="w-full space-y-8">
           {/* 게임 제목 입력 */}
           <div className="space-y-2">
-            <label className="text-lg font-medium text-white">게임 제목</label>
+            <label className="text-lg font-medium text-white">
+              게임 제목 (필수)
+            </label>
             <input
               type="text"
               value={title}
@@ -173,7 +170,7 @@ export default function CreateBalanceGamePage() {
                 }
                 setTitle(e.target.value);
               }}
-              placeholder="예) 당신의 선택은?"
+              placeholder="예)악랄한 밸런스게임 모음"
               className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
             />
           </div>
@@ -194,7 +191,7 @@ export default function CreateBalanceGamePage() {
               >
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-medium text-white">
-                    질문 {qIndex + 1}
+                    질문 {qIndex + 1} (선택)
                   </h3>
                   <CustomButton
                     onClick={() => removeQuestion(qIndex)}
@@ -210,6 +207,8 @@ export default function CreateBalanceGamePage() {
                     type="text"
                     value={question.title}
                     onChange={(e) => {
+                      if (e.target.value.length > 40)
+                        return alert("20자 이하로 입력해주세요.");
                       const newQuestions = [...questions];
                       newQuestions[qIndex].title = e.target.value;
                       setQuestions(newQuestions);
@@ -223,7 +222,7 @@ export default function CreateBalanceGamePage() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <h4 className="text-sm font-medium text-zinc-400">
-                      선택지
+                      선택지(필수)
                     </h4>
                     <CustomButton
                       onClick={() => addItem(qIndex)}
@@ -239,6 +238,8 @@ export default function CreateBalanceGamePage() {
                         type="text"
                         value={item.name}
                         onChange={(e) => {
+                          if (e.target.value.length > 40)
+                            return alert("40자 이하로 입력해주세요.");
                           const newQuestions = [...questions];
                           newQuestions[qIndex].items[iIndex].name =
                             e.target.value;
