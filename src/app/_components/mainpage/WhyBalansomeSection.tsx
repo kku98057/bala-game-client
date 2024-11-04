@@ -68,8 +68,8 @@ export default function WhyBalansomeSection() {
           transition={{ delay: 0.6 }}
           viewport={{ once: true }}
         >
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-            Balansome은 단순한 게임을 넘어,
+          <p className="text-lg text-zinc-400 max-w-2xl mx-auto ">
+            Balansome은 단순한 게임을 넘어, <br />
             <span className="text-indigo-400"> 새로운 소통의 방식</span>을
             제안합니다.
             <br />

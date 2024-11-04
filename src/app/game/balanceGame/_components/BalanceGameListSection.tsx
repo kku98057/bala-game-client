@@ -1,6 +1,10 @@
 "use client";
 import { QUERYKEYS } from "@/queryKeys";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useRef } from "react";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import CustomLink from "@/app/_components/buttons/CustomLink";
@@ -9,6 +13,7 @@ import BalanceGameCard from "./BalanceGameCard";
 import getBalanceGameListData from "../_lib/getBalanceGameListData";
 import { BalanceGameListResponse } from "@/app/types/balanceGameType";
 import TitleSection from "@/app/_components/TitleSection";
+import { deleteBalaceGameData } from "../_lib/deleteBalaceGameData";
 
 export default function BalanceGameListSection({ limit }: { limit: number }) {
   const observerRef = useRef<HTMLDivElement>(null);
@@ -38,6 +43,8 @@ export default function BalanceGameListSection({ limit }: { limit: number }) {
     ref: observerRef,
     callback: onIntersect,
   });
+  console.log(data);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">

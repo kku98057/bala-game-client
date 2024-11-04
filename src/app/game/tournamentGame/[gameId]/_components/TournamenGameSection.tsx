@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GameChoiceList } from "./GameChoiceList";
 import { ResultView } from "./ResultView";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { FiPlay } from "react-icons/fi"; // 시작 아이콘
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
@@ -221,129 +221,169 @@ export default function TournamenGameSection() {
       animate="visible"
       variants={containerVariants}
     >
-      {isStart ? (
-        <div className="relative w-full h-full overflow-hidden">
-          {currentRound && !result && (
-            <div className="round-announcement fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50  md:w-auto">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white bg-indigo-600 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg shadow-lg whitespace-nowrap text-center">
-                {currentRound} 시작!
-              </h2>
-            </div>
-          )}
-
-          {curGame.length > 0 && !result && (
-            <>
-              <motion.ul className="w-full h-full flex flex-col md:flex-row items-stretch">
-                {curGame.slice(0, 2).map((list: GameProps, index) => (
-                  <motion.li
-                    key={`${list.id}_선택지`}
-                    initial={{
-                      x: index === 0 ? -100 : 100,
-                      opacity: 0,
-                    }}
-                    animate={{
-                      x: 0,
-                      opacity: 1,
-                    }}
-                    transition={{
-                      duration: 0.8,
-                      delay: index * 0.2,
-                      ease: "easeOut",
-                    }}
-                    className={`relative flex-1`}
-                  >
-                    <GameChoiceList
-                      list={list}
-                      onSelect={selectHandler}
-                      curGame={curGame}
-                      isSelecting={isSelecting}
-                      disabled={isAnimating}
-                    />
-                  </motion.li>
-                ))}
-              </motion.ul>
-
-              <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  z-20">
-                <div className="bg-white/10 backdrop-blur-lg rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
-                  <span className="text-xl md:text-2xl font-bold text-white">
-                    VS
-                  </span>
-                </div>
+      <AnimatePresence mode="wait">
+        {isStart ? (
+          <div className="relative w-full h-full overflow-hidden">
+            {currentRound && !result && (
+              <div className="round-announcement fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50  md:w-auto">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white bg-indigo-600 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg shadow-lg whitespace-nowrap text-center">
+                  {currentRound} 시작!
+                </h2>
               </div>
-            </>
-          )}
+            )}
 
-          {result && <ResultView result={result} resultRef={resultRef} />}
-        </div>
-      ) : (
-        <motion.div
-          className="max-w-md w-full mx-auto px-4 text-center space-y-8 py-24"
-          variants={containerVariants}
-        >
-          <motion.h1
-            className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight"
-            variants={titleVariants}
-          >
-            당신의 선택은?
-            <br />
-            <motion.span className="text-indigo-400" variants={titleVariants}>
-              {data?.title}
-            </motion.span>
-          </motion.h1>
+            {curGame.length > 0 && !result && (
+              <>
+                <motion.ul className="w-full h-full flex flex-col md:flex-row items-stretch">
+                  {curGame.slice(0, 2).map((list: GameProps, index) => (
+                    <motion.li
+                      key={`${list.id}_선택지`}
+                      initial={{
+                        x: index === 0 ? -100 : 100,
+                        opacity: 0,
+                      }}
+                      animate={{
+                        x: 0,
+                        opacity: 1,
+                      }}
+                      transition={{
+                        duration: 0.8,
+                        delay: index * 0.2,
+                        ease: "easeOut",
+                      }}
+                      className={`relative flex-1`}
+                    >
+                      <GameChoiceList
+                        list={list}
+                        onSelect={selectHandler}
+                        curGame={curGame}
+                        isSelecting={isSelecting}
+                        disabled={isAnimating}
+                      />
+                    </motion.li>
+                  ))}
+                </motion.ul>
 
-          <motion.button
-            type="button"
-            disabled={isPending}
-            onClick={handleStart}
-            className="group relative w-full flex items-center justify-center py-6 px-8 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            variants={titleVariants}
-          >
-            <FiPlay className="mr-3 text-2xl" />
-            <span className="text-2xl">
-              {isPending ? "시작중.." : "시작하기"}
-            </span>
-          </motion.button>
+                <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  z-20">
+                  <div className="bg-white/10 backdrop-blur-lg rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
+                    <span className="text-xl md:text-2xl font-bold text-white">
+                      VS
+                    </span>
+                  </div>
+                </div>
+              </>
+            )}
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="text-zinc-400 text-sm mt-6"
-          >
-            두 가지 선택지 중 하나를 골라주세요
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="text-white text-lg"
-          >
-            참여자 수:{" "}
-            <motion.span
-              className="font-bold"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-            >
-              {rounded}
-            </motion.span>
-          </motion.p>
+            {result && <ResultView result={result} resultRef={resultRef} />}
+          </div>
+        ) : (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
+            className="max-w-md w-full mx-auto px-4 text-center space-y-8 py-24"
+            variants={containerVariants}
           >
-            <Link
-              href="/game/tournamentGame"
-              className="inline-block px-6 py-3 bg-zinc-700 hover:bg-zinc-600 rounded-lg text-white transition-all duration-200 hover:scale-105"
+            <motion.h1
+              className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight"
+              variants={titleVariants}
             >
-              목록으로 돌아가기
-            </Link>
+              <motion.span className="text-indigo-400" variants={titleVariants}>
+                {data?.title}
+              </motion.span>
+            </motion.h1>
+
+            <motion.button
+              type="button"
+              disabled={isPending}
+              onClick={handleStart}
+              className="group relative w-full flex items-center justify-center py-6 px-8 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              variants={titleVariants}
+            >
+              <FiPlay className="mr-3 text-2xl" />
+              <span className="text-2xl">
+                {isPending ? "시작중.." : "시작하기"}
+              </span>
+            </motion.button>
+
+            <div className="space-y-8">
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="text-zinc-400 text-sm py-2"
+              >
+                토너먼트 방식으로 최후의 1개를 선택해주세요
+              </motion.p>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="text-white text-lg py-2"
+              >
+                참여자 수:{" "}
+                <motion.span
+                  className="font-bold text-xl"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1 }}
+                >
+                  {rounded}
+                </motion.span>
+              </motion.p>
+            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2 }}
+              className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-4"
+            >
+              <Link
+                href="/game/tournamentGame"
+                className="group relative inline-flex items-center gap-2 px-6 py-3 bg-zinc-800/50 backdrop-blur hover:bg-zinc-700/50 rounded-xl text-zinc-300 hover:text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-zinc-950/20"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+                목록으로 돌아가기
+                <div className="absolute inset-0 rounded-xl border border-zinc-700/50 group-hover:border-zinc-500/50 transition-colors duration-300" />
+              </Link>{" "}
+              <Link
+                href={`/game/tournamentGame/${gameId}/statistics`}
+                className="group relative inline-flex items-center gap-2 px-6 py-3 bg-indigo-600/90 backdrop-blur hover:bg-indigo-600 rounded-xl text-indigo-200 hover:text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-indigo-950/20"
+              >
+                <span>통계 보러가기</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+                <div className="absolute inset-0 rounded-xl border border-indigo-500/50 group-hover:border-indigo-400/50 transition-colors duration-300" />
+              </Link>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 }
