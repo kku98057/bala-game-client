@@ -22,6 +22,8 @@ import MoveStatisticsButton from "@/app/game/_components/MoveStatisticsButton";
 import MoveListButton from "@/app/game/_components/MoveListButton";
 import GameParticipate from "@/app/game/_components/GameParticipate";
 import GameTitle from "@/app/game/_components/GameTitle";
+import ShareButton from "@/app/_components/buttons/ShareButton";
+import useKakaoShare from "@/hooks/useKakaoShare";
 
 export default function TournamenGameSection() {
   const { gameId } = useParams();
@@ -193,6 +195,33 @@ export default function TournamenGameSection() {
     },
   };
 
+  // 랜덤 공유 메시지
+  const shareMessages = [
+    "🏆 내가 찾은 최고의 선택! 너는 어떤 걸 고를래?",
+    "⚡️ 이상형 월드컵 결과가 예상과 다르다면? 너도 한번 도전해봐!",
+    "🎮 취향을 테스트하는 가장 재미있는 방법! 너도 참여해볼래?",
+    "🎯 내 취향 월드컵 결과 공개! 너의 선택은 뭐가 될지 궁금해~",
+    "✨ 고민 끝에 찾은 내 최애! 친구들은 어떤 걸 선택할까?",
+    "🎪 월드컵 게임 한판 어때? 의외의 결과가 나올지도!",
+    "💫 이거 은근 고르기 어려웠는데... 너는 어떤 선택을 할지 궁금해!",
+    "🎭 취향 월드컵 결과 대공개! 너도 한번 해보면 재미있을걸?",
+    "🌟 내 취향 저격템을 찾았다! 친구들의 선택이 궁금하다면 참여해봐!",
+    "🎨 이상형 월드컵 한판! 너의 최종 선택은 뭐가 될까?",
+  ];
+  const shareMessage =
+    shareMessages[Math.floor(Math.random() * shareMessages.length)];
+
+  const { handleKakaoShare } = useKakaoShare();
+
+  const handlerShare = () => {
+    handleKakaoShare({
+      title: "월드컵 게임",
+      description: shareMessage,
+      shareUrl: `${window.location.origin}${window.location.pathname}`,
+      imageUrl: data?.items[0].imageUrl || "",
+    });
+  };
+
   return (
     <motion.section
       className="flex items-center justify-center w-full min-h-dvh"
@@ -263,7 +292,17 @@ export default function TournamenGameSection() {
             <GameTitle title={data?.title || ""} />
 
             <GameStartButton isPending={isPending} handleStart={handleStart} />
-
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              <ShareButton
+                variant="secondary"
+                title={"친구에게 공유하기"}
+                handlerShare={handlerShare}
+              />
+            </motion.div>
             <div className="">
               <GameDesc description="월드컵 방식으로 최후의 1개를 선택해주세요" />
 
