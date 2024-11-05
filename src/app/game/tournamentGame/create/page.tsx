@@ -245,10 +245,10 @@ export default function CreateTournamentGameGamePage() {
         </CustomLink>
       </TitleSection>
       <form
-        className="flex justify-center  pb-8 mt-[150px]"
+        className="flex justify-center pb-8 mt-0 mb:mt-[150px]"
         onSubmit={handleSubmit}
       >
-        <div className=" w-full space-y-8">
+        <div className=" w-full space-y-8 ">
           {/* 게임 제목 입력 */}
           <div className="space-y-2">
             <label className="text-lg font-medium text-white">게임 제목</label>
@@ -264,26 +264,15 @@ export default function CreateTournamentGameGamePage() {
               className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
             />
           </div>
-          {/* <div className="space-y-2">
-            <label className="text-lg font-medium text-white">작성자</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => {
-                if (e.target.value.length > 8)
-                  return alert("작성자명은 최대 8자까지 입니다.");
-                setUsername(e.target.value);
-              }}
-              placeholder="작성자명을 입력하세요."
-              className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-            />
-          </div> */}
+
           {!tournamentType && (
-            <div className="space-y-4">
-              <h2 className="text-lg font-medium text-white">
+            <div className="space-y-4 max-w-3xl mx-auto">
+              {" "}
+              {/* max-w-3xl 추가 */}
+              <h2 className="text-base sm:text-lg font-medium text-white">
                 토너먼트 형식 선택
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                 <button
                   type="button"
                   onClick={() => initializeTournament(4)}
@@ -310,27 +299,27 @@ export default function CreateTournamentGameGamePage() {
           )}
           {tournamentType && (
             <>
-              <div className="flex justify-between items-center">
-                <h2 className="text-lg font-medium text-white">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <h2 className="text-base sm:text-lg font-medium text-white">
                   {tournamentType}강 토너먼트 ({list.length}개 선택지)
                 </h2>
-                <div className="flex items-center gap-4 justify-center">
-                  <CustomButton icon="plus">
-                    <label className="cursor-pointer text-white ">
-                      <span>이미지 일괄 업로드</span>
-                      <input
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            handleBulkImageUpload(e.target.files);
-                          }
-                        }}
-                      />
-                    </label>
-                  </CustomButton>
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="relative">
+                    <CustomButton icon="plus" className="whitespace-nowrap">
+                      이미지 일괄 업로드
+                    </CustomButton>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          handleBulkImageUpload(e.target.files);
+                        }
+                      }}
+                    />
+                  </div>
                   <CustomButton
                     onClick={() => {
                       const isValidChange = list.some(
@@ -349,7 +338,7 @@ export default function CreateTournamentGameGamePage() {
                         setList([]);
                       }
                     }}
-                    className="text-indigo-400 hover:text-indigo-300 transition-colors duration-200"
+                    className="text-indigo-400 hover:text-indigo-300 transition-colors duration-200 whitespace-nowrap"
                   >
                     형식 변경
                   </CustomButton>
