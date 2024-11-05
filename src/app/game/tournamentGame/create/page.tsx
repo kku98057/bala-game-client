@@ -7,11 +7,12 @@ import Image from "next/image";
 import CustomButton from "@/app/_components/buttons/CustomButton";
 import CustomLink from "@/app/_components/buttons/CustomLink";
 import Section from "@/app/_components/Section";
-import TitleText from "@/app/_components/TitleText";
 import { QUERYKEYS } from "@/queryKeys";
 import { UserProps } from "@/app/types/UserType";
 import Cookies from "js-cookie";
 import TitleSection from "@/app/_components/TitleSection";
+import Warning from "@/app/_components/Warning";
+import { div } from "framer-motion/client";
 export default function CreateTournamentGameGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
   const queryClient = useQueryClient();
@@ -304,7 +305,7 @@ export default function CreateTournamentGameGamePage() {
                   {tournamentType}강 월드컵 ({list.length}개 선택지)
                 </h2>
                 <div className="flex flex-wrap gap-2">
-                  <div className="relative flex-1 min-w-[160px]">
+                  <div className="relative  min-w-[160px]">
                     <CustomButton
                       icon="plus"
                       className="w-full whitespace-nowrap max-w-[200px]"
@@ -351,6 +352,15 @@ export default function CreateTournamentGameGamePage() {
           )}
 
           {/* 항목 리스트 */}
+          {tournamentType && (
+            <div>
+              <Warning />
+              <p className="text-indigo-400">
+                가장 첫 이미지가 썸네일이 됩니다.
+              </p>
+            </div>
+          )}
+
           <ul className=" w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {list.map((item, index) => (
               <li
@@ -358,8 +368,11 @@ export default function CreateTournamentGameGamePage() {
                 className="relative p-6 bg-zinc-800/50 rounded-xl border border-zinc-700 hover:border-zinc-600 transition-all duration-200"
               >
                 <div className="flex justify-between items-center mb-4">
-                  <div className="text-lg font-medium text-white">
+                  <div className="text-lg font-medium text-white flex items-center gap-1">
                     선택지 {index + 1}
+                    {index === 0 && (
+                      <span className="text-indigo-400">(썸네일)</span>
+                    )}
                   </div>
                 </div>
 
@@ -468,7 +481,7 @@ export default function CreateTournamentGameGamePage() {
           </ul>
 
           {/* 하단 버튼 */}
-          <div className="sticky bottom-8 pt-4 space-y-4 bg-gradient-to-t from-zinc-800 to-zinc-800/95">
+          <div className="sticky bottom-8 pt-4 z-10 space-y-4 bg-gradient-to-t from-zinc-800 to-zinc-800/95">
             {tournamentType && (
               <button
                 type="submit"
