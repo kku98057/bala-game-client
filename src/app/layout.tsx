@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
   title: `${DEFAULT_METADATA.siteName} | ${DEFAULT_METADATA.subTitle}`,
   description: DEFAULT_METADATA.defaultDescription,
-  icons: "/imgs/logo.png",
+  icons: "/favicon.ico",
   openGraph: {
     title: "밸런썸 (Balancesome)",
     description: DEFAULT_METADATA.defaultDescription,
