@@ -16,6 +16,12 @@ import Link from "next/link";
 import { postTournamentGameParticipageCountData } from "../_lib/postTournamentGameParticipageCountData";
 import { useTournamentGame } from "@/hooks/useTournamentGame";
 import useCounterUp from "@/hooks/useCounterUp";
+import GameStartButton from "@/app/game/_components/GameStartButton";
+import GameDesc from "@/app/game/_components/GameDesc";
+import MoveStatisticsButton from "@/app/game/_components/MoveStatisticsButton";
+import MoveListButton from "@/app/game/_components/MoveListButton";
+import GameParticipate from "@/app/game/_components/GameParticipate";
+import GameTitle from "@/app/game/_components/GameTitle";
 
 export default function TournamenGameSection() {
   const { gameId } = useParams();
@@ -187,33 +193,6 @@ export default function TournamenGameSection() {
     },
   };
 
-  const titleVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const roundAnnouncementVariants = {
-    hidden: { opacity: 0, scale: 2 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: "backOut",
-      },
-    },
-    exit: {
-      opacity: 0,
-      transition: { duration: 0.3 },
-    },
-  };
   return (
     <motion.section
       className="flex items-center justify-center w-full min-h-dvh"
@@ -278,59 +257,17 @@ export default function TournamenGameSection() {
           </div>
         ) : (
           <motion.div
-            className="max-w-md w-full mx-auto px-4 text-center space-y-8 py-24"
+            className="max-w-md w-full mx-auto px-4 text-center space-y-4 py-24"
             variants={containerVariants}
           >
-            <motion.h1
-              className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight"
-              variants={titleVariants}
-            >
-              <motion.span className="text-indigo-400" variants={titleVariants}>
-                {data?.title}
-              </motion.span>
-            </motion.h1>
+            <GameTitle title={data?.title || ""} />
 
-            <motion.button
-              type="button"
-              disabled={isPending}
-              onClick={handleStart}
-              className="group relative w-full flex items-center justify-center py-6 px-8 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              variants={titleVariants}
-            >
-              <FiPlay className="mr-3 text-2xl" />
-              <span className="text-2xl">
-                {isPending ? "시작중.." : "시작하기"}
-              </span>
-            </motion.button>
+            <GameStartButton isPending={isPending} handleStart={handleStart} />
 
-            <div className="space-y-8">
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="text-zinc-400 text-sm py-2"
-              >
-                토너먼트 방식으로 최후의 1개를 선택해주세요
-              </motion.p>
+            <div className="">
+              <GameDesc description="토너먼트 방식으로 최후의 1개를 선택해주세요" />
 
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                className="text-white text-lg py-2"
-              >
-                참여자 수:{" "}
-                <motion.span
-                  className="font-bold text-xl"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1 }}
-                >
-                  {rounded}
-                </motion.span>
-              </motion.p>
+              <GameParticipate rounded={rounded} />
             </div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -338,48 +275,10 @@ export default function TournamenGameSection() {
               transition={{ delay: 1.2 }}
               className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-4"
             >
-              <Link
-                href="/game/tournamentGame"
-                className="group relative inline-flex items-center gap-2 px-6 py-3 bg-zinc-800/50 backdrop-blur hover:bg-zinc-700/50 rounded-xl text-zinc-300 hover:text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-zinc-950/20"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-                목록으로 돌아가기
-                <div className="absolute inset-0 rounded-xl border border-zinc-700/50 group-hover:border-zinc-500/50 transition-colors duration-300" />
-              </Link>{" "}
-              <Link
+              <MoveListButton href="/game/tournamentGame" />{" "}
+              <MoveStatisticsButton
                 href={`/game/tournamentGame/${gameId}/statistics`}
-                className="group relative inline-flex items-center gap-2 px-6 py-3 bg-indigo-600/90 backdrop-blur hover:bg-indigo-600 rounded-xl text-indigo-200 hover:text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-indigo-950/20"
-              >
-                <span>통계 보러가기</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-                <div className="absolute inset-0 rounded-xl border border-indigo-500/50 group-hover:border-indigo-400/50 transition-colors duration-300" />
-              </Link>
+              />
             </motion.div>
           </motion.div>
         )}
