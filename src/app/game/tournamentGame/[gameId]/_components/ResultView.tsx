@@ -36,7 +36,7 @@ export const ResultView = ({
     `이거 실화? 내가 고른 "${result.name}" 어때요?`,
     `고민 끝에 선택한 "${result.name}", 당신의 선택은?`,
     `"${result.name}" 찍은 사람 여기 있네요!`,
-    `토너먼트계 끝판왕의 선택 "${result.name}"`,
+    `월드컵계 끝판왕의 선택 "${result.name}"`,
   ];
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export const ResultView = ({
     window.Kakao.Share.sendDefault({
       objectType: "feed",
       content: {
-        title: "토너먼트 결과",
+        title: "월드컵 결과",
         description: `내가 선택한 답은 "${result.name}"입니다! 당신의 선택은?`,
         imageUrl: result.imageUrl,
         link: {

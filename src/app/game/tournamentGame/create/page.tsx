@@ -235,7 +235,7 @@ export default function CreateTournamentGameGamePage() {
   }, [router]);
   return (
     <Section>
-      <TitleSection title="토너먼트 게임" subTitle="생성하기">
+      <TitleSection title="월드컵 게임" subTitle="생성하기">
         <CustomLink
           href="/game/tournamentGame"
           icon="arrow"
@@ -270,7 +270,7 @@ export default function CreateTournamentGameGamePage() {
               {" "}
               {/* max-w-3xl 추가 */}
               <h2 className="text-base sm:text-lg font-medium text-white">
-                토너먼트 형식 선택
+                월드컵 형식 선택
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                 <button
@@ -301,7 +301,7 @@ export default function CreateTournamentGameGamePage() {
             <>
               <div className="flex flex-col gap-4">
                 <h2 className="text-base sm:text-lg font-medium text-white">
-                  {tournamentType}강 토너먼트 ({list.length}개 선택지)
+                  {tournamentType}강 월드컵 ({list.length}개 선택지)
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   <div className="relative flex-1 min-w-[160px]">

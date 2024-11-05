@@ -4,7 +4,7 @@ import defaultMetaDatas from "@/app/_components/metadata/defaultMetaDatas";
 import Script from "next/script";
 import { DEFAULT_METADATA } from "@/app/enum";
 
-const title = `${DEFAULT_METADATA.siteName} | 토너먼트 게임 리스트`;
+const title = `${DEFAULT_METADATA.siteName} | 월드컵 게임 리스트`;
 const description = "당신이 생각하는 가장 최고의 선택은?";
 
 export const metadata: Metadata = {
