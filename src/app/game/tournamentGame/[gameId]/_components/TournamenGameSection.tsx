@@ -265,7 +265,7 @@ export default function TournamenGameSection() {
             <GameStartButton isPending={isPending} handleStart={handleStart} />
 
             <div className="">
-              <GameDesc description="토너먼트 방식으로 최후의 1개를 선택해주세요" />
+              <GameDesc description="월드컵 방식으로 최후의 1개를 선택해주세요" />
 
               <GameParticipate rounded={rounded} />
             </div>

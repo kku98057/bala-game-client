@@ -54,7 +54,7 @@ export default function TournamentGameListSection({
   }
   return (
     <Section>
-      <TitleSection title="토너먼트 게임">
+      <TitleSection title="월드컵 게임">
         <CustomLink
           href="/game/tournamentGame/create"
           icon="plus"

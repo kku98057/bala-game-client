@@ -28,7 +28,7 @@ export default function GameListSection({ limit }: { limit: number }) {
     {
       href: "/game/tournamentGame",
       icon: FaTrophy,
-      title: "토너먼트 게임",
+      title: "월드컵 게임",
       description: (
         <>
           여러 선택지 중 <span className="font-bold text-indigo-400">최애</span>

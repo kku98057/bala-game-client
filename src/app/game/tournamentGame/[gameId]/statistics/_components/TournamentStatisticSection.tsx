@@ -38,7 +38,7 @@ export default function TournamentStatisticSection() {
 
   return (
     <StatisticsSection
-      title="토너먼트 게임 통계"
+      title="월드컵 게임 통계"
       gameType="TOURNAMENT"
       username={statistics?.username as string}
       createdAt={statistics?.createdAt as string}
