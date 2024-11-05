@@ -299,20 +299,23 @@ export default function CreateTournamentGameGamePage() {
           )}
           {tournamentType && (
             <>
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex flex-col gap-4">
                 <h2 className="text-base sm:text-lg font-medium text-white">
                   {tournamentType}강 토너먼트 ({list.length}개 선택지)
                 </h2>
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="relative">
-                    <CustomButton icon="plus" className="whitespace-nowrap">
+                <div className="flex flex-wrap gap-2">
+                  <div className="relative flex-1 min-w-[160px]">
+                    <CustomButton
+                      icon="plus"
+                      className="w-full whitespace-nowrap max-w-[200px]"
+                    >
                       이미지 일괄 업로드
                     </CustomButton>
                     <input
                       type="file"
                       multiple
                       accept="image/*"
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      className="absolute inset-0  w-full h-full opacity-0 cursor-pointer"
                       onChange={(e) => {
                         if (e.target.files) {
                           handleBulkImageUpload(e.target.files);
@@ -338,7 +341,7 @@ export default function CreateTournamentGameGamePage() {
                         setList([]);
                       }
                     }}
-                    className="text-indigo-400 hover:text-indigo-300 transition-colors duration-200 whitespace-nowrap"
+                    className="text-indigo-400 max-w-[100px] hover:text-indigo-300 transition-colors duration-200 whitespace-nowrap flex-1 min-w-[100px]"
                   >
                     형식 변경
                   </CustomButton>
