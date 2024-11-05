@@ -18,7 +18,7 @@ export default function CreateBalanceGamePage() {
   const queryClient = useQueryClient();
   const [questions, setQuestions] = useState<
     { title: string; items: { name: string }[] }[]
-  >([]);
+  >([{ title: "", items: [{ name: "" }, { name: "" }] }]);
   const [user, setUser] = useState<UserProps | null>(null);
   const router = useRouter();
 
@@ -41,6 +41,7 @@ export default function CreateBalanceGamePage() {
 
   // 질문 삭제
   const removeQuestion = (index: number) => {
+    if (questions.length === 1) return alert("1개 이하로 줄일 수 없습니다.");
     const newQuestions = questions.filter((_, i) => i !== index);
     setQuestions(newQuestions);
   };
@@ -150,14 +151,12 @@ export default function CreateBalanceGamePage() {
           게임 목록
         </CustomLink>
       </TitleSection>
-      <form
-        className="flex justify-center pb-8 mt-[150px]"
-        onSubmit={handleSubmit}
-      >
-        <div className="w-full space-y-8">
+
+      <form className="flex justify-center pb-24 mt-0 px-0 sm:mt-[150px]    ">
+        <div className="w-full  space-y-6 sm:space-y-8">
           {/* 게임 제목 입력 */}
           <div className="space-y-2">
-            <label className="text-lg font-medium text-white">
+            <label className="text-base sm:text-lg font-medium text-white">
               게임 제목 (필수)
             </label>
             <input
@@ -171,38 +170,50 @@ export default function CreateBalanceGamePage() {
                 setTitle(e.target.value);
               }}
               placeholder="예)악랄한 밸런스게임 모음"
-              className="w-full py-4 px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+              className="w-full py-3 sm:py-4 px-4 sm:px-6 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
             />
           </div>
 
           {/* 질문 리스트 */}
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-medium text-white">질문 목록</h2>
-              <CustomButton onClick={addQuestion} icon="plus">
-                질문 추가
-              </CustomButton>
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <h2 className="text-base sm:text-lg font-medium text-white">
+                질문 목록
+              </h2>
             </div>
 
             {questions.map((question, qIndex) => (
               <div
                 key={qIndex}
-                className="p-6 bg-zinc-800/50 rounded-xl border border-zinc-700"
+                className="p-4 sm:p-6 bg-zinc-800/50 rounded-xl border border-zinc-700"
               >
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-white">
+                <div className="flex justify-between items-center gap-4 mb-4">
+                  <h3 className="text-base sm:text-lg font-medium text-white">
                     질문 {qIndex + 1} (선택)
                   </h3>
-                  <CustomButton
+                  <button
                     onClick={() => removeQuestion(qIndex)}
-                    className="text-red-400 hover:text-red-300"
+                    className="p-2 "
+                    type="button"
                   >
-                    삭제
-                  </CustomButton>
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      className="w-5 h-5 text-red-400 hover:text-red-300 transition-colors"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
                 </div>
 
                 {/* 질문 내용 입력 */}
-                <div className="mb-6">
+                <div className="mb-4 sm:mb-6">
                   <input
                     type="text"
                     value={question.title}
@@ -214,26 +225,38 @@ export default function CreateBalanceGamePage() {
                       setQuestions(newQuestions);
                     }}
                     placeholder="질문을 입력하세요"
-                    className="w-full py-3 px-4 bg-zinc-900 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-zinc-900 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
 
                 {/* 선택지 목록 */}
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="flex justify-between items-center gap-2">
                     <h4 className="text-sm font-medium text-zinc-400">
                       선택지(필수)
                     </h4>
-                    <CustomButton
+                    <button
                       onClick={() => addItem(qIndex)}
-                      className="text-sm text-indigo-400 hover:text-indigo-300"
+                      className="p-2 text-indigo-400 hover:text-indigo-300 transition-colors"
+                      type="button"
                     >
-                      선택지 추가
-                    </CustomButton>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
                   </div>
 
                   {question.items.map((item, iIndex) => (
-                    <div key={iIndex} className="flex gap-4">
+                    <div key={iIndex} className="flex items-center gap-2">
                       <input
                         type="text"
                         value={item.name}
@@ -246,14 +269,27 @@ export default function CreateBalanceGamePage() {
                           setQuestions(newQuestions);
                         }}
                         placeholder={`선택지 ${iIndex + 1}`}
-                        className="flex-1 py-2 px-4 bg-zinc-900 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        className="flex-1 py-2 sm:py-3 px-3 sm:px-4 bg-zinc-900 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                       />
-                      <CustomButton
+                      <button
                         onClick={() => removeItem(qIndex, iIndex)}
-                        className="text-red-400 hover:text-red-300"
+                        className="p-2 "
+                        type="button"
                       >
-                        삭제
-                      </CustomButton>
+                        <svg
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          className="w-5 h-5 text-red-400 hover:text-red-300 transition-colors"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -262,15 +298,22 @@ export default function CreateBalanceGamePage() {
           </div>
 
           {/* 제출 버튼 */}
-          <div className="sticky bottom-8 pt-4 bg-gradient-to-t from-zinc-800 to-zinc-800/95">
+          <div className="fixed gap-4 flex items-center  justify-center w-11/12 left-1/2 -translate-x-1/2 bottom-8 sm:bottom-8 pt-4 px-4 sm:px-0   z-10">
             <button
               type="submit"
               disabled={isPending}
-              className="group relative w-full flex items-center justify-center py-4 px-6 bg-green-600 hover:bg-green-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="group flex-1 relative  max-w-xl  flex items-center justify-center py-3 sm:py-4 px-4 sm:px-6 bg-green-600 hover:bg-green-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               {isPending ? "생성 중..." : "게임 생성하기"}
               <div className="absolute inset-0 rounded-xl border-2 border-green-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-            </button>
+            </button>{" "}
+            <CustomButton
+              onClick={addQuestion}
+              icon="plus"
+              className="group flex-1 relative   max-w-xl  flex items-center justify-center !py-3 sm:!py-4 !px-4 sm:!px-6 bg-green-600 hover:bg-green-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              질문 추가
+            </CustomButton>
           </div>
         </div>
       </form>
