@@ -54,7 +54,7 @@ export default function TournamentGameCard({
             e.preventDefault();
             handleDelete();
           }}
-          className="absolute top-2 right-2 p-2 text-zinc-400 hover:text-red-500 transition-colors z-50"
+          className="absolute top-2 right-2 p-2 text-zinc-400 hover:text-red-500 transition-colors z-30"
         >
           <svg
             className="w-5 h-5"

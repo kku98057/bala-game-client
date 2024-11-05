@@ -91,7 +91,7 @@ export const MenuModal = ({
   return (
     <div
       ref={modalRef}
-      className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm items-center justify-end hidden opacity-0"
+      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm items-center justify-end hidden opacity-0"
       onClick={onClose}
     >
       <div
