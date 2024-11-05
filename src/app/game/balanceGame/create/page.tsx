@@ -191,11 +191,7 @@ export default function CreateBalanceGamePage() {
                   <h3 className="text-base sm:text-lg font-medium text-white">
                     질문 {qIndex + 1} (선택)
                   </h3>
-                  <button
-                    onClick={() => removeQuestion(qIndex)}
-                    className="p-2 "
-                    type="button"
-                  >
+                  <button onClick={() => removeQuestion(qIndex)} type="button">
                     <svg
                       fill="none"
                       stroke="currentColor"
@@ -237,7 +233,7 @@ export default function CreateBalanceGamePage() {
                     </h4>
                     <button
                       onClick={() => addItem(qIndex)}
-                      className="p-2 text-indigo-400 hover:text-indigo-300 transition-colors"
+                      className=" text-indigo-400 hover:text-indigo-300 transition-colors"
                       type="button"
                     >
                       <svg
@@ -269,11 +265,10 @@ export default function CreateBalanceGamePage() {
                           setQuestions(newQuestions);
                         }}
                         placeholder={`선택지 ${iIndex + 1}`}
-                        className="flex-1 py-2 sm:py-3 px-3 sm:px-4 bg-zinc-900 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        className="flex-1 min-w-0 py-2 sm:py-3 px-3 sm:px-4 bg-zinc-900 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                       />
                       <button
                         onClick={() => removeItem(qIndex, iIndex)}
-                        className="p-2 "
                         type="button"
                       >
                         <svg
