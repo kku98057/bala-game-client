@@ -1,6 +1,6 @@
 "use client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createTournamentGameData } from "./_lib/createTournamentGameData";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -12,7 +12,6 @@ import { UserProps } from "@/app/types/UserType";
 import Cookies from "js-cookie";
 import TitleSection from "@/app/_components/TitleSection";
 import Warning from "@/app/_components/Warning";
-import { div } from "framer-motion/client";
 export default function CreateTournamentGameGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
   const queryClient = useQueryClient();
@@ -225,6 +224,10 @@ export default function CreateTournamentGameGamePage() {
       return newStates;
     });
   }, []);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
   useEffect(() => {
     const userCookie = Cookies.get("user");
     if (userCookie) {
@@ -305,15 +308,11 @@ export default function CreateTournamentGameGamePage() {
                   {tournamentType}강 월드컵 ({list.length}개 선택지)
                 </h2>
                 <div className="flex flex-wrap gap-2">
-                  <div className="relative  min-w-[160px]">
-                    <CustomButton
-                      icon="plus"
-                      className="w-full whitespace-nowrap max-w-[200px]"
-                    >
-                      이미지 일괄 업로드
-                    </CustomButton>
+                  <div className="relative  min-w-[160px] cursor-pointer">
                     <input
+                      ref={fileInputRef}
                       type="file"
+                      hidden
                       multiple
                       accept="image/*"
                       className="absolute inset-0  w-full h-full opacity-0 cursor-pointer"
@@ -323,6 +322,13 @@ export default function CreateTournamentGameGamePage() {
                         }
                       }}
                     />
+                    <CustomButton
+                      onClick={handleButtonClick}
+                      icon="plus"
+                      className="w-full  whitespace-nowrap max-w-[200px]"
+                    >
+                      이미지 일괄 업로드
+                    </CustomButton>
                   </div>
                   <CustomButton
                     onClick={() => {
