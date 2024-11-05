@@ -19,7 +19,11 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
-
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 export default function RootLayout({
   children,
 }: Readonly<{

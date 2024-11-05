@@ -7,11 +7,9 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FiShare2, FiBarChart2 } from "react-icons/fi"; // 아이콘 사용
-declare global {
-  interface Window {
-    Kakao: any;
-  }
-}
+import useKakaoShare from "@/hooks/useKakaoShare";
+import ShareButton from "@/app/_components/buttons/ShareButton";
+
 export const ResultView = ({
   result,
   resultRef,
@@ -39,13 +37,6 @@ export const ResultView = ({
     `월드컵계 끝판왕의 선택 "${result.name}"`,
   ];
 
-  useEffect(() => {
-    // Kakao SDK 초기화
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
-    }
-  }, []);
-
   const [randomMessage, setRandomMessage] = useState("");
   useEffect(() => {
     setRandomMessage(
@@ -55,38 +46,19 @@ export const ResultView = ({
 
   const shareMessage =
     shareMessages[Math.floor(Math.random() * shareMessages.length)];
-  const handleKakaoShare = () => {
-    const shareUrl = `${window.location.origin}${window.location.pathname}?result=${result.id}`;
 
-    window.Kakao.Share.sendDefault({
-      objectType: "feed",
-      content: {
-        title: "월드컵 결과",
-        description: `내가 선택한 답은 "${result.name}"입니다! 당신의 선택은?`,
-        imageUrl: result.imageUrl,
-        link: {
-          mobileWebUrl: shareUrl,
-          webUrl: shareUrl,
-        },
-      },
-      buttons: [
-        {
-          title: "게임 참여하기",
-          link: {
-            mobileWebUrl: shareUrl,
-            webUrl: shareUrl,
-          },
-        },
-        {
-          title: "결과 보기",
-          link: {
-            mobileWebUrl: shareUrl,
-            webUrl: shareUrl,
-          },
-        },
-      ],
+  const { handleKakaoShare } = useKakaoShare();
+
+  const handlerShare = () => {
+    handleKakaoShare({
+      title: "월드컵 결과",
+      description: shareMessage,
+      shareUrl: `${window.location.origin}${window.location.pathname}`,
+      imageUrl: result.imageUrl,
+      resultUrl: `${window.location.origin}${window.location.pathname}?result=${result.id}`,
     });
   };
+
   useEffect(() => {
     // 축하 효과
     confetti({
@@ -132,7 +104,7 @@ export const ResultView = ({
   return (
     <motion.div
       ref={resultRef}
-      className="w-full min-h-dvh bg-gradient-to-b from-zinc-900 to-zinc-800 flex flex-col items-center justify-center px-4"
+      className="pt-[120px] md:pt-0  w-full min-h-dvh bg-gradient-to-b from-zinc-900 to-zinc-800 flex flex-col items-center justify-center px-4"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -165,16 +137,7 @@ export const ResultView = ({
 
         {/* 버튼 그룹 */}
         <motion.div variants={itemVariants} className="flex flex-col gap-4">
-          <motion.button
-            onClick={handleKakaoShare}
-            className="group relative w-full flex items-center justify-center py-4 px-6 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <FiShare2 className="mr-2" />
-            <span>친구들한테 자랑하기</span>
-            <div className="absolute inset-0 rounded-xl border-2 border-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-          </motion.button>
+          <ShareButton handlerShare={handlerShare} />
 
           <motion.div variants={itemVariants}>
             <Link
@@ -183,6 +146,15 @@ export const ResultView = ({
             >
               <FiBarChart2 className="mr-2" />
               <span>다른 사람들은 뭘 골랐을까?</span>
+              <div className="absolute inset-0 rounded-xl border-2 border-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+            </Link>
+          </motion.div>
+          <motion.div variants={itemVariants}>
+            <Link
+              href={`/game/tournamentGame`}
+              className="group relative w-full flex items-center justify-center py-4 px-6 bg-zinc-700 hover:bg-zinc-600 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              <span>목록으로 돌아가기</span>
               <div className="absolute inset-0 rounded-xl border-2 border-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
             </Link>
           </motion.div>
