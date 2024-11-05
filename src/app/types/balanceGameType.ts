@@ -23,3 +23,23 @@ export interface BalanceGameListResponse {
   totalItems: number;
   limit: number;
 }
+export interface BanalaceGameStatisticsProps {
+  id: number;
+  title: string;
+  username: string;
+  createdAt: string;
+  commentsCount: number;
+  questions: BanalaceGameItemStatisticsProps[];
+}
+export interface BanalaceGameItemStatisticsProps {
+  id: number;
+  title: string;
+  participantCount: number;
+  totalSelections: number;
+  items: {
+    id: number;
+    name: string;
+    selectCount: number;
+    percentage: number;
+  }[];
+}

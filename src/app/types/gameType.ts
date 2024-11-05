@@ -25,15 +25,3 @@ export interface TournamentListResponse {
   totalItems: number;
   list: number;
 }
-export interface GameStatistics {
-  username: string;
-  createdAt: string;
-  totalCount: number;
-  items: {
-    id: number;
-    name: string;
-    imageUrl: string;
-    count: number;
-    percentage: number;
-  }[];
-}

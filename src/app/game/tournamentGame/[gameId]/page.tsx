@@ -7,8 +7,9 @@ import {
   HydrationBoundary,
 } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
-import { Metadata, ResolvingMetadata } from "next";
-import { generateGameMetadata } from "@/app/_components/metadata/GameMetadatas";
+import { Metadata } from "next";
+import Script from "next/script";
+import { DEFAULT_METADATA } from "@/app/enum";
 // 동적 메타데이터 생성
 // Next.js의 메타데이터 생성 함수
 interface Props {
@@ -23,10 +24,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const gameData = await getTournamenGameData(NumberId);
 
   // 메타데이터 생성
-  return generateGameMetadata({
-    gameData,
-    gameType: "TOURNAMENT",
-  });
+  return {
+    title: `${gameData.title} | ${DEFAULT_METADATA.siteName}`,
+    description: `여러가지 선택지 중 최애를 골라보자! ${DEFAULT_METADATA.defaultDescription}`,
+    openGraph: {
+      title: `${gameData.title} | ${DEFAULT_METADATA.siteName}`,
+      description: `여러가지 선택지 중 최애를 골라보자! ${DEFAULT_METADATA.defaultDescription}`,
+      type: "website",
+      url: `https://balansome.co.kr/game/tournamentGame/${gameData.id}`,
+      siteName: DEFAULT_METADATA.siteName,
+      images: gameData.items[0].imageUrl,
+    },
+  };
 }
 
 export default async function page({
@@ -51,9 +60,36 @@ export default async function page({
     });
 
     const dehydrateState = dehydrate(queryClient);
-
+    const structuredData = () => {
+      return {
+        "application-name": DEFAULT_METADATA.siteName,
+        // OG 게임 정보를 별도의 태그로 추가
+        "og:game:type": "TOURNAMENT",
+        "schema:game": JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Game",
+          name: `${gameData.title} | ${DEFAULT_METADATA.siteName}`,
+          description: `여러가지 선택지 중 최애를 골라보자! ${DEFAULT_METADATA.defaultDescription}`,
+          url: `https://balansome.co.kr/game/tournamentGame/${gameData.id}`,
+          author: {
+            "@type": "Person",
+            name: gameData.username,
+          },
+          datePublished: gameData.createdAt,
+          genre: "TOURNAMENT",
+        }),
+      };
+    };
     return (
       <HydrationBoundary state={dehydrateState}>
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          strategy="beforeInteractive" // 이 부분 추가
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
         <TournamenGameSection />
       </HydrationBoundary>
     );

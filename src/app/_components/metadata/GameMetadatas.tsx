@@ -1,21 +1,9 @@
 import { DEFAULT_METADATA } from "@/app/enum";
 import { GameTypeProps } from "@/app/types/types";
-import { Metadata, ResolvingMetadata } from "next";
-
-interface GameData {
-  id: number;
-  title: string;
-  description?: string;
-  thumbnail?: string;
-  creator?: {
-    name: string;
-  };
-  createdAt: string;
-  maxPlayers?: number;
-}
+import { Metadata } from "next";
 
 interface GenerateGameMetadataProps {
-  gameData: GameData | null;
+  gameData: any;
   gameType: GameTypeProps;
   isStatistics?: boolean;
 }
@@ -24,11 +12,17 @@ export function generateGameMetadata({
   gameData,
   gameType,
   isStatistics,
-}: GenerateGameMetadataProps): Metadata {
+}: GenerateGameMetadataProps): {
+  metaTag: Metadata;
+  structuredData?: any;
+} {
   if (!gameData) {
     return {
-      title: "게임을 찾을 수 없습니다 - 밸런썸",
-      description: "요청하신 게임을 찾을 수 없습니다.",
+      metaTag: {
+        title: "게임을 찾을 수 없습니다 - 밸런썸",
+        description: "요청하신 게임을 찾을 수 없습니다.",
+      },
+      structuredData: null,
     };
   }
 
@@ -40,37 +34,24 @@ export function generateGameMetadata({
   const url = `${DEFAULT_METADATA.baseUrl}/game/${
     gameType === "BALANCE" ? "balanceGame" : "tournamentGame"
   }/${gameData.id}`;
-  const thumbnail =
-    gameData.thumbnail || `${DEFAULT_METADATA.defaultThumbnail}`;
 
-  return {
-    title,
-    description,
-    icons: {
-      icon: `/imgs/logo.png`,
-    },
-    openGraph: {
+  const metaTag = () => {
+    return {
       title,
       description,
-      type: "website", // game -> website로 변경
-      url,
-      images: [
-        {
-          url: thumbnail,
-          width: 1200,
-          height: 630,
-          alt: gameData.title,
-        },
-      ],
-      siteName: "밸런썸 (Balancesome)",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [thumbnail],
-    },
-    other: {
+      openGraph: {
+        title,
+        description,
+        type: "website", // game -> website로 변경
+        url,
+        siteName: "밸런썸 (Balancesome)",
+        images: DEFAULT_METADATA.defaultThumbnail,
+      },
+    };
+  };
+
+  const structuredData = () => {
+    return {
       "application-name": "밸런썸",
       // OG 게임 정보를 별도의 태그로 추가
       "og:game:type": gameType,
@@ -80,7 +61,6 @@ export function generateGameMetadata({
         name: gameData.title,
         description: gameData.description,
         url,
-        image: thumbnail,
         author: {
           "@type": "Person",
           name: gameData.creator?.name || "밸런썸 유저",
@@ -93,6 +73,11 @@ export function generateGameMetadata({
           maxValue: gameData.maxPlayers || "unlimited",
         },
       }),
-    },
+    };
+  };
+
+  return {
+    metaTag: metaTag(),
+    structuredData: structuredData(),
   };
 }

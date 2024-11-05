@@ -5,11 +5,12 @@ import { FaBalanceScale, FaTrophy } from "react-icons/fa";
 import GameCard from "./GameCard";
 import { IconType } from "react-icons";
 import TitleSection from "@/app/_components/TitleSection";
+import { ReactNode } from "react";
 interface GameList {
   href: string;
   icon: IconType;
   title: string;
-  description: string;
+  description: ReactNode;
 }
 export default function GameListSection({ limit }: { limit: number }) {
   const list: GameList[] = [
@@ -17,13 +18,23 @@ export default function GameListSection({ limit }: { limit: number }) {
       href: "/game/balanceGame",
       icon: FaBalanceScale,
       title: "밸런스 게임",
-      description: `여러 선택지 중 최고의 선택을 가려내는\n 밸런스 게임을 즐겨보세요`,
+      description: (
+        <>
+          여러 선택지 중 <span className="font-bold text-indigo-400">최선</span>
+          을 골라보자!
+        </>
+      ),
     },
     {
       href: "/game/tournamentGame",
       icon: FaTrophy,
       title: "토너먼트 게임",
-      description: `여러 선택지 중 최고의 선택을 가려내는\n 토너먼트를 즐겨보세요`,
+      description: (
+        <>
+          여러 선택지 중 <span className="font-bold text-indigo-400">최애</span>
+          를 골라보자!
+        </>
+      ),
     },
   ];
   return (
