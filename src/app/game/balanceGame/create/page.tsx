@@ -154,7 +154,7 @@ export default function CreateBalanceGamePage() {
 
       <form
         className="flex justify-center pb-24 mt-0 px-0 sm:mt-[150px]"
-        // onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
       >
         <div className="w-full  space-y-6 sm:space-y-8">
           {/* 게임 제목 입력 */}

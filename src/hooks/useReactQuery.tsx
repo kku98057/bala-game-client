@@ -9,6 +9,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 export default function ReactQueryProviders({
   children,
 }: React.PropsWithChildren) {
+  const minute = 60 * 1000;
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -18,7 +19,8 @@ export default function ReactQueryProviders({
 
             // above 0 to avoid refetching immediately on the client
             retry: 0,
-            staleTime: 60 * 1000,
+            staleTime: minute * 10,
+            gcTime: minute * 30,
           },
         },
       })
@@ -28,7 +30,7 @@ export default function ReactQueryProviders({
     <QueryClientProvider client={queryClient}>
       {children}
 
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 }
