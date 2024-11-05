@@ -41,6 +41,24 @@ export default function RootLayout({
       </head>
       <body>
         <Script
+          id="structured-data"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              name: DEFAULT_METADATA.siteName,
+              description: DEFAULT_METADATA.defaultDescription,
+              url: "https://balansome.co.kr",
+              publisher: {
+                "@type": "Organization",
+                name: "밸런썸",
+              },
+            }),
+          }}
+        />
+        <Script
           strategy="beforeInteractive"
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
           integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
