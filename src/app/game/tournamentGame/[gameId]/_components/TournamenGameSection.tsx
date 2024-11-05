@@ -242,7 +242,7 @@ export default function TournamenGameSection() {
 
             {curGame.length > 0 && !result && (
               <>
-                <motion.ul className="w-full h-full flex flex-col md:flex-row items-stretch">
+                <motion.ul className="w-full h-full flex  items-stretch">
                   {curGame.slice(0, 2).map((list: GameProps, index) => (
                     <motion.li
                       key={`${list.id}_선택지`}
@@ -268,6 +268,10 @@ export default function TournamenGameSection() {
                         isSelecting={isSelecting}
                         disabled={isAnimating}
                       />
+                      {/* 하단광고 */}
+                      {/* <div className="h-[50px] md:h-[100px] bg-zinc-900 flex items-center justify-center">
+                        <div className="text-zinc-600 text-sm">광고 영역</div>
+                      </div> */}
                     </motion.li>
                   ))}
                 </motion.ul>

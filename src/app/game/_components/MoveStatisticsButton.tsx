@@ -9,7 +9,7 @@ export default function MoveStatisticsButton({ href }: { href: string }) {
       <span>통계 보러가기</span>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+        className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 "
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -20,7 +20,7 @@ export default function MoveStatisticsButton({ href }: { href: string }) {
           strokeWidth={2}
           d="M9 5l7 7-7 7"
         />
-      </svg>
+      </svg>{" "}
       <div className="absolute inset-0 rounded-xl border border-indigo-500/50 group-hover:border-indigo-400/50 transition-colors duration-300" />
     </Link>
   );
