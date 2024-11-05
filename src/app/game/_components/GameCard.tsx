@@ -2,12 +2,13 @@
 import Link from "next/link";
 import { IconType } from "react-icons";
 import { motion } from "framer-motion";
+import { ReactNode } from "react";
 
 interface GameCardProps {
   href: string;
   icon: IconType;
   title: string;
-  description: string;
+  description: ReactNode;
   delay: number;
 }
 

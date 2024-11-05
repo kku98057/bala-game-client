@@ -1,5 +1,5 @@
 "use client";
-import { GameStatistics } from "@/app/types/gameType";
+
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,14 +9,16 @@ import StatisticsSection from "@/app/_components/game/StatisticsSection";
 import Loading from "@/app/_components/Loading";
 import { FaCrown } from "react-icons/fa";
 import Image from "next/image";
+import { TournamentGameStatisticsProps } from "@/app/types/TournamentGameType";
 
 export default function TournamentStatisticSection() {
   const { gameId } = useParams();
 
-  const { data: statistics, isLoading } = useQuery<GameStatistics>({
-    queryKey: QUERYKEYS.tournamentGame.statistics(Number(gameId)),
-    queryFn: () => getTournamentGameStatisticsData(Number(gameId)),
-  });
+  const { data: statistics, isLoading } =
+    useQuery<TournamentGameStatisticsProps>({
+      queryKey: QUERYKEYS.tournamentGame.statistics(Number(gameId)),
+      queryFn: () => getTournamentGameStatisticsData(Number(gameId)),
+    });
   const [showProgress, setShowProgress] = useState(false);
 
   // 컴포넌트가 마운트된 후 애니메이션 시작

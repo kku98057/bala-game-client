@@ -6,29 +6,12 @@ import { getBalaceGameStatisticsData } from "../_lib/getBalaceGameStatisticsData
 import StatisticsSection from "@/app/_components/game/StatisticsSection";
 import Loading from "@/app/_components/Loading";
 import { motion } from "framer-motion";
-interface BalanceGameStats {
-  id: number;
-  title: string;
-  username: string;
-  createdAt: string;
-  commentsCount: number;
-  questions: {
-    id: number;
-    title: string;
-    participantCount: number;
-    totalSelections: number;
-    items: {
-      id: number;
-      name: string;
-      selectCount: number;
-      percentage: number;
-    }[];
-  }[];
-}
+import { BanalaceGameStatisticsProps } from "@/app/types/balanceGameType";
+
 export default function BalaceStatisticSection() {
   const { gameId } = useParams();
 
-  const { data, isLoading } = useQuery<BalanceGameStats>({
+  const { data, isLoading } = useQuery<BanalaceGameStatisticsProps>({
     queryKey: QUERYKEYS.balanceGame.statistics(Number(gameId)),
     queryFn: () => getBalaceGameStatisticsData(Number(gameId)),
   });

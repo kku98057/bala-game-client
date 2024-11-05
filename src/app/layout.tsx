@@ -4,24 +4,17 @@ import { Metadata } from "next";
 import Script from "next/script";
 import { DEFAULT_METADATA } from "./enum";
 export const metadata: Metadata = {
+  metadataBase: new URL("https://balansome.co.kr"),
+
   title: `${DEFAULT_METADATA.siteName} | ${DEFAULT_METADATA.subTitle}`,
   description: DEFAULT_METADATA.defaultDescription,
-  icons: {
-    icon: { url: "/imgs/logo.png" },
-  },
-
+  icons: "/favicon.ico",
   openGraph: {
     title: "밸런썸 (Balancesome)",
     description: DEFAULT_METADATA.defaultDescription,
     url: DEFAULT_METADATA.baseUrl,
     siteName: DEFAULT_METADATA.siteName,
-    images: [
-      {
-        url: DEFAULT_METADATA.defaultThumbnail,
-        width: 1200,
-        height: 630,
-      },
-    ],
+    images: DEFAULT_METADATA.defaultThumbnail,
     locale: "ko_KR",
     type: "website",
   },
@@ -47,6 +40,24 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              name: DEFAULT_METADATA.siteName,
+              description: DEFAULT_METADATA.defaultDescription,
+              url: "https://balansome.co.kr",
+              publisher: {
+                "@type": "Organization",
+                name: "밸런썸",
+              },
+            }),
+          }}
+        />
         <Script
           strategy="beforeInteractive"
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
