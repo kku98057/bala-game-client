@@ -152,7 +152,10 @@ export default function CreateBalanceGamePage() {
         </CustomLink>
       </TitleSection>
 
-      <form className="flex justify-center pb-24 mt-0 px-0 sm:mt-[150px]    ">
+      <form
+        className="flex justify-center pb-24 mt-0 px-0 sm:mt-[150px]"
+        onSubmit={handleSubmit}
+      >
         <div className="w-full  space-y-6 sm:space-y-8">
           {/* 게임 제목 입력 */}
           <div className="space-y-2">
