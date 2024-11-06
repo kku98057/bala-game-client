@@ -3,13 +3,10 @@ import { QUERYKEYS } from "@/queryKeys";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import getTournamenGameListData from "../_lib/getTournamenGameListData";
-import Link from "next/link";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
-import { motion } from "framer-motion";
 import { TournamentListResponse } from "@/app/types/gameType";
 import CustomLink from "@/app/_components/buttons/CustomLink";
 import Section from "@/app/_components/Section";
-import TitleText from "@/app/_components/TitleText";
 import TournamentGameCard from "./TournamentGameCard";
 import TitleSection from "@/app/_components/TitleSection";
 

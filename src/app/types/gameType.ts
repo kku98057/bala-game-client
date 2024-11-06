@@ -16,6 +16,7 @@ export interface TournamentList extends TournamentGameProps {
   username: string;
   createdAt: string;
   itemsCount?: number;
+  commentsCount?: number;
 }
 
 export interface TournamentListResponse {
