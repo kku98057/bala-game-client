@@ -258,7 +258,7 @@ export default function Comments({ gameId, gameType }: CommentProps) {
               className="p-6 bg-zinc-800/50 backdrop-blur border border-zinc-700/50 rounded-xl space-y-3 hover:bg-zinc-800/70 transition-colors duration-200"
             >
               {/* 댓글 헤더 */}
-              <div className="flex items-center justify-between">
+              <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-3">
                   {/* 프로필 이미지 (옵션) */}
                   <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
@@ -266,21 +266,24 @@ export default function Comments({ gameId, gameType }: CommentProps) {
                       {comment.user.nickname[0]}
                     </span>
                   </div>
-                  {/* 닉네임 */}
-                  <span className="font-medium text-white hover:text-indigo-400 transition-colors duration-200">
-                    {comment.user.nickname}
-                  </span>
+                  <div className="flex flex-col  ">
+                    {/* 닉네임 */}
+                    <span className="font-medium text-white ">
+                      {comment.user.nickname}
+                    </span>
+                    {/* 작성 시간 */}
+                    <span className="text-sm text-zinc-400">
+                      {new Date(comment.createdAt).toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
                 </div>
-                {/* 작성 시간 */}
-                <span className="text-sm text-zinc-400">
-                  {new Date(comment.createdAt).toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </span>
+
                 {user?.id === comment.userId && (
                   <div className="flex gap-2">
                     <button

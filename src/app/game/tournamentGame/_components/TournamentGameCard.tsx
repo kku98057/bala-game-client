@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
 import deleteTournamentGameData from "../_lib/deleteTournamentGameData";
+import { useEffect, useState } from "react";
+import { UserProps } from "@/app/types/UserType";
 interface TournamentGameCardProps {
   game: TournamentList;
   delay: number;
@@ -16,8 +18,7 @@ export default function TournamentGameCard({
   delay,
 }: TournamentGameCardProps) {
   const gameId = game.id;
-  const userInfo = Cookies.get("user");
-  const username = userInfo ? JSON.parse(userInfo).nickname : null;
+  const [user, setUser] = useState<UserProps | null>(null);
 
   const queryClient = useQueryClient();
   const { mutate: deleteGameHandler } = useMutation({
@@ -39,6 +40,12 @@ export default function TournamentGameCard({
       deleteGameHandler(Number(gameId));
     }
   };
+  useEffect(() => {
+    const userCookie = Cookies.get("user");
+    if (userCookie) {
+      setUser(JSON.parse(userCookie));
+    }
+  }, []);
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -48,7 +55,7 @@ export default function TournamentGameCard({
       whileTap={{ scale: 0.98 }}
       className="relative"
     >
-      {username === game.username && (
+      {(user?.role === "SUPER_ADMIN" || user?.nickname === game.username) && (
         <button
           onClick={(e) => {
             e.preventDefault();
