@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { FiX, FiHome, FiList, FiUser, FiLogIn, FiLogOut } from "react-icons/fi";
+import {
+  FiX,
+  FiHome,
+  FiList,
+  FiUser,
+  FiLogIn,
+  FiLogOut,
+  FiBell,
+} from "react-icons/fi";
 import gsap from "gsap";
 import Link from "next/link";
 import { UserProps } from "../types/UserType";
@@ -25,6 +33,7 @@ export const MenuModal = ({
   // 로그인 상태에 따라 다른 메뉴 아이템 표시
   const menuItems = [
     { icon: <FiHome />, label: "홈", href: "/" },
+    { icon: <FiBell />, label: "공지사항", href: "/notice" },
     { icon: <FiList />, label: "게임 목록", href: "/game" },
   ];
 
