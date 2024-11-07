@@ -4,16 +4,13 @@ import { MouseEvent } from "react";
 import { FiPlay } from "react-icons/fi";
 
 type GameStartButtonProps = {
-  isPending: boolean;
-  handleStart: () => void;
+  isPending?: boolean;
+  handleStart: (e: MouseEvent<HTMLButtonElement>) => void;
 };
 export default function GameStartButton({
-  isPending,
+  isPending = false,
   handleStart,
-}: {
-  isPending: boolean;
-  handleStart: (e: MouseEvent<HTMLButtonElement>) => void;
-}) {
+}: GameStartButtonProps) {
   return (
     <motion.button
       type="button"

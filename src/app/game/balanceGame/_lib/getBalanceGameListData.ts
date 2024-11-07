@@ -5,7 +5,10 @@ type Props = {
 export default async function getBalanceGameListData({ page, limit }: Props) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame?page=${page}&limit=${limit}`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame?page=${page}&limit=${limit}`,
+      {
+        cache: "no-cache",
+      }
     );
     const data = await res.json();
 

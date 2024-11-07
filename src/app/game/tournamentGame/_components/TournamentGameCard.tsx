@@ -86,7 +86,7 @@ export default function TournamentGameCard({
 
         {/* VS 섹션 */}
         <div className="flex relative items-center justify-center  p-4 bg-zinc-800/50 rounded-xl group-hover:bg-zinc-700/50 transition-colors duration-300">
-          <div className="relative flex-1 aspect-[1/1] rounded-lg overflow-hidden">
+          <div className="relative flex-1 aspect-[1/1] rounded-lg rounded-tr-none rounded-br-none overflow-hidden">
             <Image
               src={game.items[0].imageUrl}
               alt={game.items[0].name}
@@ -98,7 +98,7 @@ export default function TournamentGameCard({
           <span className="absolute text-[24px] p-2 block rounded-full bg-indigo-800/80 z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-indigo-400  group-hover:text-indigo-300 transition-colors duration-300">
             VS
           </span>
-          <div className="relative flex-1 aspect-[1/1] rounded-lg overflow-hidden">
+          <div className="relative flex-1 aspect-[1/1] rounded-lg ounded-tl-none rounded-bl-none overflow-hidden">
             <Image
               src={game.items[1].imageUrl}
               alt={game.items[1].name}
@@ -130,23 +130,41 @@ export default function TournamentGameCard({
           </div>
 
           {/* 참여자 수 */}
-          <div className="flex items-center gap-2 text-sm text-zinc-400">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-              />
-            </svg>
-            <span>{game.participantCount.toLocaleString()}명 참여</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-sm text-zinc-400">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+              <span>{game.participantCount.toLocaleString()}명 참여</span>
+            </div>
+            {/* 댓글 수 */}
+            <div className="flex items-center gap-1 text-sm text-zinc-400">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                />
+              </svg>
+              <span>{game.commentsCount}</span>
+            </div>
           </div>
-
           {/* 시작하기 버튼 */}
           {/* <div className="mt-6 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
             <span className="inline-flex items-center justify-center w-full gap-2 text-sm text-indigo-400 group-hover:text-indigo-300 font-medium">

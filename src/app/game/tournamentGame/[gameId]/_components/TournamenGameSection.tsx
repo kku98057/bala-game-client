@@ -7,13 +7,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { GameChoiceList } from "./GameChoiceList";
 import { ResultView } from "./ResultView";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiPlay } from "react-icons/fi"; // 시작 아이콘
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
 import { useParams, useSearchParams } from "next/navigation";
 import { getTournamenGameData } from "../_lib/getTournamenGameData";
-import Link from "next/link";
-import { postTournamentGameParticipageCountData } from "../_lib/postTournamentGameParticipageCountData";
 import { useTournamentGame } from "@/hooks/useTournamentGame";
 import useCounterUp from "@/hooks/useCounterUp";
 import GameStartButton from "@/app/game/_components/GameStartButton";
@@ -123,33 +120,18 @@ export default function TournamenGameSection() {
     }
   }, [isStart]);
 
-  const { mutate: participantCountHandler, isPending } = useMutation({
-    mutationFn: ({ id }: { id: number }) =>
-      postTournamentGameParticipageCountData(id),
-    mutationKey: QUERYKEYS.tournamentGame.participantCount(Number(gameId)),
-  });
-
   const handleStart = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    participantCountHandler(
-      {
-        id: Number(gameId),
-      },
-      {
-        onSuccess: () => {
-          setIsStart(true);
-          const timeline = gsap.timeline({ repeat: 3 });
-          timeline
-            .to(e.currentTarget, {
-              scale: 0.95,
-              duration: 0.15,
-            })
-            .to(e.currentTarget, {
-              scale: 1,
-              duration: 0.15,
-            });
-        },
-      }
-    );
+    setIsStart(true);
+    const timeline = gsap.timeline({ repeat: 3 });
+    timeline
+      .to(e.currentTarget, {
+        scale: 0.95,
+        duration: 0.15,
+      })
+      .to(e.currentTarget, {
+        scale: 1,
+        duration: 0.15,
+      });
   };
   useEffect(() => {
     if (currentRound && isStart && !result) {
@@ -221,7 +203,6 @@ export default function TournamenGameSection() {
       imageUrl: data?.items[0].imageUrl || "",
     });
   };
-
   return (
     <motion.section
       className="flex items-center justify-center w-full min-h-dvh"
@@ -295,7 +276,7 @@ export default function TournamenGameSection() {
           >
             <GameTitle title={data?.title || ""} />
 
-            <GameStartButton isPending={isPending} handleStart={handleStart} />
+            <GameStartButton handleStart={handleStart} />
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

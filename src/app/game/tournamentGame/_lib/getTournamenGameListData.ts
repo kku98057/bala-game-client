@@ -7,7 +7,10 @@ export default async function getTournamenGameListData({
 }) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/tournamentGame?page=${page}&limit=${limit}`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/tournamentGame?page=${page}&limit=${limit}`,
+      {
+        cache: "no-cache",
+      }
     );
     const data = await res.json();
 

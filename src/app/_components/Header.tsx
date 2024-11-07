@@ -19,6 +19,7 @@ export default function Header() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`,
         {
           method: "POST",
+          cache: "no-cache",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${Cookies.get("token")}`,

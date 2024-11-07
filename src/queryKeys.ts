@@ -1,3 +1,10 @@
+const notice = {
+  all: () => ["all", "notice"] as const,
+  lists: (page: number, search: string) =>
+    [...notice.all(), { page, search }] as const,
+  list: (id: number) => [...notice.all(), { id }] as const,
+  detail: (id: number) => [...notice.all(), "detail", { id }] as const,
+};
 const tournamentGame = {
   all: () => ["all", "tournament_game"] as const,
   lists: ({ limit }: { limit: number }) =>
@@ -42,4 +49,5 @@ const balanceGame = {
 export const QUERYKEYS = {
   tournamentGame,
   balanceGame,
+  notice,
 };
