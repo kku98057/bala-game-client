@@ -7,6 +7,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteBalaceGameData } from "../_lib/deleteBalaceGameData";
 import { QUERYKEYS } from "@/queryKeys";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { UserProps } from "@/app/types/UserType";
 interface BalanceGameCardProps {
   game: BalanceGameListProps;
   delay: number;
@@ -14,8 +16,7 @@ interface BalanceGameCardProps {
 
 export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
   const gameId = game.id;
-  const userInfo = Cookies.get("user");
-  const username = userInfo ? JSON.parse(userInfo).nickname : null;
+  const [user, setUser] = useState<UserProps | null>(null);
   const queryClient = useQueryClient();
   const { mutate: deleteGameHandler } = useMutation({
     mutationFn: (id: number) => deleteBalaceGameData(id),
@@ -36,7 +37,13 @@ export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
       deleteGameHandler(Number(gameId));
     }
   };
-
+  useEffect(() => {
+    const userCookie = Cookies.get("user");
+    if (userCookie) {
+      setUser(JSON.parse(userCookie));
+    }
+  }, []);
+  console.log();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -46,7 +53,7 @@ export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
       whileTap={{ scale: 0.98 }}
       className="relative"
     >
-      {username === game.username && (
+      {(user?.role === "SUPER_ADMIN" || user?.nickname === game.username) && (
         <button
           onClick={(e) => {
             e.preventDefault();
