@@ -42,6 +42,10 @@ export default function RootLayout({
           name="naver-site-verification"
           content="5bf1ec7d9b1db9137927d7f2f151d81a7885b897"
         />
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-3604338976078798"
+        ></meta>
       </head>
       <body>
         <Script
