@@ -43,7 +43,6 @@ export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
       setUser(JSON.parse(userCookie));
     }
   }, []);
-  console.log();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
