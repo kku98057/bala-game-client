@@ -148,6 +148,7 @@ export default function RegisterPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
         {
           method: "POST",
+          cache: "no-cache",
           headers: {
             "Content-Type": "application/json",
           },

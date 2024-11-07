@@ -7,6 +7,7 @@ export default async function postLogin(
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
       {
+        cache: "no-cache",
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -109,6 +109,7 @@ export default function Comments({ gameId, gameType }: CommentProps) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${commentId}`,
         {
+          cache: "no-cache",
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -146,6 +147,7 @@ export default function Comments({ gameId, gameType }: CommentProps) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${commentId}`,
         {
+          cache: "no-cache",
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

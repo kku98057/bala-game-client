@@ -6,6 +6,7 @@ export default async function deleteTournamentGameData(id: number) {
     `${process.env.NEXT_PUBLIC_API_URL}/api/tournamentGame/${id}`,
     {
       method: "DELETE",
+      cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

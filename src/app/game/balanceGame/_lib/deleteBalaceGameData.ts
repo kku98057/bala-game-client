@@ -6,6 +6,7 @@ export async function deleteBalaceGameData(id: number) {
     `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/${id}`,
     {
       method: "DELETE",
+      cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
