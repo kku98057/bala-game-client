@@ -5,8 +5,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import postLogin from "../_lib/postLogin";
 import Loading from "@/app/_components/Loading";
+import { useAuthStore } from "@/app/store";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const { user, setUser } = useAuthStore((state) => state);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -161,9 +164,14 @@ export default function RegisterPage() {
         throw new Error(data.message || "회원가입에 실패했습니다.");
       }
 
-      await postLogin({ email: formData.email, password: formData.password });
-      setIsLoading(false);
+      const data = await postLogin({
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log(data);
+      setUser(data.data.user);
       alert("로그인 되었습니다.");
+      router.push("/");
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "회원가입에 실패했습니다.";
