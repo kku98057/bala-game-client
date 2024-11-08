@@ -25,7 +25,7 @@ export default async function postLogin(
     Cookies.set("token", data.data.token, {
       secure: true,
       sameSite: "strict",
-      httpOnly: process.env.NODE_ENV === "development" ? false : true,
+      httpOnly: false,
       expires: data.data.expiresIn, // 7일
     });
     return data;
