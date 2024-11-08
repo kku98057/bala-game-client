@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+// 상수로 분리하여 관리
+const PROTECTED_ROUTES = [
+  "/game/balanceGame/create",
+  "/game/tournamentGame/create",
+] as const;
+
+const AUTH_ROUTES = ["/login", "/signup"] as const;
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token");
 
   // 인증이 필요한 페이지 목록 (로그인한 사용자만 접근 가능)
-  const protectedRoutes = ["/balanceGame/create", "/tournamentGame/create"];
+  const protectedRoutes = PROTECTED_ROUTES;
   const isProtectedRoute = protectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
   );
@@ -16,7 +23,7 @@ export function middleware(request: NextRequest) {
   }
 
   // 인증 페이지 목록 (로그인한 사용자는 접근 불가)
-  const authRoutes = ["/login", "/signup"];
+  const authRoutes = AUTH_ROUTES;
   const isAuthRoute = authRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
   );
@@ -30,10 +37,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/login",
-    "/signup",
-    "/game/tournamentGame/create", // 추가
-    "/game/balanceGame/create", // 추가
-  ],
+  matcher: [...PROTECTED_ROUTES, ...AUTH_ROUTES],
 };

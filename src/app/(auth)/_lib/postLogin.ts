@@ -25,17 +25,10 @@ export default async function postLogin(
     Cookies.set("token", data.data.token, {
       secure: true,
       sameSite: "strict",
-      expires: 7, // 7일
+      httpOnly: process.env.NODE_ENV === "development" ? false : true,
+      expires: data.data.expiresIn, // 7일
     });
-
-    Cookies.set("user", JSON.stringify(data.data.user), {
-      secure: true,
-      sameSite: "strict",
-      expires: 7,
-    });
-
-    // 로그인 성공 시 홈페이지로 이동
-    window.location.href = "/";
+    return data;
   } catch (err: unknown) {
     const errorMessage =
       err instanceof Error ? err.message : "로그인에 실패했습니다.";

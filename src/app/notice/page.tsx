@@ -13,12 +13,13 @@ import { formatDate } from "@/app/utils/formatDate";
 import { getNoticeData } from "./_lib/getNoticeData";
 import Loading from "../_components/Loading";
 import { QUERYKEYS } from "@/queryKeys";
+import { useAuthStore } from "../store";
 
 export default function NoticePage() {
   const [search, setSearch] = useState("");
   const [searchQuery, setSearchQuery] = useState(""); // 실제 검색에 사용될 쿼리
   const [page, setPage] = useState(1);
-  const [user, setUser] = useState<UserProps | null>(null);
+  const { user, setUser } = useAuthStore((state) => state);
   const {
     data: noticeData,
 
@@ -64,12 +65,7 @@ export default function NoticePage() {
 
     return rangeWithDots;
   };
-  useEffect(() => {
-    const userCookie = Cookies.get("user");
-    if (userCookie) {
-      setUser(JSON.parse(userCookie));
-    }
-  }, []);
+
   return (
     <main className="min-h-dvh bg-zinc-900 py-20">
       <div className="container mx-auto px-4">

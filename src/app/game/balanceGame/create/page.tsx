@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import { createBalanceGameData } from "./_lib/createBalanceGameData";
 import { BalanceGameProps } from "@/app/types/balanceGameType";
 import TitleSection from "@/app/_components/TitleSection";
+import { useAuthStore } from "@/app/store";
 
 export default function CreateBalanceGamePage() {
   const [title, setTitle] = useState("");
@@ -19,7 +20,7 @@ export default function CreateBalanceGamePage() {
   const [questions, setQuestions] = useState<
     { title: string; items: { name: string }[] }[]
   >([{ title: "", items: [{ name: "" }, { name: "" }] }]);
-  const [user, setUser] = useState<UserProps | null>(null);
+  const { user, setUser } = useAuthStore((state) => state);
   const router = useRouter();
 
   const { mutate, isPending } = useMutation({
@@ -134,15 +135,6 @@ export default function CreateBalanceGamePage() {
       }
     );
   };
-
-  useEffect(() => {
-    const userCookie = Cookies.get("user");
-    if (userCookie) {
-      setUser(JSON.parse(userCookie));
-    } else {
-      router.push("/login");
-    }
-  }, [router]);
 
   return (
     <Section>

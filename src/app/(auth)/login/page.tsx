@@ -1,21 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Cookies from "js-cookie";
 import postLogin from "../_lib/postLogin";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/app/store";
+import Cookies from "js-cookie";
 export default function LoginPage() {
   const router = useRouter();
+  const { user, setUser } = useAuthStore((state) => state);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
 
+  const { mutate } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: (data: { email: string; password: string }) =>
+      postLogin(data, setError),
+    onSuccess: (res) => {
+      setUser(res.data.user);
+      router.push("/");
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await postLogin(formData, setError);
+    mutate(formData);
   };
 
   return (
