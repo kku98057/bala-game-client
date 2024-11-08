@@ -8,6 +8,7 @@ import { QUERYKEYS } from "@/queryKeys";
 import deleteTournamentGameData from "../_lib/deleteTournamentGameData";
 import { useEffect, useState } from "react";
 import { UserProps } from "@/app/types/UserType";
+import { useAuthStore } from "@/app/store";
 interface TournamentGameCardProps {
   game: TournamentList;
   delay: number;
@@ -18,7 +19,7 @@ export default function TournamentGameCard({
   delay,
 }: TournamentGameCardProps) {
   const gameId = game.id;
-  const [user, setUser] = useState<UserProps | null>(null);
+  const { user, setUser } = useAuthStore((state) => state);
 
   const queryClient = useQueryClient();
   const { mutate: deleteGameHandler } = useMutation({
@@ -40,12 +41,7 @@ export default function TournamentGameCard({
       deleteGameHandler(Number(gameId));
     }
   };
-  useEffect(() => {
-    const userCookie = Cookies.get("user");
-    if (userCookie) {
-      setUser(JSON.parse(userCookie));
-    }
-  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

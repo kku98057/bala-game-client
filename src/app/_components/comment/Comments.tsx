@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { UserProps } from "@/app/types/UserType";
 import { useRouter } from "next/navigation";
 import getGameCommentData from "./_lib/getGameCommentData";
+import { useAuthStore } from "@/app/store";
 
 interface CommentListType {
   comments: CommentType[];
@@ -32,19 +33,13 @@ interface CommentType {
 }
 export default function Comments({ gameId, gameType }: CommentProps) {
   const [content, setContent] = useState("");
-  const [user, setUser] = useState<UserProps | null>(null);
+  const { user } = useAuthStore((state) => state);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState("");
   const router = useRouter();
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
   // 로그인한 유저 정보 가져오기
-  useEffect(() => {
-    const userCookie = Cookies.get("user");
-    if (userCookie) {
-      setUser(JSON.parse(userCookie));
-    }
-  }, []);
 
   // 댓글 목록 조회
   const { data: comments } = useQuery<CommentListType>({

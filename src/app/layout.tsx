@@ -3,6 +3,7 @@ import ReactQueryProviders from "@/hooks/useReactQuery";
 import { Metadata } from "next";
 import Script from "next/script";
 import { DEFAULT_METADATA } from "./enum";
+import UserProvider from "./_components/UserProvider";
 export const metadata: Metadata = {
   metadataBase: new URL("https://balansome.co.kr"),
 
@@ -85,7 +86,9 @@ export default function RootLayout({
   gtag('config', 'G-G3YHG309EC');`,
           }}
         ></script>
-        <ReactQueryProviders>{children}</ReactQueryProviders>
+        <ReactQueryProviders>
+          <UserProvider>{children}</UserProvider>
+        </ReactQueryProviders>
       </body>
     </html>
   );

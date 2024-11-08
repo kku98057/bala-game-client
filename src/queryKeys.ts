@@ -1,3 +1,4 @@
+const user = () => ["user"] as const;
 const notice = {
   all: () => ["all", "notice"] as const,
   lists: (page: number, search: string) =>
@@ -50,4 +51,5 @@ export const QUERYKEYS = {
   tournamentGame,
   balanceGame,
   notice,
+  user,
 };

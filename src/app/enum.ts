@@ -1,5 +1,5 @@
 export const DEFAULT_METADATA = {
-  siteName: "밸런썸",
+  siteName: "밸런썸 | 이상형 월드컵 | 밸런스게임",
   subTitle: "선택으로 시작되는 재미",
   baseUrl: "https://balancesome.co.kr",
   defaultThumbnail: "/imgs/logo.png",

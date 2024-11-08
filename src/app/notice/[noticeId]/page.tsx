@@ -6,11 +6,11 @@ import { FiArrowLeft, FiEdit2, FiTrash2 } from "react-icons/fi";
 import Link from "next/link";
 
 import { UserRole } from "../../types/UserType";
-import Cookies from "js-cookie";
 import { formatDate } from "@/app/utils/formatDate";
 import { getNoticeDetail } from "./_lib/getNoticeDetailData";
 import { deleteNotice } from "./_lib/deleteNotice";
 import { QUERYKEYS } from "@/queryKeys";
+import { useAuthStore } from "@/app/store";
 
 export default function NoticeDetailPage({
   params,
@@ -18,7 +18,7 @@ export default function NoticeDetailPage({
   params: { noticeId: string };
 }) {
   const router = useRouter();
-  const user = Cookies.get("user") ? JSON.parse(Cookies.get("user")!) : null;
+  const { user } = useAuthStore((state) => state);
 
   const { data: notice, isLoading } = useQuery({
     queryKey: QUERYKEYS.notice.detail(Number(params.noticeId)),

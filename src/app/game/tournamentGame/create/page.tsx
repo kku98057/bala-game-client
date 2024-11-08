@@ -8,19 +8,19 @@ import CustomButton from "@/app/_components/buttons/CustomButton";
 import CustomLink from "@/app/_components/buttons/CustomLink";
 import Section from "@/app/_components/Section";
 import { QUERYKEYS } from "@/queryKeys";
-import { UserProps } from "@/app/types/UserType";
 import Cookies from "js-cookie";
 import TitleSection from "@/app/_components/TitleSection";
 import Warning from "@/app/_components/Warning";
+import { useAuthStore } from "@/app/store";
 export default function CreateTournamentGameGamePage() {
   const [title, setTitle] = useState(""); // 게임 제목 추가
   const queryClient = useQueryClient();
   const [tournamentType, setTournamentType] = useState<4 | 8 | 16 | null>(null);
-  const [user, setUser] = useState<UserProps | null>(null);
+
   const [list, setList] = useState<
     { name: string; image: File | null; id: number }[]
   >([]);
-
+  const { user } = useAuthStore((state) => state);
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: createTournamentGameData,
@@ -228,15 +228,7 @@ export default function CreateTournamentGameGamePage() {
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
-  useEffect(() => {
-    const userCookie = Cookies.get("user");
-    if (userCookie) {
-      setUser(JSON.parse(userCookie));
-    } else {
-      // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
-      router.push("/login");
-    }
-  }, [router]);
+
   return (
     <Section>
       <TitleSection title="월드컵 게임" subTitle="생성하기">

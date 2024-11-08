@@ -9,6 +9,7 @@ import { QUERYKEYS } from "@/queryKeys";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { UserProps } from "@/app/types/UserType";
+import { useAuthStore } from "@/app/store";
 interface BalanceGameCardProps {
   game: BalanceGameListProps;
   delay: number;
@@ -16,7 +17,7 @@ interface BalanceGameCardProps {
 
 export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
   const gameId = game.id;
-  const [user, setUser] = useState<UserProps | null>(null);
+  const { user, setUser } = useAuthStore((state) => state);
   const queryClient = useQueryClient();
   const { mutate: deleteGameHandler } = useMutation({
     mutationFn: (id: number) => deleteBalaceGameData(id),
@@ -37,12 +38,7 @@ export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
       deleteGameHandler(Number(gameId));
     }
   };
-  useEffect(() => {
-    const userCookie = Cookies.get("user");
-    if (userCookie) {
-      setUser(JSON.parse(userCookie));
-    }
-  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
