@@ -13,6 +13,9 @@ import TitleSection from "@/app/_components/TitleSection";
 import Warning from "@/app/_components/Warning";
 import { useAuthStore } from "@/app/store";
 export default function CreateTournamentGameGamePage() {
+  const LIMIT_CHOICE_NAME = 30;
+  const LIMIT_TITLE = 20;
+
   const [title, setTitle] = useState(""); // 게임 제목 추가
   const queryClient = useQueryClient();
   const [tournamentType, setTournamentType] = useState<4 | 8 | 16 | null>(null);
@@ -104,8 +107,8 @@ export default function CreateTournamentGameGamePage() {
       alert("게임 제목을 입력해주세요.");
       return;
     }
-    if (title.length > 20) {
-      alert("게임 제목은 20자 이하로 입력해주세요.");
+    if (title.length > LIMIT_TITLE) {
+      alert(`게임 제목은 ${LIMIT_TITLE}자 이하로 입력해주세요.`);
       return;
     }
     if (![8, 16, 32].includes(list.length)) {
@@ -113,9 +116,11 @@ export default function CreateTournamentGameGamePage() {
       return;
     }
     // 선택지 이름 길이 검증 추가
-    const invalidItem = list.find((item) => item.name.trim().length > 20);
+    const invalidItem = list.find(
+      (item) => item.name.trim().length > LIMIT_CHOICE_NAME
+    );
     if (invalidItem) {
-      alert("선택지 설명은 20자 이하로 입력해주세요.");
+      alert(`선택지 설명은 ${LIMIT_CHOICE_NAME}자 이하로 입력해주세요.`);
       return;
     }
 
@@ -252,8 +257,8 @@ export default function CreateTournamentGameGamePage() {
               type="text"
               value={title}
               onChange={(e) => {
-                if (e.target.value.length > 20)
-                  return alert("게임 제목은 최대 20자까지 입니다.");
+                if (e.target.value.length > LIMIT_TITLE)
+                  return alert(`게임 제목은 최대 ${LIMIT_TITLE}자까지 입니다.`);
                 setTitle(e.target.value);
               }}
               placeholder="예) 당신의 선택은?"
@@ -354,7 +359,9 @@ export default function CreateTournamentGameGamePage() {
             <div>
               <Warning />
               <p className="text-indigo-400">
-                가장 첫 이미지가 썸네일이 됩니다.
+                첫번째 두번째 이미지가 썸네일이 됩니다.
+                <br />
+                게임진행시 랜덤으로 선택지가 배치됩니다.
               </p>
             </div>
           )}
@@ -368,7 +375,7 @@ export default function CreateTournamentGameGamePage() {
                 <div className="flex justify-between items-center mb-4">
                   <div className="text-lg font-medium text-white flex items-center gap-1">
                     선택지 {index + 1}
-                    {index === 0 && (
+                    {(index === 0 || index === 1) && (
                       <span className="text-indigo-400">(썸네일)</span>
                     )}
                   </div>
@@ -464,8 +471,10 @@ export default function CreateTournamentGameGamePage() {
                     type="text"
                     value={item.name}
                     onChange={(e) => {
-                      if (e.target.value.length > 20)
-                        return alert("설명은 최대 20자까지 입니다.");
+                      if (e.target.value.length > LIMIT_CHOICE_NAME)
+                        return alert(
+                          `설명은 최대 ${LIMIT_CHOICE_NAME}자까지 입니다.`
+                        );
                       const newList = [...list];
                       newList[index].name = e.target.value;
                       setList(newList);
