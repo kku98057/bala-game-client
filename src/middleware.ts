@@ -4,7 +4,6 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token");
-
   // 인증이 필요한 페이지 목록 (로그인한 사용자만 접근 가능)
   const protectedRoutes = [
     "/game/balanceGame/create",
@@ -16,7 +15,11 @@ export function middleware(request: NextRequest) {
 
   // 인증이 필요한 페이지에 비로그인 사용자가 접근
   if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const returnUrl = encodeURIComponent(request.nextUrl.pathname);
+
+    return NextResponse.redirect(
+      new URL(`/login?returnUrl=${returnUrl}`, request.url)
+    );
   }
 
   // 인증 페이지 목록 (로그인한 사용자는 접근 불가)

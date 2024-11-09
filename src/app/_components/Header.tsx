@@ -13,7 +13,7 @@ import { QUERYKEYS } from "@/queryKeys";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const { user, setUser, logout } = useAuthStore((state) => state);
+  const { user, logout } = useAuthStore((state) => state);
   const queryClient = useQueryClient();
   const handleLogout = async () => {
     try {
@@ -43,7 +43,6 @@ export default function Header() {
       console.error("로그아웃 에러:", error);
       // 에러가 발생해도 일단 로컬의 토큰은 제거
       logout();
-      router.push("/login");
     }
   };
   // 컴포넌트가 마운트된 후에만 쿠키를 읽도록 수정

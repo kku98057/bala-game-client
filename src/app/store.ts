@@ -15,5 +15,6 @@ export const useAuthStore = create<authStoreProps>((set) => ({
     Cookies.remove("token");
     localStorage.removeItem("tokenExpiresAt");
     set({ user: null });
+    window.location.href = "/login";
   },
 }));

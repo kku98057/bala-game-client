@@ -4,12 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import postLogin from "../_lib/postLogin";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/app/store";
-import Cookies from "js-cookie";
 export default function LoginPage() {
-  const router = useRouter();
-  const { user, setUser } = useAuthStore((state) => state);
+  const { setUser } = useAuthStore((state) => state);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,7 +19,9 @@ export default function LoginPage() {
       postLogin(data, setError),
     onSuccess: (res) => {
       setUser(res.data.user);
-      router.push("/");
+      const params = new URLSearchParams(window.location.search);
+      const returnUrl = params.get("returnUrl");
+      window.location.href = returnUrl || "/";
     },
   });
 
