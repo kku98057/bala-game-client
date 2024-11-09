@@ -15,6 +15,8 @@ import TitleSection from "@/app/_components/TitleSection";
 import { useAuthStore } from "@/app/store";
 
 export default function CreateBalanceGamePage() {
+  const LIMIT_TITLE = 20;
+  const LIMIT_CHOICE_NAME = 50;
   const [title, setTitle] = useState("");
   const queryClient = useQueryClient();
   const [questions, setQuestions] = useState<
@@ -188,16 +190,15 @@ export default function CreateBalanceGamePage() {
                   </h3>
                   <button onClick={() => removeQuestion(qIndex)} type="button">
                     <svg
-                      fill="none"
-                      stroke="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
+                      fill="currentColor"
                       className="w-5 h-5 text-red-400 hover:text-red-300 transition-colors"
                     >
                       <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        fillRule="evenodd"
+                        d="M5.25 12a.75.75 0 01.75-.75h12a.75.75 0 010 1.5H6a.75.75 0 01-.75-.75z"
+                        clipRule="evenodd"
                       />
                     </svg>
                   </button>
@@ -209,8 +210,8 @@ export default function CreateBalanceGamePage() {
                     type="text"
                     value={question.title}
                     onChange={(e) => {
-                      if (e.target.value.length > 40)
-                        return alert("20자 이하로 입력해주세요.");
+                      if (e.target.value.length > LIMIT_TITLE)
+                        return alert(`${LIMIT_TITLE}자 이하로 입력해주세요.`);
                       const newQuestions = [...questions];
                       newQuestions[qIndex].title = e.target.value;
                       setQuestions(newQuestions);
@@ -252,8 +253,10 @@ export default function CreateBalanceGamePage() {
                         type="text"
                         value={item.name}
                         onChange={(e) => {
-                          if (e.target.value.length > 40)
-                            return alert("40자 이하로 입력해주세요.");
+                          if (e.target.value.length > LIMIT_CHOICE_NAME)
+                            return alert(
+                              `${LIMIT_CHOICE_NAME}자 이하로 입력해주세요.`
+                            );
                           const newQuestions = [...questions];
                           newQuestions[qIndex].items[iIndex].name =
                             e.target.value;
@@ -267,16 +270,15 @@ export default function CreateBalanceGamePage() {
                         type="button"
                       >
                         <svg
-                          fill="none"
-                          stroke="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
+                          fill="currentColor"
                           className="w-5 h-5 text-red-400 hover:text-red-300 transition-colors"
                         >
                           <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            fillRule="evenodd"
+                            d="M5.25 12a.75.75 0 01.75-.75h12a.75.75 0 010 1.5H6a.75.75 0 01-.75-.75z"
+                            clipRule="evenodd"
                           />
                         </svg>
                       </button>
