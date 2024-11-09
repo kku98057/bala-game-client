@@ -1,6 +1,6 @@
 "use client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { createTournamentGameData } from "./_lib/createTournamentGameData";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -8,12 +8,11 @@ import CustomButton from "@/app/_components/buttons/CustomButton";
 import CustomLink from "@/app/_components/buttons/CustomLink";
 import Section from "@/app/_components/Section";
 import { QUERYKEYS } from "@/queryKeys";
-import Cookies from "js-cookie";
 import TitleSection from "@/app/_components/TitleSection";
 import Warning from "@/app/_components/Warning";
 import { useAuthStore } from "@/app/store";
 export default function CreateTournamentGameGamePage() {
-  const LIMIT_CHOICE_NAME = 30;
+  const LIMIT_CHOICE_NAME = 40;
   const LIMIT_TITLE = 20;
 
   const [title, setTitle] = useState(""); // 게임 제목 추가
