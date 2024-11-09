@@ -145,14 +145,14 @@ export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
               <span>{game.questionsCount}개</span>
             </div>
           </div>
-
+          {/* 
           <div className="mt-4 py-3 px-4 bg-zinc-900/50 rounded-lg">
             <div className="text-sm text-zinc-400">
               <span className="text-indigo-400 font-medium">예시 질문</span>
               <span className="mx-2">•</span>
               <span>당신의 선택은?</span>
             </div>
-          </div>
+          </div> */}
         </div>
       </Link>
     </motion.div>

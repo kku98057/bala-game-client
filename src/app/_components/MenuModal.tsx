@@ -172,7 +172,7 @@ export const MenuModal = ({
 
         <div className="absolute bottom-8 left-6 right-6">
           <div className="p-4 bg-zinc-800 rounded-xl">
-            <p className="text-zinc-400 text-sm text-center">밸런썸 v1.0.0</p>
+            <p className="text-zinc-400 text-sm text-center">밸런썸 v1.0.3</p>
           </div>
         </div>
       </div>
