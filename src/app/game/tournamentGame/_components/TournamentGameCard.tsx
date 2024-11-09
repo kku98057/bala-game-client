@@ -101,7 +101,7 @@ export default function TournamentGameCard({
           <span className="absolute text-[24px] p-2 block rounded-full bg-indigo-800/80 z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-indigo-400  group-hover:text-indigo-300 transition-colors duration-300">
             VS
           </span>
-          <div className="relative flex-1 aspect-[1/1] rounded-lg ounded-tl-none rounded-bl-none overflow-hidden">
+          <div className="relative flex-1 aspect-[1/1] rounded-lg rounded-tl-none rounded-bl-none overflow-hidden">
             <Image
               src={game.items[1].imageUrl}
               alt={game.items[1].name}
