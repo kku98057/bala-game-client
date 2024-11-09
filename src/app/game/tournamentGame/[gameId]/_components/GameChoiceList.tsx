@@ -9,6 +9,7 @@ interface GameChoiceListProps {
   curGame: GameProps[];
   isSelecting: boolean;
   disabled?: boolean;
+  index: number;
 }
 
 export const GameChoiceList = ({
@@ -17,6 +18,7 @@ export const GameChoiceList = ({
   curGame,
   isSelecting,
   disabled,
+  index,
 }: GameChoiceListProps) => {
   const itemRef = useRef<HTMLButtonElement>(null);
 
@@ -74,25 +76,19 @@ export const GameChoiceList = ({
         data-id={list.id}
       >
         <motion.div
-          className="relative w-full h-full group"
+          className="relative h-full group"
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
           {/* 이미지 컨테이너 */}
-          <div className="absolute inset-0 bg-zinc-900">
-            <Image
-              src={list.imageUrl}
-              alt={list.name}
-              fill
-              className="object-cover 
-                object-center 
-                md:object-[center_20%]
-                lg:object-[center_15%]"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority
-              quality={85}
-            />
-          </div>
+          <div
+            className={`inset-0 bg-zinc-900 h-full bg-no-repeat bg-contain ${
+              index === 0 ? "bg-right" : "bg-left"
+            }`}
+            style={{
+              backgroundImage: `url(${list.imageUrl})`,
+            }}
+          ></div>
 
           {/* 배경 그라데이션 */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
@@ -107,7 +103,7 @@ export const GameChoiceList = ({
 
           {/* 텍스트 컨테이너 */}
           <div className="absolute inset-x-0 bottom-0 p-4 md:p-8 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-            <p className="text-white text-[8cqi] md:text-[5cqi] font-bold text-center leading-tight drop-shadow-lg">
+            <p className="text-white  text-[4.5cqi] md:text-[3cqi] font-bold text-center leading-tight drop-shadow-lg">
               {list.name}
             </p>
           </div>

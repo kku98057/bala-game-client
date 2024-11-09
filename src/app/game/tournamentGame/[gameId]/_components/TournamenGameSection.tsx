@@ -248,6 +248,7 @@ export default function TournamenGameSection() {
                         curGame={curGame}
                         isSelecting={isSelecting}
                         disabled={isAnimating}
+                        index={index}
                       />
                       {/* 하단광고 */}
                       {/* <div className="h-[50px] md:h-[100px] bg-zinc-900 flex items-center justify-center">
