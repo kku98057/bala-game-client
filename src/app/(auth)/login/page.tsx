@@ -5,6 +5,7 @@ import Link from "next/link";
 import postLogin from "../_lib/postLogin";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "@/app/store";
+import useRedirectURL from "@/hooks/useRedirectURL";
 export default function LoginPage() {
   const { setUser } = useAuthStore((state) => state);
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ export default function LoginPage() {
     e.preventDefault();
     mutate(formData);
   };
-
+  const { returnURL } = useRedirectURL();
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-900 px-4">
       <div className="max-w-md w-full space-y-8 bg-zinc-800/50 p-8 rounded-2xl backdrop-blur-sm">
@@ -85,7 +86,7 @@ export default function LoginPage() {
         <div className="text-center text-zinc-400">
           계정이 없으신가요?{" "}
           <Link
-            href="/signup"
+            href={`/signup${returnURL("returnUrl")}`}
             className="text-indigo-400 hover:text-indigo-300 transition-colors"
           >
             회원가입하기
