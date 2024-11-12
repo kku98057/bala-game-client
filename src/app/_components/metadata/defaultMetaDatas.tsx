@@ -1,17 +1,14 @@
 import { DEFAULT_METADATA } from "@/app/enum";
 type Props = {
-  subTitle?: string;
   desc?: string;
 };
-export default function defaultMetaDatas({ subTitle, desc }: Props) {
+export default function defaultMetaDatas({ desc }: Props) {
   return {
-    title: `${DEFAULT_METADATA.siteName} | ${
-      subTitle || DEFAULT_METADATA.subTitle
+    title: `${DEFAULT_METADATA.siteName} 
     }`,
     description: desc || DEFAULT_METADATA.defaultDescription,
     openGraph: {
-      title: `${DEFAULT_METADATA.siteName} | ${
-        subTitle || DEFAULT_METADATA.subTitle
+      title: `${DEFAULT_METADATA.siteName}
       }`,
       description: desc || DEFAULT_METADATA.defaultDescription,
     },
