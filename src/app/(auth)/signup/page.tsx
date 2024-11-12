@@ -6,6 +6,7 @@ import Link from "next/link";
 import postLogin from "../_lib/postLogin";
 import Loading from "@/app/_components/Loading";
 import { useAuthStore } from "@/app/store";
+import useRedirectURL from "@/hooks/useRedirectURL";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -168,10 +169,11 @@ export default function RegisterPage() {
         email: formData.email,
         password: formData.password,
       });
-      console.log(data);
       setUser(data.data.user);
       alert("로그인 되었습니다.");
-      router.push("/");
+      const params = new URLSearchParams(window.location.search);
+      const returnUrl = params.get("returnUrl");
+      window.location.href = returnUrl || "/";
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "회원가입에 실패했습니다.";
@@ -179,6 +181,7 @@ export default function RegisterPage() {
       setIsLoading(false);
     }
   };
+  const { returnURL } = useRedirectURL();
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-900 px-4">
       <div className="max-w-md w-full space-y-8 bg-zinc-800/50 p-8 rounded-2xl backdrop-blur-sm">
@@ -272,7 +275,7 @@ export default function RegisterPage() {
         <div className="text-center text-zinc-400">
           이미 계정이 있으신가요?{" "}
           <Link
-            href="/login"
+            href={`/login${returnURL("returnUrl")}`}
             className="text-indigo-400 hover:text-indigo-300 transition-colors"
           >
             로그인하기

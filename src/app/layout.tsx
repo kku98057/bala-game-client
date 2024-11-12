@@ -7,11 +7,11 @@ import UserProvider from "./_components/UserProvider";
 export const metadata: Metadata = {
   metadataBase: new URL("https://balansome.co.kr"),
 
-  title: `${DEFAULT_METADATA.siteName} | ${DEFAULT_METADATA.subTitle}`,
+  title: `${DEFAULT_METADATA.siteName} `,
   description: DEFAULT_METADATA.defaultDescription,
   icons: "/favicon.ico",
   openGraph: {
-    title: "밸런썸 (Balancesome)",
+    title: `${DEFAULT_METADATA.siteName} `,
     description: DEFAULT_METADATA.defaultDescription,
     url: DEFAULT_METADATA.baseUrl,
     siteName: DEFAULT_METADATA.siteName,

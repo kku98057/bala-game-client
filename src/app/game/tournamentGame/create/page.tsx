@@ -235,7 +235,7 @@ export default function CreateTournamentGameGamePage() {
 
   return (
     <Section>
-      <TitleSection title="월드컵 게임" subTitle="생성하기">
+      <TitleSection title="이상형 월드컵" subTitle="생성하기">
         <CustomLink
           href="/game/tournamentGame"
           icon="arrow"
