@@ -28,7 +28,7 @@ export default function Home() {
           }),
         }}
       />
-      <Header />
+
       <main className="bg-gradient-to-b from-zinc-900 to-zinc-800 min-h-dvh ">
         <HeroSection />
         <GameUseCaseSection />

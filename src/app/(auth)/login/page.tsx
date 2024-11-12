@@ -6,6 +6,7 @@ import postLogin from "../_lib/postLogin";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "@/app/store";
 import useRedirectURL from "@/hooks/useRedirectURL";
+
 export default function LoginPage() {
   const { setUser } = useAuthStore((state) => state);
   const [formData, setFormData] = useState({
@@ -73,7 +74,6 @@ export default function LoginPage() {
                        focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
-
           <button
             type="submit"
             className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white font-semibold

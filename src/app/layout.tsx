@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import Script from "next/script";
 import { DEFAULT_METADATA } from "./enum";
 import UserProvider from "./_components/UserProvider";
+import Header from "./_components/Header";
 export const metadata: Metadata = {
   metadataBase: new URL("https://balansome.co.kr"),
 

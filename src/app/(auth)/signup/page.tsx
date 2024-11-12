@@ -126,8 +126,6 @@ export default function RegisterPage() {
       return;
     }
 
-    e.preventDefault();
-
     // 비밀번호 유효성 검사
     const passwordError = validatePassword(formData.password);
     const passwordConfirmError = validatePasswordConfirm(

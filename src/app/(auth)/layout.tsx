@@ -1,14 +1,9 @@
-import Header from "../_components/Header";
+import { Suspense } from "react";
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Header />
-      {children}
-    </>
-  );
+  return <Suspense>{children}</Suspense>;
 }
