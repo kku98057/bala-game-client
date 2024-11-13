@@ -1,6 +1,3 @@
 User-agent: *
 Allow: /
 Sitemap: https://balansome.co.kr/sitemap.xml
-
-# Sitemaps
-Sitemap: https://balancesome.co.kr/sitemap.xml

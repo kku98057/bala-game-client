@@ -88,7 +88,10 @@ export default function RootLayout({
           }}
         ></script>
         <ReactQueryProviders>
-          <UserProvider>{children}</UserProvider>
+          <UserProvider>
+            <Header />
+            {children}
+          </UserProvider>
         </ReactQueryProviders>
       </body>
     </html>
