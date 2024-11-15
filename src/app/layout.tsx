@@ -5,6 +5,7 @@ import Script from "next/script";
 import { DEFAULT_METADATA } from "./enum";
 import UserProvider from "./_components/UserProvider";
 import Header from "./_components/Header";
+import { CanonicalTag } from "./_components/metadata/CanonicalTag";
 export const metadata: Metadata = {
   metadataBase: new URL("https://balansome.co.kr"),
 
@@ -48,6 +49,7 @@ export default function RootLayout({
           name="google-adsense-account"
           content="ca-pub-3604338976078798"
         ></meta>
+        <CanonicalTag />
       </head>
       <body>
         <Script
