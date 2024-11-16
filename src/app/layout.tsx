@@ -6,6 +6,7 @@ import { DEFAULT_METADATA } from "./enum";
 import UserProvider from "./_components/UserProvider";
 import Header from "./_components/Header";
 import { CanonicalTag } from "./_components/metadata/CanonicalTag";
+import GoogleAdSenseScript from "./_components/adsense/GoogleAdSenseScript";
 export const metadata: Metadata = {
   metadataBase: new URL("https://balansome.co.kr"),
 
@@ -70,6 +71,7 @@ export default function RootLayout({
             }),
           }}
         />
+        <GoogleAdSenseScript />
         <Script
           strategy="beforeInteractive"
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
