@@ -4,6 +4,7 @@ export const getTournamentGameStatisticsData = async (id: number) => {
       `${process.env.NEXT_PUBLIC_API_URL}/api/tournamentGame/statistics/${id}`,
       {
         cache: "no-store",
+        credentials: "include",
       }
     );
     if (!response.ok) {

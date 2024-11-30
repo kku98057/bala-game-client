@@ -9,6 +9,7 @@ export const postFinalChoiceData = async (finalChoiceData: DataProps) => {
       `${process.env.NEXT_PUBLIC_API_URL}/api/tournamentGame/final-choice`,
       {
         cache: "no-cache",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json", // 이 헤더를 추가
         },

@@ -6,6 +6,7 @@ export const getNoticeDetail = async (id: number) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/notice/${id}`,
     {
       next: { revalidate: 0 },
+      credentials: "include",
       headers: {
         ...(token && { Authorization: `Bearer ${token}` }),
       },

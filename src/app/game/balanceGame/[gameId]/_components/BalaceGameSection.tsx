@@ -28,7 +28,7 @@ export default function BalanceGameSection() {
     queryFn: () => getBalanceGameData(Number(gameId)),
   });
 
-  const { mutate: participantCountHandler, isPending } = useMutation({
+  const { mutate: participantCountHandler, isLoading } = useMutation({
     mutationFn: ({ id }: { id: number }) =>
       postBanaceGameParticipageCountData(id),
     mutationKey: QUERYKEYS.balanceGame.participantCount(Number(gameId)),
@@ -101,7 +101,7 @@ export default function BalanceGameSection() {
           >
             <GameTitle title={data?.title || ""} />
 
-            <GameStartButton isPending={isPending} handleStart={handleStart} />
+            <GameStartButton isPending={isLoading} handleStart={handleStart} />
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

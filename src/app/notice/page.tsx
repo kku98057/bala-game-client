@@ -23,7 +23,7 @@ export default function NoticePage() {
   const {
     data: noticeData,
 
-    isPending,
+    isLoading,
   } = useQuery({
     queryKey: QUERYKEYS.notice.lists(page, searchQuery),
     queryFn: () => getNoticeData({ page, search: searchQuery, limit: 100 }),
@@ -106,7 +106,7 @@ export default function NoticePage() {
           </form>
 
           {/* 공지사항 목록 */}
-          {!isPending ? (
+          {!isLoading ? (
             <div className="space-y-4">
               {noticeData?.notices?.map((notice: any) => (
                 <Link

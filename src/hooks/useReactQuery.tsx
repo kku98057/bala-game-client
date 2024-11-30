@@ -20,7 +20,7 @@ export default function ReactQueryProviders({
             // above 0 to avoid refetching immediately on the client
             retry: 0,
             staleTime: minute * 10,
-            gcTime: minute * 30,
+            cacheTime: minute * 30,
           },
         },
       })

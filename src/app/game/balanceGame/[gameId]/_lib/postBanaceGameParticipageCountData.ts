@@ -4,6 +4,7 @@ export const postBanaceGameParticipageCountData = async (id: number) => {
       `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/participants`,
       {
         cache: "no-cache",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json", // 이 헤더를 추가
         },

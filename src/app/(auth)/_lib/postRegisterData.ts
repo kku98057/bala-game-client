@@ -2,6 +2,7 @@ export default async function postRegisterData(formData: FormData) {
   const response = await fetch("/api/auth/register", {
     method: "POST",
     cache: "no-cache",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },

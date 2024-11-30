@@ -13,6 +13,7 @@ export const updateNotice = async (data: UpdateNoticeData) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/notice/${data.id}`,
     {
       method: "PUT",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),

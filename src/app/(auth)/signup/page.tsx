@@ -151,6 +151,7 @@ export default function RegisterPage() {
         {
           method: "POST",
           cache: "no-cache",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

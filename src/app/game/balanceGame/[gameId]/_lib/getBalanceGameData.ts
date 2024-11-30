@@ -4,6 +4,7 @@ export const getBalanceGameData = async (id: number) => {
       `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/${id}`,
       {
         cache: "no-cache",
+        credentials: "include",
       }
     );
     const data = await response.json();

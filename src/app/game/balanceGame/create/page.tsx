@@ -25,7 +25,7 @@ export default function CreateBalanceGamePage() {
   const { user, setUser } = useAuthStore((state) => state);
   const router = useRouter();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: (data: BalanceGameProps) => createBalanceGameData(data),
     mutationKey: QUERYKEYS.balanceGame.create(),
   });
@@ -293,10 +293,10 @@ export default function CreateBalanceGamePage() {
           <div className="fixed gap-4 flex items-center  justify-center w-11/12 left-1/2 -translate-x-1/2 bottom-8 sm:bottom-8 pt-4 px-4 sm:px-0   z-10">
             <button
               type="submit"
-              disabled={isPending}
+              disabled={isLoading}
               className="group flex-1 relative  max-w-xl  flex items-center justify-center py-3 sm:py-4 px-4 sm:px-6 bg-green-600 hover:bg-green-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
             >
-              {isPending ? "생성 중..." : "게임 생성하기"}
+              {isLoading ? "생성 중..." : "게임 생성하기"}
               <div className="absolute inset-0 rounded-xl border-2 border-green-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
             </button>{" "}
             <CustomButton

@@ -22,6 +22,7 @@ export default function Header() {
         {
           method: "POST",
           cache: "no-cache",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${Cookies.get("token")}`,
