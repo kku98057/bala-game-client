@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion"; // framer-motion 추가
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FiBarChart2 } from "react-icons/fi";
+import Script from "next/script";
+import GoogleAdSenseComponent from "@/app/_components/adsense/GoogleAdSenseComponent";
 
 export interface BalanceQuestion {
   id: number;
@@ -150,7 +152,7 @@ export default function QuestionList({ questions }: QuestionListProps) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.5 }}
-          className="bg-zinc-800/50 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-zinc-700/50"
+          className="bg-zinc-800/50 backdrop-blur-lg mx-[10px] rounded-2xl p-8 shadow-xl border border-zinc-700/50"
         >
           <h3 className="text-2xl font-bold text-white mb-6 text-center">
             {currentQuestion.title}
@@ -202,7 +204,7 @@ export default function QuestionList({ questions }: QuestionListProps) {
               );
             })}
           </div>
-
+          <GoogleAdSenseComponent />
           {results[currentQuestion.id] && (
             <motion.div
               initial={{ opacity: 0 }}
