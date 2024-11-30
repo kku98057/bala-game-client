@@ -1,9 +1,5 @@
 "use server";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+import { dehydrate, Hydrate, QueryClient } from "@tanstack/react-query";
 import TournamentStatisticSection from "./_components/TournamentStatisticSection";
 import { QUERYKEYS } from "@/queryKeys";
 import { getTournamentGameStatisticsData } from "./_lib/getTournamentGameStatisticsData";
@@ -80,7 +76,7 @@ export default async function StatisticsPage({
     };
     return (
       <>
-        <HydrationBoundary state={dehydrateState}>
+        <Hydrate state={dehydrateState}>
           <Script
             id="structured-data"
             type="application/ld+json"
@@ -90,7 +86,7 @@ export default async function StatisticsPage({
             }}
           />
           <TournamentStatisticSection />
-        </HydrationBoundary>
+        </Hydrate>
       </>
     );
   } catch (error) {

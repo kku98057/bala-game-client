@@ -55,6 +55,7 @@ export default function Comments({ gameId, gameType }: CommentProps) {
         `${process.env.NEXT_PUBLIC_API_URL}/api/comments/create`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -105,6 +106,7 @@ export default function Comments({ gameId, gameType }: CommentProps) {
         `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${commentId}`,
         {
           cache: "no-cache",
+          credentials: "include",
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -143,6 +145,7 @@ export default function Comments({ gameId, gameType }: CommentProps) {
         `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${commentId}`,
         {
           cache: "no-cache",
+          credentials: "include",
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -230,10 +233,10 @@ export default function Comments({ gameId, gameType }: CommentProps) {
               </div>
               <button
                 type="submit"
-                disabled={createMutation.isPending}
+                disabled={createMutation.isLoading}
                 className="px-4 py-2 mt-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
               >
-                {createMutation.isPending ? "작성 중..." : "댓글 작성"}
+                {createMutation.isLoading ? "작성 중..." : "댓글 작성"}
               </button>
             </>
           )}

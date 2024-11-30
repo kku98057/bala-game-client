@@ -17,7 +17,7 @@ export default function CreateNoticePage() {
     isVisible: true,
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: (data: {
       title: string;
       content: string;
@@ -137,10 +137,10 @@ export default function CreateNoticePage() {
               </Link>
               <button
                 type="submit"
-                disabled={isPending}
+                disabled={isLoading}
                 className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
               >
-                {isPending ? "작성 중..." : "작성하기"}
+                {isLoading ? "작성 중..." : "작성하기"}
               </button>
             </div>
           </form>

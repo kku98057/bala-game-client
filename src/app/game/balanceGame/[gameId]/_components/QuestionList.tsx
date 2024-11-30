@@ -40,6 +40,7 @@ export default function QuestionList({ questions }: QuestionListProps) {
         `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/choice`,
         {
           method: "POST",
+          credentials: "include",
           cache: "no-cache",
           headers: {
             "Content-Type": "application/json",

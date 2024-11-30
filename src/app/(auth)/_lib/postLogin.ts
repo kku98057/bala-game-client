@@ -8,6 +8,7 @@ export default async function postLogin(
       `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
       {
         cache: "no-cache",
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",

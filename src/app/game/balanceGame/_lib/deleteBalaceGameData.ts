@@ -7,6 +7,7 @@ export async function deleteBalaceGameData(id: number) {
     {
       method: "DELETE",
       cache: "no-cache",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

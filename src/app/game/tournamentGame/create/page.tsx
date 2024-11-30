@@ -491,10 +491,10 @@ export default function CreateTournamentGameGamePage() {
             {tournamentType && (
               <button
                 type="submit"
-                disabled={mutation.isPending}
+                disabled={mutation.isLoading}
                 className="group relative w-full flex items-center justify-center py-4 px-6 bg-green-600 hover:bg-green-700 rounded-xl text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
               >
-                {mutation.isPending ? "생성 중..." : "게임 생성하기"}
+                {mutation.isLoading ? "생성 중..." : "게임 생성하기"}
                 <div className="absolute inset-0 rounded-xl border-2 border-green-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               </button>
             )}

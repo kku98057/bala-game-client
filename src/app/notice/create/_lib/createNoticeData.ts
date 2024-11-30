@@ -10,6 +10,7 @@ export default async function createNoticeData(formData: {
     `${process.env.NEXT_PUBLIC_API_URL}/api/notice`,
     {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),

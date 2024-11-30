@@ -1,10 +1,6 @@
 import { QUERYKEYS } from "@/queryKeys";
 
-import {
-  QueryClient,
-  dehydrate,
-  HydrationBoundary,
-} from "@tanstack/react-query";
+import { QueryClient, dehydrate, Hydrate } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import BalaceGameSection from "./_components/BalaceGameSection";
 import { getBalanceGameData } from "./_lib/getBalanceGameData";
@@ -78,7 +74,7 @@ export default async function page({
     };
 
     return (
-      <HydrationBoundary state={dehydrateState}>
+      <Hydrate state={dehydrateState}>
         <Script
           id="structured-data"
           type="application/ld+json"
@@ -88,7 +84,7 @@ export default async function page({
           }}
         />
         <BalaceGameSection />
-      </HydrationBoundary>
+      </Hydrate>
     );
   } catch (error) {
     notFound();

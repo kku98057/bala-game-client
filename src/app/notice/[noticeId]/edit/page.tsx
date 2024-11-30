@@ -40,7 +40,7 @@ export default function EditNoticePage({
       });
     }
   }, [notice]);
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: (data: NoticeFormData & { id: number }) => updateNotice(data),
     mutationKey: ["updateNotice", params.noticeId],
   });
@@ -159,10 +159,10 @@ export default function EditNoticePage({
               </Link>
               <button
                 type="submit"
-                disabled={isPending}
+                disabled={isLoading}
                 className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
               >
-                {isPending ? "수정 중..." : "수정하기"}
+                {isLoading ? "수정 중..." : "수정하기"}
               </button>
             </div>
           </form>

@@ -1,11 +1,7 @@
 import { QUERYKEYS } from "@/queryKeys";
 import TournamenGameSection from "./_components/TournamenGameSection";
 import { getTournamenGameData } from "./_lib/getTournamenGameData";
-import {
-  QueryClient,
-  dehydrate,
-  HydrationBoundary,
-} from "@tanstack/react-query";
+import { QueryClient, dehydrate, Hydrate } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Script from "next/script";
@@ -81,7 +77,7 @@ export default async function page({
       };
     };
     return (
-      <HydrationBoundary state={dehydrateState}>
+      <Hydrate state={dehydrateState}>
         <Script
           id="structured-data"
           type="application/ld+json"
@@ -91,7 +87,7 @@ export default async function page({
           }}
         />
         <TournamenGameSection />
-      </HydrationBoundary>
+      </Hydrate>
     );
   } catch (error) {
     // 에러 발생시 404

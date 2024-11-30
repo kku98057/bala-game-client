@@ -9,6 +9,7 @@ export const createBalanceGameData = async (gameData: BalanceGameProps) => {
       body: JSON.stringify(gameData),
       headers: {
         cache: "no-cache",
+        credentials: "include",
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },

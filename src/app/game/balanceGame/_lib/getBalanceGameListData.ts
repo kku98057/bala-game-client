@@ -8,6 +8,7 @@ export default async function getBalanceGameListData({ page, limit }: Props) {
       `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame?page=${page}&limit=${limit}`,
       {
         cache: "no-cache",
+        credentials: "include",
       }
     );
     const data = await res.json();

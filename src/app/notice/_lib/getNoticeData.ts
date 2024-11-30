@@ -16,6 +16,7 @@ export const getNoticeData = async ({
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/notice?page=${page}&search=${search}&limit=${limit}`,
     {
+      credentials: "include",
       headers: {
         ...(token && { Authorization: `Bearer ${token}` }), // 토큰이 있을 때만 헤더 추가
       },

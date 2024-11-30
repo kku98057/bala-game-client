@@ -9,6 +9,7 @@ export default async function postRecordBalanceChoice({
   try {
     const response = await fetch("/api/balanceGame/choice", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

@@ -27,6 +27,7 @@ export const createTournamentGameData = async (formData: FormData) => {
       method: "POST",
       body: compressedFormData,
       cache: "no-cache",
+      credentials: "include",
       headers: {
         Authorization: `Bearer ${token}`,
       },

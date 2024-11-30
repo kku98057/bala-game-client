@@ -18,19 +18,20 @@ export default function TournamentGameListSection({
   const observerRef = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
-    useInfiniteQuery<TournamentListResponse>({
-      queryKey: QUERYKEYS.tournamentGame.lists({ limit }),
-      queryFn: ({ pageParam = 1 }) =>
+    useInfiniteQuery<TournamentListResponse>(
+      QUERYKEYS.tournamentGame.lists({ limit }),
+      ({ pageParam = 1 }) =>
         getTournamenGameListData({ page: pageParam, limit }),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage) => {
-        if (!lastPage?.games) return undefined;
-        if (!lastPage.currentPage || !lastPage.totalPages) return undefined;
-        return lastPage.currentPage < lastPage.totalPages
-          ? lastPage.currentPage + 1
-          : undefined;
-      },
-    });
+      {
+        getNextPageParam: (lastPage) => {
+          if (!lastPage?.games) return undefined;
+          if (!lastPage.currentPage || !lastPage.totalPages) return undefined;
+          return lastPage.currentPage < lastPage.totalPages
+            ? lastPage.currentPage + 1
+            : undefined;
+        },
+      }
+    );
 
   const onIntersect = ([entry]: IntersectionObserverEntry[]) => {
     if (entry.isIntersecting && hasNextPage) {

@@ -4,6 +4,7 @@ export const getBalaceGameStatisticsData = async (id: number) => {
       `${process.env.NEXT_PUBLIC_API_URL}/api/balanceGame/statistics/${id}`,
       {
         cache: "no-store",
+        credentials: "include",
       }
     );
     if (!response.ok) {

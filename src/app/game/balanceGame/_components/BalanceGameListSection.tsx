@@ -19,19 +19,19 @@ export default function BalanceGameListSection({ limit }: { limit: number }) {
   const observerRef = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
-    useInfiniteQuery<BalanceGameListResponse>({
-      queryKey: QUERYKEYS.balanceGame.lists({ limit }),
-      queryFn: ({ pageParam = 1 }) =>
-        getBalanceGameListData({ page: pageParam, limit }),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage) => {
-        if (!lastPage?.games) return undefined;
-        if (!lastPage.currentPage || !lastPage.totalPages) return undefined;
-        return lastPage.currentPage < lastPage.totalPages
-          ? lastPage.currentPage + 1
-          : undefined;
-      },
-    });
+    useInfiniteQuery<BalanceGameListResponse>(
+      QUERYKEYS.balanceGame.lists({ limit }),
+      ({ pageParam = 1 }) => getBalanceGameListData({ page: pageParam, limit }),
+      {
+        getNextPageParam: (lastPage) => {
+          if (!lastPage?.games) return undefined;
+          if (!lastPage.currentPage || !lastPage.totalPages) return undefined;
+          return lastPage.currentPage < lastPage.totalPages
+            ? lastPage.currentPage + 1
+            : undefined;
+        },
+      }
+    );
 
   const onIntersect = ([entry]: IntersectionObserverEntry[]) => {
     if (entry.isIntersecting && hasNextPage) {
