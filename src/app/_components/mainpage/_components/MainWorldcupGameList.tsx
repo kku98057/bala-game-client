@@ -25,7 +25,7 @@ export default function MainWorldcupGameList() {
       getTournamenGameListData({ limit, sort: "popular", page: 1 }),
   });
   return (
-    <Section>
+    <Section variant="secondary">
       <h2 className="text-3xl font-bold text-white mb-12 text-left ">
         인기 이상형월드컵
       </h2>
