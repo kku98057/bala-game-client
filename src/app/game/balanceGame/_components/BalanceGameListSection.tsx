@@ -1,10 +1,6 @@
 "use client";
 import { QUERYKEYS } from "@/queryKeys";
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import CustomLink from "@/app/_components/buttons/CustomLink";
@@ -13,15 +9,15 @@ import BalanceGameCard from "./BalanceGameCard";
 import getBalanceGameListData from "../_lib/getBalanceGameListData";
 import { BalanceGameListResponse } from "@/app/types/balanceGameType";
 import TitleSection from "@/app/_components/TitleSection";
-import { deleteBalaceGameData } from "../_lib/deleteBalaceGameData";
 
 export default function BalanceGameListSection({ limit }: { limit: number }) {
   const observerRef = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfiniteQuery<BalanceGameListResponse>(
-      QUERYKEYS.balanceGame.lists({ limit }),
-      ({ pageParam = 1 }) => getBalanceGameListData({ page: pageParam, limit }),
+      QUERYKEYS.balanceGame.lists({ limit, sort: "latest" }),
+      ({ pageParam = 1 }) =>
+        getBalanceGameListData({ page: pageParam, limit, sort: "latest" }),
       {
         getNextPageParam: (lastPage) => {
           if (!lastPage?.games) return undefined;

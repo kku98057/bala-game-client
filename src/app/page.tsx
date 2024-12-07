@@ -6,6 +6,7 @@ import GameUseCaseSection from "./_components/mainpage/GameUseCaseSection";
 import HeroSection from "./_components/mainpage/HeroSection";
 import WhyBalansomeSection from "./_components/mainpage/WhyBalansomeSection";
 import { DEFAULT_METADATA } from "./enum";
+import MainBalanceGameSection from "./_components/mainpage/MainBalanceGameSection";
 
 export default function Home() {
   return (
@@ -31,7 +32,8 @@ export default function Home() {
 
       <main className="bg-gradient-to-b from-zinc-900 to-zinc-800 min-h-dvh ">
         <HeroSection />
-        <GameUseCaseSection />
+        {/* <GameUseCaseSection /> */}
+        <MainBalanceGameSection />
         <WhyBalansomeSection />
         <Footer />
       </main>

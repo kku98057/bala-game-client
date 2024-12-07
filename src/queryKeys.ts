@@ -30,8 +30,13 @@ const tournamentGame = {
 };
 const balanceGame = {
   all: () => ["all", "balance_game"] as const,
-  lists: ({ limit }: { limit: number }) =>
-    [...balanceGame.all(), { limit }] as const,
+  lists: ({
+    limit,
+    sort,
+  }: {
+    limit: number;
+    sort: "latest" | "popular" | "comments";
+  }) => [...balanceGame.all(), { limit, sort }] as const,
   list: (id: number) => [...balanceGame.all(), { id }] as const,
   participantCount: (id: number) =>
     [...balanceGame.all(), "participantCount", { id }] as const,
