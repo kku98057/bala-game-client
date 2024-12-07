@@ -9,6 +9,7 @@ import BalanceGameCard from "./BalanceGameCard";
 import getBalanceGameListData from "../_lib/getBalanceGameListData";
 import { BalanceGameListResponse } from "@/app/types/balanceGameType";
 import TitleSection from "@/app/_components/TitleSection";
+import Loading from "@/app/_components/Loading";
 
 export default function BalanceGameListSection({ limit }: { limit: number }) {
   const observerRef = useRef<HTMLDivElement>(null);
@@ -39,13 +40,8 @@ export default function BalanceGameListSection({ limit }: { limit: number }) {
     ref: observerRef,
     callback: onIntersect,
   });
-
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <p className="text-lg text-gray-600">Loading...</p>
-      </div>
-    );
+    return <Loading overlay />;
   }
   return (
     <Section>
