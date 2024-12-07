@@ -8,8 +8,13 @@ const notice = {
 };
 const tournamentGame = {
   all: () => ["all", "tournament_game"] as const,
-  lists: ({ limit }: { limit: number }) =>
-    [...tournamentGame.all(), { limit }] as const,
+  lists: ({
+    limit,
+    sort,
+  }: {
+    limit: number;
+    sort: "latest" | "popular" | "comments";
+  }) => [...tournamentGame.all(), { limit, sort }] as const,
   list: (id: number) => [...tournamentGame.all(), { id }] as const,
   participantCount: (id: number) =>
     [...tournamentGame.all(), "participantCount", { id }] as const,
