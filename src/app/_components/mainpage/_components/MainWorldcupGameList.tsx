@@ -16,6 +16,7 @@ import "swiper/css/pagination";
 import getTournamenGameListData from "@/app/game/tournamentGame/_lib/getTournamenGameListData";
 import { TournamentListResponse } from "@/app/types/gameType";
 import TournamentGameCard from "@/app/game/tournamentGame/_components/TournamentGameCard";
+import Loading from "../../Loading";
 export default function MainWorldcupGameList() {
   const limit = 5;
   const { data, isLoading } = useQuery<TournamentListResponse>({
@@ -30,7 +31,7 @@ export default function MainWorldcupGameList() {
       </h2>
 
       {isLoading ? (
-        <div className="text-white">로딩 중...</div>
+        <Loading />
       ) : (
         <div className="relative pb-12 ">
           {" "}

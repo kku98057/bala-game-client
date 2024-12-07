@@ -13,6 +13,7 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import Loading from "../../Loading";
 export default function BalanceGameList() {
   const limit = 5;
   const { data, isLoading } = useQuery<BalanceGameListResponse>({
@@ -26,7 +27,7 @@ export default function BalanceGameList() {
       </h2>
 
       {isLoading ? (
-        <div className="text-white">로딩 중...</div>
+        <Loading />
       ) : (
         <div className="relative pb-12 ">
           {" "}
