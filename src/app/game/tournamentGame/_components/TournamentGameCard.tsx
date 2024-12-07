@@ -11,12 +11,12 @@ import { UserProps } from "@/app/types/UserType";
 import { useAuthStore } from "@/app/store";
 interface TournamentGameCardProps {
   game: TournamentList;
-  delay: number;
+  delay?: number;
 }
 
 export default function TournamentGameCard({
   game,
-  delay,
+  delay = 0,
 }: TournamentGameCardProps) {
   const gameId = game.id;
   const { user, setUser } = useAuthStore((state) => state);
