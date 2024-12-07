@@ -56,8 +56,13 @@ const balanceGame = {
     create: () => [...balanceGame.comments.all(), "create"] as const,
   },
 };
-
+const profile = {
+  all: () => ["all", "profile"] as const,
+  games: ({ gameType }: { gameType: "BALANCE" | "TOURNAMENT" }) =>
+    [...profile.all(), "games", { gameType }] as const,
+};
 export const QUERYKEYS = {
+  profile,
   tournamentGame,
   balanceGame,
   notice,
