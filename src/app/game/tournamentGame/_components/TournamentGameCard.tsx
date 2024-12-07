@@ -12,11 +12,13 @@ import { useAuthStore } from "@/app/store";
 interface TournamentGameCardProps {
   game: TournamentList;
   delay?: number;
+  isDelete?: boolean;
 }
 
 export default function TournamentGameCard({
   game,
   delay = 0,
+  isDelete = false,
 }: TournamentGameCardProps) {
   const gameId = game.id;
   const { user, setUser } = useAuthStore((state) => state);
@@ -51,29 +53,30 @@ export default function TournamentGameCard({
       whileTap={{ scale: 0.98 }}
       className="relative"
     >
-      {(user?.role === "SUPER_ADMIN" || user?.nickname === game.username) && (
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            handleDelete();
-          }}
-          className="absolute -top-4 -right-4 p-2 bg-indigo-800 rounded-full text-zinc-400 hover:text-red-500 transition-colors z-30"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+      {(user?.role === "SUPER_ADMIN" || user?.nickname === game.username) &&
+        isDelete && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleDelete();
+            }}
+            className="absolute -top-4 -right-4 p-2 bg-indigo-800 rounded-full text-zinc-400 hover:text-red-500 transition-colors z-30"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-          </svg>
-        </button>
-      )}
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        )}
       <Link
         href={`/game/tournamentGame/${game.id}`}
         className="group block relative overflow-hidden rounded-2xl transition-all duration-300"

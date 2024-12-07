@@ -73,6 +73,7 @@ export default function TournamentGameListSection({
         {data?.pages.map((page, pageIndex) =>
           page.games.map((game, index) => (
             <TournamentGameCard
+              isDelete
               key={game.id}
               game={game}
               delay={0.1 * (pageIndex * page.games.length + index)} // 순차적으로 딜레이 증가
