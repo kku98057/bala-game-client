@@ -35,3 +35,6 @@ body {
   background: theme("colors.zinc.900");
   transform-origin: 50% 50%;
 }
+.swiper-pagination-bullet-active {
+  background: rgba(129, 140, 248, 1) !important;
+}

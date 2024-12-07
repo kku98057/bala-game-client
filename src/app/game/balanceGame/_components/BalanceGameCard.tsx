@@ -12,10 +12,13 @@ import { UserProps } from "@/app/types/UserType";
 import { useAuthStore } from "@/app/store";
 interface BalanceGameCardProps {
   game: BalanceGameListProps;
-  delay: number;
+  delay?: number;
 }
 
-export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
+export default function BalanceGameCard({
+  game,
+  delay = 0,
+}: BalanceGameCardProps) {
   const gameId = game.id;
   const { user, setUser } = useAuthStore((state) => state);
   const queryClient = useQueryClient();
