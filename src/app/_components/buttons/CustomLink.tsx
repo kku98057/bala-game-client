@@ -50,7 +50,7 @@ export default function CustomLink({
   iconPosition = "left",
 }: CustomLinkProps) {
   const baseStyles =
-    "group relative px-8 py-4 rounded-xl text-white font-semibold transition-all duration-200 w-full sm:w-auto overflow-hidden";
+    "group relative px-4 sm:px-8 py-2 sm:py-4 rounded-lg sm:rounded-xl text-white font-semibold transition-all duration-200 w-full sm:w-auto overflow-hidden text-sm sm:text-base";
 
   const variants = {
     primary: {
@@ -70,13 +70,13 @@ export default function CustomLink({
       href={href}
       className={`${baseStyles} ${selectedVariant.background} ${className}`}
     >
-      <span className="flex items-center justify-center gap-2 relative z-10 whitespace-nowrap">
+      <span className="flex items-center justify-center gap-1.5 sm:gap-2 relative z-10 whitespace-nowrap">
         {icon && iconPosition === "left" && icons[icon]}
         {children}
         {icon && iconPosition === "right" && icons[icon]}
       </span>
       <div
-        className={`absolute inset-0 rounded-xl border-2 ${selectedVariant.border} opacity-0 group-hover:opacity-100 transition-opacity duration-200`}
+        className={`absolute inset-0 rounded-lg sm:rounded-xl border-2 ${selectedVariant.border} opacity-0 group-hover:opacity-100 transition-opacity duration-200`}
       />
     </Link>
   );
