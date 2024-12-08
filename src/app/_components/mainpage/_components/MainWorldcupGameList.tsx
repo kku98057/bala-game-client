@@ -76,7 +76,7 @@ export default function MainWorldcupGameList() {
         </Link>
       </div>
 
-      <div className="relative ">
+      <div className="relative pb-4">
         <Swiper {...swiperConfig} className="!pb-[40px] !pt-[10px]">
           {isLoading
             ? Array.from({ length: 3 }).map((_, index) => (
