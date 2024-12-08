@@ -38,10 +38,12 @@ const balanceGame = {
   lists: ({
     limit,
     sort,
+    period,
   }: {
     limit: number;
     sort: "latest" | "popular" | "comments";
-  }) => [...balanceGame.all(), { limit, sort }] as const,
+    period: "all" | "weekly" | "monthly";
+  }) => [...balanceGame.all(), { limit, sort, period }] as const,
   list: (id: number) => [...balanceGame.all(), { id }] as const,
   participantCount: (id: number) =>
     [...balanceGame.all(), "participantCount", { id }] as const,

@@ -16,8 +16,18 @@ import Link from "next/link";
 export default function BalanceGameList() {
   const limit = 5;
   const { data, isLoading } = useQuery<BalanceGameListResponse>({
-    queryKey: QUERYKEYS.balanceGame.lists({ limit, sort: "popular" }),
-    queryFn: () => getBalanceGameListData({ limit, sort: "popular", page: 1 }),
+    queryKey: QUERYKEYS.balanceGame.lists({
+      limit,
+      sort: "popular",
+      period: "all",
+    }),
+    queryFn: () =>
+      getBalanceGameListData({
+        limit,
+        sort: "popular",
+        page: 1,
+        period: "all",
+      }),
   });
 
   return (
