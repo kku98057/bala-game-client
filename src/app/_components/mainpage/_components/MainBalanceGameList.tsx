@@ -1,37 +1,54 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import Container from "../../Container";
-import { motion } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+import { BalanceGameCardSkeleton } from "@/app/game/balanceGame/_components/BalanceGameCard";
+import Section from "../../Section";
 import { QUERYKEYS } from "@/queryKeys";
 import getBalanceGameListData from "@/app/game/balanceGame/_lib/getBalanceGameListData";
 import { BalanceGameListResponse } from "@/app/types/balanceGameType";
 import BalanceGameCard from "@/app/game/balanceGame/_components/BalanceGameCard";
-import Section from "../../Section";
-// Swiper 스타일 import
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import Loading from "../../Loading";
+import Link from "next/link";
+
 export default function BalanceGameList() {
   const limit = 5;
   const { data, isLoading } = useQuery<BalanceGameListResponse>({
     queryKey: QUERYKEYS.balanceGame.lists({ limit, sort: "popular" }),
     queryFn: () => getBalanceGameListData({ limit, sort: "popular", page: 1 }),
   });
+
   return (
     <Section variant="secondary">
-      <h2 className="text-3xl font-bold text-white mb-12 text-left ">
-        인기 밸런스게임
-      </h2>
+      <div className="flex items-center justify-between mb-12">
+        <h2 className="text-3xl font-bold text-white text-left">
+          인기 밸런스게임
+        </h2>
+        <Link
+          href="/game/balanceGame"
+          className="inline-flex items-center gap-1 px-4 py-2 text-sm text-zinc-400 hover:text-white transition-colors"
+        >
+          더보기
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </Link>
+      </div>
 
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <div className="relative pb-12 ">
-          {" "}
-          {/* 페이지네이션을 위한 여백 */}
+      <div className="relative pb-12">
+        {isLoading ? (
           <Swiper
             modules={[Pagination, Autoplay]}
             spaceBetween={30}
@@ -43,7 +60,30 @@ export default function BalanceGameList() {
               delay: 3000,
               disableOnInteraction: false,
             }}
-            className="!pb-[40px]" // 클래스 이름 변경
+            className="!pb-[40px]"
+          >
+            {Array.from({ length: 3 }).map((_, index) => (
+              <SwiperSlide
+                key={`밸런스게임스켈레톤_${index}`}
+                className="py-[10px] max-w-[478px] mr-[30px]"
+              >
+                <BalanceGameCardSkeleton />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <Swiper
+            modules={[Pagination, Autoplay]}
+            spaceBetween={30}
+            slidesPerView={"auto"}
+            pagination={{
+              clickable: true,
+            }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            className="!pb-[40px]"
           >
             {data?.games.map((game) => (
               <SwiperSlide key={game.id} className="py-[10px] max-w-[478px]">
@@ -51,8 +91,8 @@ export default function BalanceGameList() {
               </SwiperSlide>
             ))}
           </Swiper>
-        </div>
-      )}
+        )}
+      </div>
     </Section>
   );
 }

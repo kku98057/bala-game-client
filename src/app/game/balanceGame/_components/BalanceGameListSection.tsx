@@ -60,7 +60,7 @@ export default function BalanceGameListSection({ limit }: { limit: number }) {
           icon="arrow"
           iconPosition="right"
         >
-          게임 목록
+          게임 카테고리
         </CustomLink>
       </TitleSection>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

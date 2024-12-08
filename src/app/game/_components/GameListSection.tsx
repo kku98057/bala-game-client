@@ -39,7 +39,7 @@ export default function GameListSection({ limit }: { limit: number }) {
   ];
   return (
     <Section className="pb-10">
-      <TitleSection title="게임" />
+      <TitleSection title="게임" subTitle="카테고리" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
         {list.map((data, index) => (
           <GameCard
