@@ -54,7 +54,7 @@ export default function CustomLink({
 
   const variants = {
     primary: {
-      background: "bg-indigo-600 hover:bg-indigo-700",
+      background: "bg-indigo-500 hover:bg-indigo-700",
       border: "border-indigo-400",
     },
     secondary: {

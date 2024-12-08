@@ -16,6 +16,47 @@ interface BalanceGameCardProps {
   isDelete?: boolean;
 }
 
+export const BalanceGameCardSkeleton = () => {
+  return (
+    <div className="bg-zinc-800/50 rounded-2xl overflow-hidden border border-zinc-700">
+      <div className="p-6 relative overflow-hidden">
+        {/* 제목 스켈레톤 */}
+        <div className="mb-3 flex items-center gap-2">
+          <div className="h-6 w-20 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-6 w-48 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+        </div>
+
+        {/* 작성자 정보 스켈레톤 */}
+        <div className="flex items-center justify-between text-sm mb-4">
+          <div className="h-4 w-24 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-4 w-20 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+        </div>
+
+        {/* 통계 정보 스켈레톤 */}
+        <div className="flex items-center gap-6 text-sm">
+          <div className="h-4 w-20 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-4 w-16 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-4 w-16 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function BalanceGameCard({
   game,
   delay = 0,

@@ -56,8 +56,8 @@ const RankBadge = ({ rank }: { rank: number }) => {
 
 const RankingSkeleton = () => {
   return (
-    <div className="bg-zinc-800/30 rounded-lg divide-y divide-zinc-700/50">
-      {[...Array(10)].map((_, index) => (
+    <div className="bg-zinc-800/30 rounded-lg divide-y divide-zinc-700/50 flex flex-col gap-[20px]">
+      {Array.from({ length: 3 }).map((_, index) => (
         <div
           key={index}
           className="flex items-center gap-4 p-4 relative overflow-hidden"
@@ -116,7 +116,7 @@ export default function MainRanking() {
     activeTab === "BALANCE" ? balanceRanking : tournamentRanking;
 
   return (
-    <Section>
+    <Section className="pb-20">
       <div className="flex items-center justify-between mb-12 ">
         <h2 className="text-3xl font-bold text-white text-left ">
           실시간 랭킹

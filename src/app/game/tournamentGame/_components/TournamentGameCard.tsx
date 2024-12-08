@@ -199,3 +199,57 @@ export default function TournamentGameCard({
     </motion.div>
   );
 }
+
+export const TournamentGameCardSkeleton = () => {
+  return (
+    <div className="bg-zinc-800/50 rounded-2xl overflow-hidden border border-zinc-700">
+      {/* VS 섹션 스켈레톤 */}
+      <div className="flex relative items-center justify-center p-4 bg-zinc-800/50 rounded-xl">
+        <div className="relative flex-1 aspect-[1/1] rounded-lg rounded-tr-none rounded-br-none overflow-hidden bg-zinc-700/50">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+        </div>
+        <span className="absolute text-[24px] p-2 block rounded-full bg-indigo-800/80 z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-indigo-400">
+          VS
+        </span>
+        <div className="relative flex-1 aspect-[1/1] rounded-lg rounded-tl-none rounded-bl-none overflow-hidden bg-zinc-700/50">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+        </div>
+      </div>
+
+      {/* 컨텐츠 스켈레톤 */}
+      <div className="relative p-6 text-white">
+        {/* 타이틀 섹션 스켈레톤 */}
+        <div className="mb-2 flex items-center gap-2">
+          <div className="h-6 w-16 bg-zinc-700/50 rounded-full relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-6 w-48 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+        </div>
+
+        {/* 메타 정보 스켈레톤 */}
+        <div className="flex items-center justify-between text-sm mb-2">
+          <div className="h-4 w-24 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-4 w-20 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+        </div>
+
+        {/* 참여자 수 & 댓글 수 스켈레톤 */}
+        <div className="flex items-center gap-2">
+          <div className="h-4 w-24 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-4 w-16 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+        </div>
+      </div>
+
+      {/* 테두리 효과 */}
+    </div>
+  );
+};
