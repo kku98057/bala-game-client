@@ -8,6 +8,7 @@ import WhyBalansomeSection from "./_components/mainpage/WhyBalansomeSection";
 import { DEFAULT_METADATA } from "./enum";
 import MainBalanceGameSection from "./_components/mainpage/MainBalanceGameSection";
 import MainWordcupGameSection from "./_components/mainpage/MainWordcupGameSection";
+import MainRanking from "./_components/mainpage/MainRanking";
 
 export default function Home() {
   return (
@@ -36,7 +37,8 @@ export default function Home() {
         {/* <GameUseCaseSection /> */}
         <MainBalanceGameSection />
         <MainWordcupGameSection />
-        <WhyBalansomeSection />
+        {/* <WhyBalansomeSection /> */}
+        <MainRanking />
         <Footer />
       </main>
     </>

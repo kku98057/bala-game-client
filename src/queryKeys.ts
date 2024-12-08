@@ -61,10 +61,15 @@ const profile = {
   games: ({ gameType }: { gameType: "BALANCE" | "TOURNAMENT" }) =>
     [...profile.all(), "games", { gameType }] as const,
 };
+const rankings = {
+  balance: () => ["ranking", "balance"] as const,
+  tournament: () => ["ranking", "tournament"] as const,
+};
 export const QUERYKEYS = {
   profile,
   tournamentGame,
   balanceGame,
   notice,
+  rankings,
   user,
 };
