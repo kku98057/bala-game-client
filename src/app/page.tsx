@@ -33,12 +33,9 @@ export default function Home() {
       />
 
       <main className="bg-gradient-to-b from-zinc-900 to-zinc-800 min-h-dvh ">
-        {/* <HeroSection /> */}
-        {/* <GameUseCaseSection /> */}
+        <MainRanking />
         <MainBalanceGameSection />
         <MainWordcupGameSection />
-        {/* <WhyBalansomeSection /> */}
-        <MainRanking />
         <Footer />
       </main>
     </>

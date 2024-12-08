@@ -8,6 +8,20 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        sweep: {
+          "0%": {
+            transform: "translateX(-100%)",
+          },
+          "100%": {
+            transform: "translateX(100%)",
+          },
+        },
+      },
+      animation: {
+        sweep: "sweep 1s ease-in-out infinite",
+      },
+
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
