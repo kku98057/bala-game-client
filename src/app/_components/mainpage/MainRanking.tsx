@@ -116,15 +116,15 @@ export default function MainRanking() {
     activeTab === "BALANCE" ? balanceRanking : tournamentRanking;
 
   return (
-    <Section className="pb-20">
-      <div className="flex items-center justify-between mb-12 ">
-        <h2 className="text-3xl font-bold text-white text-left ">
+    <Section className="pb-10 sm:pb-20">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 gap-4 sm:gap-0">
+        <h2 className="text-xl sm:text-3xl font-bold text-white">
           실시간 랭킹
         </h2>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto">
           <button
             onClick={() => setActiveTab("BALANCE")}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all
+            className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition-all
               ${
                 activeTab === "BALANCE"
                   ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
@@ -135,7 +135,7 @@ export default function MainRanking() {
           </button>
           <button
             onClick={() => setActiveTab("TOURNAMENT")}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all
+            className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition-all
               ${
                 activeTab === "TOURNAMENT"
                   ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
@@ -154,7 +154,7 @@ export default function MainRanking() {
           {currentRanking?.ranking.map((user: any) => (
             <div
               key={user.userId}
-              className={`flex items-center gap-4 p-4 transition-colors
+              className={`flex items-center gap-2 sm:gap-4 p-3 sm:p-4 transition-colors
                 ${
                   user.rank <= 3
                     ? "bg-zinc-800/50 hover:bg-zinc-700/50"
@@ -162,7 +162,7 @@ export default function MainRanking() {
                 }`}
             >
               <RankBadge rank={user.rank} />
-              <div className="relative w-10 h-10 flex-shrink-0">
+              <div className="relative w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
                 {user.profileImageUrl ? (
                   <Image
                     src={user.profileImageUrl}
@@ -172,18 +172,18 @@ export default function MainRanking() {
                   />
                 ) : (
                   <div className="w-full h-full rounded-full bg-zinc-700 flex items-center justify-center">
-                    <span className="text-lg font-bold text-zinc-400">
+                    <span className="text-base sm:text-lg font-bold text-zinc-400">
                       {user.nickname.charAt(0)}
                     </span>
                   </div>
                 )}
               </div>
-              <div className="flex-1">
-                <p className="font-medium text-white flex items-center gap-2">
-                  {user.nickname}
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-white flex items-center gap-2 text-sm sm:text-base">
+                  <span className="truncate">{user.nickname}</span>
                   {user.rank <= 3 && (
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full 
+                      className={`text-xs px-2 py-0.5 rounded-full whitespace-nowrap
                         ${
                           user.rank === 1
                             ? "bg-yellow-400/20 text-yellow-400"
@@ -200,7 +200,7 @@ export default function MainRanking() {
                     </span>
                   )}
                 </p>
-                <p className="text-sm text-zinc-400">
+                <p className="text-xs sm:text-sm text-zinc-400 truncate">
                   총 {user.totalParticipants.toLocaleString()}명 참여
                 </p>
               </div>

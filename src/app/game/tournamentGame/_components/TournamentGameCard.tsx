@@ -13,12 +13,14 @@ interface TournamentGameCardProps {
   game: TournamentList;
   delay?: number;
   isDelete?: boolean;
+  rank?: number;
 }
 
 export default function TournamentGameCard({
   game,
   delay = 0,
   isDelete = false,
+  rank,
 }: TournamentGameCardProps) {
   const gameId = game.id;
   const { user, setUser } = useAuthStore((state) => state);
@@ -53,6 +55,52 @@ export default function TournamentGameCard({
       whileTap={{ scale: 0.98 }}
       className="relative"
     >
+      {rank && rank <= 3 && (
+        <div className="absolute -top-3 right-4 z-30">
+          {rank === 1 && (
+            <div className="flex items-center justify-center w-[80px] h-[32px] rounded-full bg-gradient-to-r from-yellow-300 via-yellow-500 to-amber-500 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 group">
+              <div className="flex items-center gap-1">
+                <svg
+                  className="w-4 h-4 text-yellow-200 animate-pulse"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 .587l3.668 7.431 8.332 1.21-6.001 5.85 1.416 8.265L12 18.925l-7.415 3.918 1.416-8.265-6.001-5.85 8.332-1.21z" />
+                </svg>
+                <span className="font-bold">BEST</span>
+              </div>
+            </div>
+          )}
+          {rank === 2 && (
+            <div className="flex items-center justify-center w-[80px] h-[32px] rounded-full bg-gradient-to-r from-zinc-300 via-zinc-400 to-zinc-500 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200">
+              <div className="flex items-center gap-1">
+                <svg
+                  className="w-4 h-4 text-zinc-200"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28z" />
+                </svg>
+                <span className="font-bold">TOP 2</span>
+              </div>
+            </div>
+          )}
+          {rank === 3 && (
+            <div className="flex items-center justify-center w-[80px] h-[32px] rounded-full bg-gradient-to-r from-amber-700 via-amber-800 to-amber-900 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200">
+              <div className="flex items-center gap-1">
+                <svg
+                  className="w-4 h-4 text-amber-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28z" />
+                </svg>
+                <span className="font-bold">TOP 3</span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       {(user?.role === "SUPER_ADMIN" || user?.nickname === game.username) &&
         isDelete && (
           <button

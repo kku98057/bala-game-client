@@ -10,9 +10,18 @@ import getTournamenGameListData from "@/app/game/tournamentGame/_lib/getTourname
 export default async function MainWordcupGameSection() {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: QUERYKEYS.tournamentGame.lists({ limit: 4, sort: "popular" }),
+    queryKey: QUERYKEYS.tournamentGame.lists({
+      limit: 4,
+      sort: "popular",
+      period: "all",
+    }),
     queryFn: () =>
-      getTournamenGameListData({ limit: 4, sort: "popular", page: 1 }),
+      getTournamenGameListData({
+        limit: 4,
+        sort: "popular",
+        period: "all",
+        page: 1,
+      }),
   });
   const dehydratedState = dehydrate(queryClient);
   return (

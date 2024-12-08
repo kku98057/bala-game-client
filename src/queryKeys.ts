@@ -11,10 +11,12 @@ const tournamentGame = {
   lists: ({
     limit,
     sort,
+    period,
   }: {
     limit: number;
     sort: "latest" | "popular" | "comments";
-  }) => [...tournamentGame.all(), { limit, sort }] as const,
+    period: "all" | "weekly" | "monthly";
+  }) => [...tournamentGame.all(), { limit, sort, period }] as const,
   list: (id: number) => [...tournamentGame.all(), { id }] as const,
   participantCount: (id: number) =>
     [...tournamentGame.all(), "participantCount", { id }] as const,

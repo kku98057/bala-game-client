@@ -8,9 +8,18 @@ import getBalanceGameListData from "@/app/game/balanceGame/_lib/getBalanceGameLi
 export default async function MainBalanceGameSection() {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: QUERYKEYS.balanceGame.lists({ limit: 4, sort: "popular" }),
+    queryKey: QUERYKEYS.balanceGame.lists({
+      limit: 4,
+      sort: "popular",
+      period: "all",
+    }),
     queryFn: () =>
-      getBalanceGameListData({ limit: 4, sort: "popular", page: 1 }),
+      getBalanceGameListData({
+        limit: 4,
+        sort: "popular",
+        period: "all",
+        page: 1,
+      }),
   });
   const dehydratedState = dehydrate(queryClient);
   return (

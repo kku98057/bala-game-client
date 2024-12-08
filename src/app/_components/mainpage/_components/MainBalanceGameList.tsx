@@ -12,9 +12,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Link from "next/link";
+import { SwiperOptions } from "swiper/types";
 
-export default function BalanceGameList() {
+export default function MainBalanceGameList() {
   const limit = 5;
+
   const { data, isLoading } = useQuery<BalanceGameListResponse>({
     queryKey: QUERYKEYS.balanceGame.lists({
       limit,
@@ -25,15 +27,30 @@ export default function BalanceGameList() {
       getBalanceGameListData({
         limit,
         sort: "popular",
-        page: 1,
         period: "all",
+        page: 1,
       }),
   });
 
+  // Swiper 설정을 상수로 분리하여 재사용
+  const swiperConfig: SwiperOptions = {
+    modules: [Pagination, Autoplay],
+    spaceBetween: 30,
+    slidesPerView: "auto",
+    pagination: {
+      clickable: true,
+    },
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    },
+  };
+
   return (
     <Section variant="secondary">
-      <div className="flex items-center justify-between mb-12">
-        <h2 className="text-3xl font-bold text-white text-left">
+      <div className="flex items-center justify-between mb-0 sm:mb-6">
+        <h2 className="text-xl sm:text-3xl font-bold text-white">
           인기 밸런스게임
         </h2>
         <Link
@@ -57,51 +74,26 @@ export default function BalanceGameList() {
         </Link>
       </div>
 
-      <div className="relative pb-12">
-        {isLoading ? (
-          <Swiper
-            modules={[Pagination, Autoplay]}
-            spaceBetween={30}
-            slidesPerView={"auto"}
-            pagination={{
-              clickable: true,
-            }}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-            }}
-            className="!pb-[40px]"
-          >
-            {Array.from({ length: 3 }).map((_, index) => (
-              <SwiperSlide
-                key={`밸런스게임스켈레톤_${index}`}
-                className="py-[10px] max-w-[478px] mr-[30px]"
-              >
-                <BalanceGameCardSkeleton />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <Swiper
-            modules={[Pagination, Autoplay]}
-            spaceBetween={30}
-            slidesPerView={"auto"}
-            pagination={{
-              clickable: true,
-            }}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-            }}
-            className="!pb-[40px]"
-          >
-            {data?.games.map((game) => (
-              <SwiperSlide key={game.id} className="py-[10px] max-w-[478px]">
-                <BalanceGameCard game={game} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        )}
+      <div className="relative pb-2">
+        <Swiper {...swiperConfig} className="!pb-[40px] !pt-[10px]">
+          {isLoading
+            ? Array.from({ length: 3 }).map((_, index) => (
+                <SwiperSlide
+                  key={`밸런스게임스켈레톤_${index}`}
+                  className="py-[10px] max-w-[478px] mr-[30px]"
+                >
+                  <BalanceGameCardSkeleton />
+                </SwiperSlide>
+              ))
+            : data?.games.map((game, index) => (
+                <SwiperSlide
+                  key={`밸런스게임_${game.id}`}
+                  className="py-[10px] max-w-[478px]"
+                >
+                  <BalanceGameCard game={game} rank={index + 1} />
+                </SwiperSlide>
+              ))}
+        </Swiper>
       </div>
     </Section>
   );

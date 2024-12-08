@@ -20,9 +20,14 @@ export default function TournamentGameListSection({
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfiniteQuery<TournamentListResponse>(
-      QUERYKEYS.tournamentGame.lists({ limit, sort: "latest" }),
+      QUERYKEYS.tournamentGame.lists({ limit, sort: "latest", period: "all" }),
       ({ pageParam = 1 }) =>
-        getTournamenGameListData({ page: pageParam, limit, sort: "latest" }),
+        getTournamenGameListData({
+          page: pageParam,
+          limit,
+          sort: "latest",
+          period: "all",
+        }),
       {
         getNextPageParam: (lastPage) => {
           if (!lastPage?.games) return undefined;
