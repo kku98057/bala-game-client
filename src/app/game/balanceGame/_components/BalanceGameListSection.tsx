@@ -16,9 +16,14 @@ export default function BalanceGameListSection({ limit }: { limit: number }) {
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfiniteQuery<BalanceGameListResponse>(
-      QUERYKEYS.balanceGame.lists({ limit, sort: "latest" }),
+      QUERYKEYS.balanceGame.lists({ limit, sort: "latest", period: "all" }),
       ({ pageParam = 1 }) =>
-        getBalanceGameListData({ page: pageParam, limit, sort: "latest" }),
+        getBalanceGameListData({
+          page: pageParam,
+          limit,
+          sort: "latest",
+          period: "all",
+        }),
       {
         getNextPageParam: (lastPage) => {
           if (!lastPage?.games) return undefined;

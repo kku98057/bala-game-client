@@ -15,7 +15,7 @@ import Loading from "../_components/Loading";
 export default function ProfileSection() {
   return (
     <Section>
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-4xl mx-auto space-y-8 pb-4">
         <ProfileInfo />
         <ProfileGameList />
       </div>
