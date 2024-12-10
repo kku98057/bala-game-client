@@ -11,6 +11,7 @@ import { getNoticeDetail } from "./_lib/getNoticeDetailData";
 import { deleteNotice } from "./_lib/deleteNotice";
 import { QUERYKEYS } from "@/queryKeys";
 import { useAuthStore } from "@/app/store";
+import Loading from "@/app/_components/Loading";
 
 export default function NoticeDetailPage({
   params,
@@ -69,13 +70,8 @@ export default function NoticeDetailPage({
     //   alert("공지사항 삭제에 실패했습니다.");
     // }
   };
-
   if (isLoading) {
-    return (
-      <div className="min-h-dvh bg-zinc-900 flex items-center justify-center">
-        <div className="text-white">로딩 중...</div>
-      </div>
-    );
+    return <Loading overlay />;
   }
 
   if (!notice) {

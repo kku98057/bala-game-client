@@ -1,10 +1,6 @@
 "use client";
 import { QUERYKEYS } from "@/queryKeys";
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import CustomLink from "@/app/_components/buttons/CustomLink";
@@ -13,15 +9,21 @@ import BalanceGameCard from "./BalanceGameCard";
 import getBalanceGameListData from "../_lib/getBalanceGameListData";
 import { BalanceGameListResponse } from "@/app/types/balanceGameType";
 import TitleSection from "@/app/_components/TitleSection";
-import { deleteBalaceGameData } from "../_lib/deleteBalaceGameData";
+import Loading from "@/app/_components/Loading";
 
 export default function BalanceGameListSection({ limit }: { limit: number }) {
   const observerRef = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfiniteQuery<BalanceGameListResponse>(
-      QUERYKEYS.balanceGame.lists({ limit }),
-      ({ pageParam = 1 }) => getBalanceGameListData({ page: pageParam, limit }),
+      QUERYKEYS.balanceGame.lists({ limit, sort: "latest", period: "all" }),
+      ({ pageParam = 1 }) =>
+        getBalanceGameListData({
+          page: pageParam,
+          limit,
+          sort: "latest",
+          period: "all",
+        }),
       {
         getNextPageParam: (lastPage) => {
           if (!lastPage?.games) return undefined;
@@ -43,13 +45,8 @@ export default function BalanceGameListSection({ limit }: { limit: number }) {
     ref: observerRef,
     callback: onIntersect,
   });
-
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <p className="text-lg text-gray-600">Loading...</p>
-      </div>
-    );
+    return <Loading overlay />;
   }
   return (
     <Section>
@@ -68,13 +65,14 @@ export default function BalanceGameListSection({ limit }: { limit: number }) {
           icon="arrow"
           iconPosition="right"
         >
-          게임 목록
+          게임 카테고리
         </CustomLink>
       </TitleSection>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {data?.pages.map((page, pageIndex) =>
           page.games.map((game, index) => (
             <BalanceGameCard
+              isDelete
               key={game.id}
               game={game}
               delay={0.1 * (pageIndex * page.games.length + index)} // 순차적으로 딜레이 증가

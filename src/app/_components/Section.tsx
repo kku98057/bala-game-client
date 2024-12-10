@@ -16,7 +16,7 @@ export default function Section({
       padding: "pt-24",
     },
     secondary: {
-      padding: "pt-0",
+      padding: "pt-4 md:pt-20 lg:pt-24",
     },
   };
   return (

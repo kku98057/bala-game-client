@@ -9,6 +9,7 @@ import CustomLink from "@/app/_components/buttons/CustomLink";
 import Section from "@/app/_components/Section";
 import TournamentGameCard from "./TournamentGameCard";
 import TitleSection from "@/app/_components/TitleSection";
+import Loading from "@/app/_components/Loading";
 
 export default function TournamentGameListSection({
   limit,
@@ -19,9 +20,14 @@ export default function TournamentGameListSection({
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfiniteQuery<TournamentListResponse>(
-      QUERYKEYS.tournamentGame.lists({ limit }),
+      QUERYKEYS.tournamentGame.lists({ limit, sort: "latest", period: "all" }),
       ({ pageParam = 1 }) =>
-        getTournamenGameListData({ page: pageParam, limit }),
+        getTournamenGameListData({
+          page: pageParam,
+          limit,
+          sort: "latest",
+          period: "all",
+        }),
       {
         getNextPageParam: (lastPage) => {
           if (!lastPage?.games) return undefined;
@@ -44,11 +50,7 @@ export default function TournamentGameListSection({
     callback: onIntersect,
   });
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <div className="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <Loading overlay />;
   }
   return (
     <Section>
@@ -68,7 +70,7 @@ export default function TournamentGameListSection({
           iconPosition="right"
           className="w-full sm:w-auto justify-center text-center px-6 py-3"
         >
-          게임 목록
+          게임 카테고리
         </CustomLink>
       </TitleSection>
 
@@ -76,6 +78,7 @@ export default function TournamentGameListSection({
         {data?.pages.map((page, pageIndex) =>
           page.games.map((game, index) => (
             <TournamentGameCard
+              isDelete
               key={game.id}
               game={game}
               delay={0.1 * (pageIndex * page.games.length + index)} // 순차적으로 딜레이 증가

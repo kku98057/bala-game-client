@@ -12,10 +12,58 @@ import { UserProps } from "@/app/types/UserType";
 import { useAuthStore } from "@/app/store";
 interface BalanceGameCardProps {
   game: BalanceGameListProps;
-  delay: number;
+  delay?: number;
+  isDelete?: boolean;
+  rank?: number;
 }
 
-export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
+export const BalanceGameCardSkeleton = () => {
+  return (
+    <div className="bg-zinc-800/50 rounded-2xl overflow-hidden border border-zinc-700">
+      <div className="p-6 relative overflow-hidden">
+        {/* 제목 스켈레톤 */}
+        <div className="mb-3 flex items-center gap-2">
+          <div className="h-6 w-20 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-6 w-48 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+        </div>
+
+        {/* 작성자 정보 스켈레톤 */}
+        <div className="flex items-center justify-between text-sm mb-4">
+          <div className="h-4 w-24 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-4 w-20 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+        </div>
+
+        {/* 통계 정보 스켈레톤 */}
+        <div className="flex items-center gap-6 text-sm">
+          <div className="h-4 w-20 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-4 w-16 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+          <div className="h-4 w-16 bg-zinc-700/50 rounded relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-600/50 to-transparent animate-sweep" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function BalanceGameCard({
+  game,
+  delay = 0,
+  isDelete = false,
+  rank,
+}: BalanceGameCardProps) {
   const gameId = game.id;
   const { user, setUser } = useAuthStore((state) => state);
   const queryClient = useQueryClient();
@@ -48,29 +96,76 @@ export default function BalanceGameCard({ game, delay }: BalanceGameCardProps) {
       whileTap={{ scale: 0.98 }}
       className="relative"
     >
-      {(user?.role === "SUPER_ADMIN" || user?.nickname === game.username) && (
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            handleDelete();
-          }}
-          className="absolute top-2 right-2 p-2 text-zinc-400 hover:text-red-500 transition-colors z-10"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-          </svg>
-        </button>
+      {rank && rank <= 3 && (
+        <div className="absolute -top-3 right-4 z-10">
+          {rank === 1 && (
+            <div className="flex items-center justify-center w-[80px] h-[32px] rounded-full bg-gradient-to-r from-yellow-300 via-yellow-500 to-amber-500 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 group">
+              <div className="flex items-center gap-1">
+                <svg
+                  className="w-4 h-4 text-yellow-200 animate-pulse"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 .587l3.668 7.431 8.332 1.21-6.001 5.85 1.416 8.265L12 18.925l-7.415 3.918 1.416-8.265-6.001-5.85 8.332-1.21z" />
+                </svg>
+                <span className="font-bold">BEST</span>
+              </div>
+            </div>
+          )}
+          {rank === 2 && (
+            <div className="flex items-center justify-center w-[80px] h-[32px] rounded-full bg-gradient-to-r from-zinc-300 via-zinc-400 to-zinc-500 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200">
+              <div className="flex items-center gap-1">
+                <svg
+                  className="w-4 h-4 text-zinc-200"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28z" />
+                </svg>
+                <span className="font-bold">TOP 2</span>
+              </div>
+            </div>
+          )}
+          {rank === 3 && (
+            <div className="flex items-center justify-center w-[80px] h-[32px] rounded-full bg-gradient-to-r from-amber-700 via-amber-800 to-amber-900 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200">
+              <div className="flex items-center gap-1">
+                <svg
+                  className="w-4 h-4 text-amber-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28z" />
+                </svg>
+                <span className="font-bold">TOP 3</span>
+              </div>
+            </div>
+          )}
+        </div>
       )}
+      {(user?.role === "SUPER_ADMIN" || user?.nickname === game.username) &&
+        isDelete && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleDelete();
+            }}
+            className="absolute top-2 right-2 p-2 text-zinc-400 hover:text-red-500 transition-colors z-10"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        )}
       <Link
         href={`/game/balanceGame/${game.id}`}
         className="group block bg-zinc-800/50 rounded-2xl overflow-hidden transition-all duration-300 hover:bg-zinc-700/50 border border-zinc-700"
