@@ -88,7 +88,7 @@ export default function ProfileGameList() {
               <Link
                 key={game.id}
                 href={`/game/${
-                  activeTab === "BALANCE" ? "balanceGame" : "tournament"
+                  activeTab === "BALANCE" ? "balanceGame" : "tournamentGame"
                 }/${game.id}`}
                 className="block bg-zinc-800/30 p-4 rounded-lg hover:bg-zinc-800/50 transition-all"
               >
