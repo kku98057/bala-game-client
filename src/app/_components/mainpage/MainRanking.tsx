@@ -1,46 +1,18 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Section from "../Section";
-import { useState } from "react";
 import Image from "next/image";
 import { QUERYKEYS } from "@/queryKeys";
 import { getBalanceGameRankingData } from "./_lib/getBalanceGameRankingData";
 import { getWorldcupGameRankingData } from "./_lib/getWorldcupGameRankingData";
 
 const RankBadge = ({ rank }: { rank: number }) => {
-  // SVG 크라운 아이콘들
   const crowns = {
-    1: (
-      <svg
-        className="w-6 h-6 text-yellow-400"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path d="M2.5 7.5L5 16.5H19L21.5 7.5L16.5 10.5L12 4.5L7.5 10.5L2.5 7.5Z" />
-        <path d="M5 16.5V18.5H19V16.5H5Z" />
-      </svg>
-    ),
-    2: (
-      <svg
-        className="w-6 h-6 text-zinc-400"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path d="M3 7.5L5.5 16.5H18.5L21 7.5L16.5 10.5L12 4.5L7.5 10.5L3 7.5Z" />
-        <path d="M5.5 16.5V18.5H18.5V16.5H5.5Z" />
-      </svg>
-    ),
-    3: (
-      <svg
-        className="w-6 h-6 text-amber-600"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path d="M3.5 7.5L6 16.5H18L20.5 7.5L16.5 10.5L12 4.5L7.5 10.5L3.5 7.5Z" />
-        <path d="M6 16.5V18.5H18V16.5H6Z" />
-      </svg>
-    ),
+    1: <span className="text-yellow-400">🥇</span>,
+    2: <span className="text-zinc-400">🥈</span>,
+    3: <span className="text-amber-600">🥉</span>,
   };
 
   return (
@@ -96,10 +68,18 @@ const RankingSkeleton = () => {
   );
 };
 
+// 애니메이션을 위한 CSS 추가
+const slideAnimation = {
+  enter: "transition-all duration-500 transform translate-y-0 opacity-100",
+  exit: "transition-all duration-500 transform -translate-y-full opacity-0",
+};
+
 export default function MainRanking() {
   const [activeTab, setActiveTab] = useState<"BALANCE" | "TOURNAMENT">(
     "BALANCE"
   );
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [currentRollingIndex, setCurrentRollingIndex] = useState(0);
 
   const { data: balanceRanking, isLoading: isBalanceLoading } = useQuery({
     queryKey: QUERYKEYS.rankings.balance(),
@@ -115,32 +95,44 @@ export default function MainRanking() {
   const currentRanking =
     activeTab === "BALANCE" ? balanceRanking : tournamentRanking;
 
+  useEffect(() => {
+    if (!isExpanded && currentRanking?.ranking.length) {
+      const interval = setInterval(() => {
+        setCurrentRollingIndex((prev) =>
+          prev === currentRanking.ranking.length - 1 ? 0 : prev + 1
+        );
+      }, 2000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isExpanded, currentRanking]);
+
   return (
     <Section className="pb-10 sm:pb-20">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 gap-4 sm:gap-0">
-        <h2 className="text-xl sm:text-3xl font-bold text-white">
-          실시간 랭킹
-        </h2>
+        <div className="flex items-center gap-4">
+          <h2 className="text-xl sm:text-3xl font-bold text-white">
+            실시간 랭킹
+          </h2>
+        </div>
         <div className="flex gap-2 w-full sm:w-auto">
           <button
             onClick={() => setActiveTab("BALANCE")}
-            className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition-all
-              ${
-                activeTab === "BALANCE"
-                  ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
-                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700/80"
-              }`}
+            className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+              activeTab === "BALANCE"
+                ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
+                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700/80"
+            }`}
           >
             밸런스 게임
           </button>
           <button
             onClick={() => setActiveTab("TOURNAMENT")}
-            className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition-all
-              ${
-                activeTab === "TOURNAMENT"
-                  ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
-                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700/80"
-              }`}
+            className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+              activeTab === "TOURNAMENT"
+                ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
+                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700/80"
+            }`}
           >
             이상형월드컵
           </button>
@@ -150,62 +142,138 @@ export default function MainRanking() {
       {isLoading ? (
         <RankingSkeleton />
       ) : (
-        <div className="bg-zinc-800/30 rounded-lg divide-y divide-zinc-700/50">
-          {currentRanking?.ranking.map((user: any) => (
-            <div
-              key={user.userId}
-              className={`flex items-center gap-2 sm:gap-4 p-3 sm:p-4 transition-colors
-                ${
-                  user.rank <= 3
-                    ? "bg-zinc-800/50 hover:bg-zinc-700/50"
-                    : "hover:bg-zinc-800/50"
-                }`}
-            >
-              <RankBadge rank={user.rank} />
-              <div className="relative w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
-                {user.profileImageUrl ? (
-                  <Image
-                    src={user.profileImageUrl}
-                    alt={user.nickname}
-                    fill
-                    className="rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full rounded-full bg-zinc-700 flex items-center justify-center">
-                    <span className="text-base sm:text-lg font-bold text-zinc-400">
-                      {user.nickname.charAt(0)}
-                    </span>
+        <div
+          className="bg-zinc-800/30 rounded-lg divide-y divide-zinc-700/50 relative overflow-hidden cursor-pointer group"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? (
+            // 펼쳐진 상태의 리스트
+            <>
+              {currentRanking?.ranking.slice(0, 10).map((user: any) => (
+                <div
+                  key={user.userId}
+                  className="flex items-center gap-2 sm:gap-4 p-3 sm:p-4 transition-colors hover:bg-zinc-800/50"
+                >
+                  <RankBadge rank={user.rank} />
+                  <div className="relative w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
+                    {user.profileImageUrl ? (
+                      <Image
+                        src={user.profileImageUrl}
+                        alt={user.nickname}
+                        fill
+                        className="rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full rounded-full bg-zinc-700 flex items-center justify-center">
+                        <span className="text-base sm:text-lg font-bold text-zinc-400">
+                          {user.nickname.charAt(0)}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-white flex items-center gap-2 text-sm sm:text-base">
+                      <span className="truncate">{user.nickname}</span>
+                    </p>
+                    <p className="text-xs sm:text-sm text-zinc-400 truncate">
+                      총 {user.totalParticipants.toLocaleString()}명 참여
+                    </p>
+                  </div>
+                </div>
+              ))}
+              <div className="flex justify-center p-2">
+                <div className="text-zinc-400 hover:text-white transition-colors">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 15l7-7 7 7"
+                    />
+                  </svg>
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-white flex items-center gap-2 text-sm sm:text-base">
-                  <span className="truncate">{user.nickname}</span>
-                  {user.rank <= 3 && (
-                    <span
-                      className={`text-xs px-2 py-0.5 rounded-full whitespace-nowrap
-                        ${
-                          user.rank === 1
-                            ? "bg-yellow-400/20 text-yellow-400"
-                            : user.rank === 2
-                            ? "bg-zinc-400/20 text-zinc-400"
-                            : "bg-amber-600/20 text-amber-600"
-                        }`}
-                    >
-                      {user.rank === 1
-                        ? "1st"
-                        : user.rank === 2
-                        ? "2nd"
-                        : "3rd"}
-                    </span>
-                  )}
-                </p>
-                <p className="text-xs sm:text-sm text-zinc-400 truncate">
-                  총 {user.totalParticipants.toLocaleString()}명 참여
-                </p>
+            </>
+          ) : (
+            <>
+              {/* 롤링되는 단일 아이템 */}
+              <div className="relative h-[72px] sm:h-[80px]">
+                <div
+                  key={currentRanking?.ranking[currentRollingIndex]?.userId}
+                  className={`absolute w-full ${slideAnimation.enter}`}
+                >
+                  <div className="flex items-center gap-2 sm:gap-4 p-3 sm:p-4 transition-colors hover:bg-zinc-800/50">
+                    <RankBadge
+                      rank={currentRanking?.ranking[currentRollingIndex]?.rank}
+                    />
+                    <div className="relative w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
+                      {currentRanking?.ranking[currentRollingIndex]
+                        ?.profileImageUrl ? (
+                        <Image
+                          src={
+                            currentRanking.ranking[currentRollingIndex]
+                              .profileImageUrl
+                          }
+                          alt={
+                            currentRanking.ranking[currentRollingIndex].nickname
+                          }
+                          fill
+                          className="rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full rounded-full bg-zinc-700 flex items-center justify-center">
+                          <span className="text-base sm:text-lg font-bold text-zinc-400">
+                            {currentRanking?.ranking[
+                              currentRollingIndex
+                            ]?.nickname.charAt(0)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-white flex items-center gap-2 text-sm sm:text-base">
+                        <span className="truncate">
+                          {
+                            currentRanking?.ranking[currentRollingIndex]
+                              ?.nickname
+                          }
+                        </span>
+                      </p>
+                      <p className="text-xs sm:text-sm text-zinc-400 truncate">
+                        총{" "}
+                        {currentRanking?.ranking[
+                          currentRollingIndex
+                        ]?.totalParticipants.toLocaleString()}
+                        명 참여
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+              <div className="flex justify-center p-2">
+                <div className="text-zinc-400 group-hover:text-white transition-colors">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       )}
     </Section>
