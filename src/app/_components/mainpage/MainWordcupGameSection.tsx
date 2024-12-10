@@ -1,10 +1,6 @@
-import { motion } from "framer-motion";
-import Container from "../Container";
 import { dehydrate, Hydrate, QueryClient } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
-import BalanceGameList from "./_components/MainBalanceGameList";
 import MainWorldcupGameList from "./_components/MainWorldcupGameList";
-import { getTournamenGameData } from "@/app/game/tournamentGame/[gameId]/_lib/getTournamenGameData";
 import getTournamenGameListData from "@/app/game/tournamentGame/_lib/getTournamenGameListData";
 
 export default async function MainWordcupGameSection() {
