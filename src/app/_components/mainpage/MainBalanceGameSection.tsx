@@ -1,9 +1,7 @@
-import { motion } from "framer-motion";
-import Container from "../Container";
 import { dehydrate, Hydrate, QueryClient } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/queryKeys";
-import BalanceGameList from "./_components/MainBalanceGameList";
 import getBalanceGameListData from "@/app/game/balanceGame/_lib/getBalanceGameListData";
+import MainBalanceGameList from "./_components/MainBalanceGameList";
 
 export default async function MainBalanceGameSection() {
   const queryClient = new QueryClient();
@@ -24,7 +22,7 @@ export default async function MainBalanceGameSection() {
   const dehydratedState = dehydrate(queryClient);
   return (
     <Hydrate state={dehydratedState}>
-      <BalanceGameList />
+      <MainBalanceGameList />
     </Hydrate>
   );
 }
