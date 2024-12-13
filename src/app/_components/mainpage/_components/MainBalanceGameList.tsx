@@ -13,9 +13,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Link from "next/link";
 import { SwiperOptions } from "swiper/types";
-import GoogleAdSenseComponent from "../../adsense/GoogleAdSenseComponent";
-
-import GoogleAdSenseComponent2 from "../../adsense/GoogleAdSenseComponent2";
 
 export default function MainBalanceGameList() {
   const limit = 5;
@@ -53,7 +50,6 @@ export default function MainBalanceGameList() {
   return (
     <>
       <Section variant="secondary">
-        <GoogleAdSenseComponent2 />
         <div className="flex items-center justify-between mb-0 sm:mb-6">
           <h2 className="text-xl sm:text-3xl font-bold text-white">
             인기 밸런스게임

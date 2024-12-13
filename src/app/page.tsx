@@ -9,6 +9,7 @@ import { DEFAULT_METADATA } from "./enum";
 import MainBalanceGameSection from "./_components/mainpage/MainBalanceGameSection";
 import MainWordcupGameSection from "./_components/mainpage/MainWordcupGameSection";
 import MainRanking from "./_components/mainpage/MainRanking";
+import AdsenceSection from "./_components/adsense/AdsenceSection";
 
 export default function Home() {
   return (
@@ -34,8 +35,11 @@ export default function Home() {
 
       <main className="bg-gradient-to-b from-zinc-900 to-zinc-800 min-h-dvh ">
         <MainRanking />
+        <AdsenceSection />
         <MainBalanceGameSection />
+        <AdsenceSection />
         <MainWordcupGameSection />
+        <AdsenceSection />
         <Footer />
       </main>
     </>
