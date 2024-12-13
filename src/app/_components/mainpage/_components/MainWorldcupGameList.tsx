@@ -52,7 +52,16 @@ export default function MainWorldcupGameList() {
 
   return (
     <Section variant="secondary">
-      <GoogleAdSenseComponent2 />
+      <div className="w-full flex items-center justify-center">
+        <ins
+          className="adsbygoogle example_responsive_1"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-3604338976078798"
+          data-ad-slot="6734164461"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+      </div>
       <div className="flex items-center justify-between mb-0 ">
         <h2 className="text-xl sm:text-3xl font-bold text-white">
           인기 이상형월드컵
