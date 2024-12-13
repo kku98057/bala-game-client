@@ -14,6 +14,7 @@ import { SwiperOptions } from "swiper/types";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import GoogleAdSenseComponent2 from "../../adsense/GoogleAdSenseComponent2";
 
 export default function MainWorldcupGameList() {
   const limit = 5;
@@ -51,6 +52,7 @@ export default function MainWorldcupGameList() {
 
   return (
     <Section variant="secondary">
+      <GoogleAdSenseComponent2 />
       <div className="flex items-center justify-between mb-0 ">
         <h2 className="text-xl sm:text-3xl font-bold text-white">
           인기 이상형월드컵
