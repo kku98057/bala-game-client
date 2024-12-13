@@ -53,14 +53,7 @@ export default function MainBalanceGameList() {
   return (
     <>
       <Section variant="secondary">
-        <ins
-          className="adsbygoogle example_responsive_1"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-3604338976078798"
-          data-ad-slot="6734164461"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
+        <GoogleAdSenseComponent2 />
         <div className="flex items-center justify-between mb-0 sm:mb-6">
           <h2 className="text-xl sm:text-3xl font-bold text-white">
             인기 밸런스게임
